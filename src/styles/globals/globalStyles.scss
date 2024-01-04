@@ -1,0 +1,10 @@
+@use '../utils/mixins' as *;
+
+body[data-theme='light'] {
+    @include globalTheme('light');
+};
+
+
+body[data-theme='dark'] {
+    @include globalTheme('dark');
+};

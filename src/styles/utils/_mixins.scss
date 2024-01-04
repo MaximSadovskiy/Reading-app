@@ -1,0 +1,18 @@
+@use '../globals/colors' as *;
+
+@mixin globalTheme($lightOrDark) {
+    @if $lightOrDark == 'light' {
+        --bg: map.get($colors, 'bisque');
+        --text: map.get($colors, 'darkbrown');
+    } @else if $lightOrDark == 'dark' {
+        --bg: map.get($colors, 'darkbrown');
+        --text: map.get($colors, 'bisque');
+    }
+};
+
+@mixin flex($dir, $justify, $align) {
+    display: flex;
+    flex-direction: $dir;
+    justify-content: $justify;
+    align-items: $align;
+};
