@@ -1,10 +1,24 @@
-@use '../utils/mixins' as *;
-
-body[data-theme='light'] {
-    @include globalTheme('light');
+// resets
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 };
 
-
-body[data-theme='dark'] {
-    @include globalTheme('dark');
+:root {
+    // colors
+    --color-bisque: hsl(0, 52%, 84%);
+    --color-darkbrown: hsl(0, 38%, 8%);
+    --color-orange: hsl(25, 100%, 82%);
+    --color-gray: hsl(0, 1%, 83%);
+    --color-white: hsl(0, 0%, 100%);
+    //fonts
 };
+
+body {
+    min-height: 100vh;
+};
+
+a {
+    text-decoration: none;
+}

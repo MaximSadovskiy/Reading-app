@@ -1,18 +1,18 @@
-@use '../globals/colors' as *;
+@use 'functions' as *;
 
-@mixin globalTheme($lightOrDark) {
-    @if $lightOrDark == 'light' {
-        --bg: map.get($colors, 'bisque');
-        --text: map.get($colors, 'darkbrown');
-    } @else if $lightOrDark == 'dark' {
-        --bg: map.get($colors, 'darkbrown');
-        --text: map.get($colors, 'bisque');
-    }
-};
-
-@mixin flex($dir, $justify, $align) {
+@mixin flex($justify: stretch, $align: stretch, $gap: 0, $dir: row, $wrap: nowrap) {
     display: flex;
     flex-direction: $dir;
+    flex-wrap: $wrap;
     justify-content: $justify;
     align-items: $align;
+    gap: $gap;
+};
+
+@mixin colorTransition($duration: 300ms) {
+    transition: background-color $duration ease-in-out, color $duration ease-in-out;
+};
+
+@mixin fontClamp ($bottom, $prefer, $high) {
+    font-size: clamp(pxIntoUnit($bottom), #{$prefer}vh, pxIntoUnit($high));
 };
