@@ -13,6 +13,26 @@
     transition: background-color $duration ease-in-out, color $duration ease-in-out;
 };
 
+@mixin transition($prop, $duration: 150ms) {
+    transition: $prop $duration ease-in-out;
+};
+
 @mixin fontClamp ($bottom, $prefer, $high) {
     font-size: clamp(pxIntoUnit($bottom), #{$prefer}vh, pxIntoUnit($high));
+};
+
+@mixin fontDefault ($fontSize: 16) {
+    font-family: var(--font-pt-regular);
+    font-size: pxIntoUnit($fontSize);
+    letter-spacing: 0.5px;
+};
+
+@mixin padding($inline: pxIntoUnit(15), $block: pxIntoUnit(15)) {
+    padding-inline: $inline;
+    padding-block: $block;
+;}
+
+@mixin roundCorners($dir: top, $val: pxIntoUnit(15)) {
+    border-#{$dir}-left-radius: $val;
+    border-#{$dir}-right-radius: $val; 
 };

@@ -5,20 +5,51 @@
     box-sizing: border-box;
 };
 
+a {
+    text-decoration: none;
+    display: inline-block;
+};
+
+button {
+    cursor: pointer;
+    border: none;
+}
+
 :root {
     // colors
     --color-bisque: hsl(0, 52%, 84%);
     --color-darkbrown: hsl(0, 38%, 8%);
+    --color-lightbrown: #421e1e;
     --color-orange: hsl(25, 100%, 82%);
     --color-gray: hsl(0, 1%, 83%);
-    --color-white: hsl(0, 0%, 100%);
-    //fonts
+    --color-white: hsl(0, 0%, 100%);  
 };
 
 body {
     min-height: 100vh;
-};
 
-a {
-    text-decoration: none;
-}
+    // header
+    --header-bg: var(--color-darkbrown);
+    --header-border: var(--color-darkbrown);
+    --logo-color: var(--color-orange);
+    --link-color: var(--color-white);
+    --link-active: var(--color-orange);
+
+    // themeChanger
+    --theme-btn-bg: var(--color-darkbrown);
+    --theme-btn-bg-hover: var(--color-lightbrown);
+    --theme-btn-border: var(--color-white);
+    --theme-btn-text: var(--color-white);
+    --theme-list-bg: var(--color-bisque);
+    --theme-list-border: var(--color-white);
+    --theme-li-color: var(--color-white);
+    --theme-li-hover: var(--color-orange);
+
+    // rootPage
+    --main-bg: var(--color-bisque);
+
+    &[data-dark='true'] {
+        --main-bg: var(--color-darkbrown);
+        --header-border: var(--color-orange);
+    };
+};
