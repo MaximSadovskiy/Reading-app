@@ -1,0 +1,102 @@
+@use 'utils' as *;
+
+.container {
+    position: relative;
+};
+
+.button {
+    @include flex(flex-start, center, pxIntoUnit(12));
+    @include padding(pxIntoUnit(20), pxIntoUnit(25));
+    @include transition(background-color);
+
+    cursor: pointer;
+    width: pxIntoUnit(150);
+    height: pxIntoUnit(50);
+    border-radius: pxIntoUnit(15);
+    background-color: var(--theme-btn-bg);
+    border: pxIntoUnit(2) solid var(--theme-btn-border);
+    position: relative;
+
+    &:hover {
+        background-color: var(--theme-btn-bg-hover);
+    };
+
+    ::after {
+        @include transition(transform);
+
+        content: url('/arrow.svg');
+        position: absolute;
+        top: 50%;
+        right: 8px;
+        transform: translateY(-50%);
+        transform-origin: 80% 30%;
+    }
+
+    &[data-open='true'] ::after {
+        transform: rotate(90deg);
+    };
+};
+
+.buttonText {
+    @include fontDefault;
+    @include transition(color);
+
+    color: var(--theme-btn-text);
+};
+
+.list {
+    @include flex(stretch, stretch, pxIntoUnit(3), column);
+
+    list-style: none;
+    position: absolute;
+    top: pxIntoUnit(60);
+    left: 0;
+    width: pxIntoUnit(150);
+    z-index: 10;
+    background-color: var(--theme-list-bg);
+    border-radius: pxIntoUnit(15);
+    border: pxIntoUnit(2) solid var(--theme-list-border);
+};
+
+.li {
+    width: 100%;
+
+    &:first-of-type {
+        @include roundCorners(top, pxIntoUnit(15));
+    };
+
+    &:last-of-type {
+        @include roundCorners(bottom, pxIntoUnit(15));
+    };
+};
+
+.buttonOption {
+    @include padding(pxIntoUnit(10), pxIntoUnit(10));
+    @include flex(flex-start, center, 20);
+    @include transition(background-color);
+    
+    width: 100%;
+    height: 100%;
+    padding-left: pxIntoUnit(20);
+    background-color: var(--theme-btn-bg);
+
+    &:hover {
+        background-color: var(--theme-btn-bg-hover);
+    };
+
+    &[data-first] {
+        @include roundCorners(top, pxIntoUnit(15));
+    };
+
+    &[data-last] {
+        @include roundCorners(bottom, pxIntoUnit(15));
+    };
+};
+
+.optionText {
+    @include fontDefault(16);
+
+    display: inline-block;
+    margin-left: pxIntoUnit(10);
+    color: var(--theme-li-color);
+};

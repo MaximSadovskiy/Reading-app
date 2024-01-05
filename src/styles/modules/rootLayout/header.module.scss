@@ -1,22 +1,24 @@
 @use 'utils' as *;
 
 .header {
-    background-color: var(--color-bisque);
+    background-color: var(--header-bg);
     height: pxIntoUnit(125);
     @include flex(space-between, center);
     padding-inline: 2rem;
-}
+    border-bottom: pxIntoUnit(2) solid var(--header-border);
+};
 
 .logo {
     font-family: var(--font-marckscript);
     font-size: pxIntoUnit(52);
     letter-spacing: -1px;
-    color: var(--color-darkbrown);
+    color: var(--logo-color);
     padding-left: pxIntoUnit(90);
     position: relative;
 
     &::before {
         content: url('/book-2.svg');
+        color: var(--logo-color);
         position: absolute;
         left: 0;
         top: 0;
