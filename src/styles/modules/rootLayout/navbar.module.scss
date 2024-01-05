@@ -1,0 +1,17 @@
+@use 'utils' as *;
+
+.list {
+    @include flex(space-between, center, clamp(10px, 2vw, 30px));
+    list-style: none;
+};
+
+.link {
+    @include fontClamp(18, 2.3, 22);
+    letter-spacing: 0.8px;
+    color: var(--color-white);
+};
+
+.active {
+    color: var(--color-darkbrown);
+    font-weight: bold;
+};
