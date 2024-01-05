@@ -1,0 +1,25 @@
+@use 'utils' as *;
+
+.header {
+    background-color: var(--color-bisque);
+    height: pxIntoUnit(125);
+    @include flex(space-between, center);
+    padding-inline: 2rem;
+}
+
+.logo {
+    font-family: var(--font-marckscript);
+    font-size: pxIntoUnit(52);
+    letter-spacing: -1px;
+    color: var(--color-darkbrown);
+    padding-left: pxIntoUnit(90);
+    position: relative;
+
+    &::before {
+        content: url('/book-2.svg');
+        position: absolute;
+        left: 0;
+        top: 0;
+        transform: translateY(-15%) rotate(10deg);
+    }
+};
