@@ -4,7 +4,8 @@ import '@/styles/globals/globalStyles.scss';
 // font 
 import { marckScriptFont, ptRootBoldFont, ptRootRegularFont } from '@/fonts/fonts';
 // components
-import Header from '@/components/rootLayout/Header';
+import ContextWrapper from '@/components/rootLayout/ContextWrapper';
+import Body from '@/components/rootLayout/Body';
 
 export const metadata: Metadata = {
 	title: 'Create Next App',
@@ -19,10 +20,11 @@ export default function RootLayout({
 
 	return (
 		<html lang="ru" className={`${marckScriptFont.variable} ${ptRootBoldFont.variable} ${ptRootRegularFont.variable}`}>
-			<body>
-				<Header />
-				{children}
-			</body>
+			<ContextWrapper>
+				<Body>
+					{children}
+				</Body>
+			</ContextWrapper>
 		</html>
 	)
 }

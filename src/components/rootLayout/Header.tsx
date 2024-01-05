@@ -1,7 +1,10 @@
 import styles from '@/styles/modules/rootLayout/header.module.scss';
+// types
+import { ToggleTheme } from '@/hooks/useTheme';
+// components
 import Link from 'next/link';
 import Navbar from './Navbar';
-
+import ThemeChanger from './ThemeChanger';
 
 const Header = () => {
 
@@ -11,6 +14,7 @@ const Header = () => {
                 <h1 className={styles.logo}>БукЛайф</h1>
             </Link>
             <Navbar />
+            <ThemeChanger />
         </header>
     )
 };
