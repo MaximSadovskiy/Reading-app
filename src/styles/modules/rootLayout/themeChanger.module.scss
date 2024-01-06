@@ -50,8 +50,8 @@
     list-style: none;
     position: absolute;
     top: pxIntoUnit(60);
-    left: 0;
-    width: pxIntoUnit(150);
+    left: -12px;
+    width: pxIntoUnit(170);
     z-index: 10;
     background-color: var(--theme-list-bg);
     border-radius: pxIntoUnit(15);
@@ -77,7 +77,7 @@
     
     width: 100%;
     height: 100%;
-    padding-left: pxIntoUnit(20);
+    padding-left: pxIntoUnit(10);
     background-color: var(--theme-btn-bg);
 
     &:hover {
@@ -97,6 +97,6 @@
     @include fontDefault(16);
 
     display: inline-block;
-    margin-left: pxIntoUnit(10);
+    margin-inline: pxIntoUnit(10);
     color: var(--theme-li-color);
 };
