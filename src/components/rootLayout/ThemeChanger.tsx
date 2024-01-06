@@ -4,8 +4,8 @@ import styles from '@/styles/modules/rootLayout/themeChanger.module.scss';
 import Image from "next/image";
 import React, { useState } from 'react';
 // framer
-import { motion, AnimatePresence } from 'framer-motion';
-import { listVariants } from "@/styles/variants/themeToggler/themeTogglerVariants";
+import { m, LazyMotion, domAnimation, AnimatePresence } from 'framer-motion';
+import { listVariants, itemVariants } from "@/styles/variants/themeToggler/themeTogglerVariants";
 import { SetThemeType, ThemeType } from "@/hooks/useTheme";
 
 // types & helpers
@@ -24,15 +24,19 @@ const ThemeChanger = () => {
                 className={styles.button} 
                 data-open={isOpen}
                 onClick={() => setIsOpen(o => !o)}
+                aria-controls="open-list"
+                aria-expanded={isOpen}
             >
                 <span className={styles.buttonText}>тема: </span>
                 <Image src={svgPath} alt='' role="presentation" width={35} height={35} />
             </button>
-            <AnimatePresence>
-                {isOpen && (
-                    <PopupThemeList setTheme={setTheme} systemTheme={systemTheme} setSvgPath={setSvgPath} closeList={() => setIsOpen(false)} />
-                )}
-            </AnimatePresence>
+            <LazyMotion features={domAnimation} strict>
+                <AnimatePresence>
+                    {isOpen && (
+                        <PopupThemeList setTheme={setTheme} systemTheme={systemTheme} setSvgPath={setSvgPath} closeList={() => setIsOpen(false)} />
+                    )}
+                </AnimatePresence>
+            </LazyMotion>
         </div>
     )
 };
@@ -69,39 +73,45 @@ const PopupThemeList = ({ setTheme, systemTheme, setSvgPath, closeList }: ListPr
     };
 
     return (
-        <motion.ul className={styles.list}
-            variants={listVariants}
-            exit='exit'
-            initial='initial'
-            animate='animate'
-        >
-            <li className={styles.li}>
-                <button 
-                    onClick={handleChangeThemeClick} data-first 
-                    className={styles.buttonOption} name="light"
-                >
-                    <Image src='/sun.svg' alt="" role="presentation" width={20}  height={20}/>
-                    <span className={styles.optionText}>Светлая</span>
-                </button>
-            </li>
-            <li className={styles.li}>
-                <button 
-                    onClick={handleChangeThemeClick} 
-                    className={styles.buttonOption} name="dark"
-                >
-                    <Image src='/moon.svg' alt="" role="presentation" width={20}  height={20}/>
-                    <span className={styles.optionText}>Тёмная</span>
-                </button>
-            </li>
-            <li className={styles.li}>
-                <button 
-                    onClick={handleChangeThemeClick} data-last 
-                    className={styles.buttonOption} name="system"
-                >
-                    <Image src='/computer.svg' alt="" role="presentation" width={20}  height={20}/>
-                    <span className={styles.optionText}>Системная</span>
-                </button>
-            </li>
-        </motion.ul>
+        <>
+            <m.ul className={styles.list}
+                variants={listVariants}
+                exit='exit'
+                initial='initial'
+                animate='animate'
+                
+                id='open-list'
+                aria-live="polite"
+            >
+                <m.li variants={itemVariants} className={styles.li}>
+                    <button 
+                        onClick={handleChangeThemeClick} data-first 
+                        className={styles.buttonOption} name="light"
+                    >
+                        <Image src='/sun.svg' alt="" role="presentation" width={20}  height={20}/>
+                        <span className={styles.optionText}>Светлая</span>
+                    </button>
+                </m.li>
+                <m.li variants={itemVariants} className={styles.li}>
+                    <button 
+                        onClick={handleChangeThemeClick} 
+                        className={styles.buttonOption} name="dark"
+                    >
+                        <Image src='/moon.svg' alt="" role="presentation" width={20}  height={20}/>
+                        <span className={styles.optionText}>Тёмная</span>
+                    </button>
+                </m.li>
+                <m.li variants={itemVariants} className={styles.li}>
+                    <button 
+                        onClick={handleChangeThemeClick} data-last 
+                        className={styles.buttonOption} name="system"
+                    >
+                        <Image src='/computer.svg' alt="" role="presentation" width={20}  height={20}/>
+                        <span className={styles.optionText}>Системная</span>
+                    </button>
+                </m.li>
+            </m.ul>
+            <p className="sr-only">Выбор цветовой темы</p>
+        </>
     )
 }
