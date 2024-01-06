@@ -7,11 +7,37 @@
 
 .link {
     @include fontClamp(18, 2.3, 22);
+    @include transition(transform, 150ms);
     letter-spacing: 0.8px;
-    color: var(--color-white);
+    color: var(--link-color);
+    position: relative;
+
+    &:hover, &:focus {
+        transform: scale(1.1);
+    };
+
+    &::before {
+        @include transition(transform, 300ms); 
+
+        content: '';
+        display: block;
+        height: pxIntoUnit(2);
+        width: 100%;
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        background-color: var(--link-underline);
+        border-radius: pxIntoUnit(5);
+        transform: scale(0);
+    };
+
+    &:hover::before, &:focus::before {
+        transform: scaleX(1);
+    }
 };
 
+
 .active {
-    color: var(--color-darkbrown);
+    color: var(--link-active);
     font-weight: bold;
 };

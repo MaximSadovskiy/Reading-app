@@ -27,6 +27,7 @@ button {
 
 body {
     min-height: 100vh;
+    overflow-x: hidden;
 
     // header
     --header-bg: var(--color-darkbrown);
@@ -34,6 +35,7 @@ body {
     --logo-color: var(--color-orange);
     --link-color: var(--color-white);
     --link-active: var(--color-orange);
+    --link-underline: var(--color-orange);
 
     // themeChanger
     --theme-btn-bg: var(--color-darkbrown);
@@ -52,4 +54,16 @@ body {
         --main-bg: var(--color-darkbrown);
         --header-border: var(--color-orange);
     };
+};
+
+// screen-reader only class
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
 };
