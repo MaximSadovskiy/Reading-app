@@ -2,7 +2,8 @@
 import { useGlobalContext } from "./ContextWrapper";
 import styles from '@/styles/modules/rootLayout/themeChanger.module.scss';
 import Image from "next/image";
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, forwardRef } from 'react';
+import closeIfOutsideClick from "@/utils/clickOutsideCloseFunction";
 // framer
 import { m, LazyMotion, domAnimation, AnimatePresence } from 'framer-motion';
 import { listVariants, itemVariants } from "@/styles/variants/themeToggler/themeTogglerVariants";
@@ -27,6 +28,23 @@ const ThemeChanger = () => {
         return getSvgPath(theme);
     });
 
+    // refs for checking if click outside
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const listRef = useRef<HTMLUListElement>(null);
+
+    // close if 'isOpen' + clickOutside
+    useEffect(() => {
+        const handleClick = (e: MouseEvent) => {
+            closeIfOutsideClick<HTMLButtonElement | HTMLUListElement>([buttonRef, listRef], e, () => setIsOpen(false));
+        };
+
+        document.addEventListener('click', handleClick);
+
+        return () => {
+            document.removeEventListener('click', handleClick);
+        };
+    }, []);
+
     return (
         <div className={styles.container}>
             <button 
@@ -35,6 +53,7 @@ const ThemeChanger = () => {
                 onClick={() => setIsOpen(o => !o)}
                 aria-controls="open-list"
                 aria-expanded={isOpen}
+                ref={buttonRef}
             >
                 <span className={styles.buttonText}>тема: </span>
                 <Image src={svgPath} alt='' role="presentation" width={35} height={35} />
@@ -42,7 +61,7 @@ const ThemeChanger = () => {
             <LazyMotion features={domAnimation} strict>
                 <AnimatePresence>
                     {isOpen && (
-                        <PopupThemeList setTheme={setTheme} systemTheme={systemTheme} setSvgPath={setSvgPath} closeList={() => setIsOpen(false)} svgPath={svgPath} />
+                        <PopupThemeList setTheme={setTheme} systemTheme={systemTheme} setSvgPath={setSvgPath} closeList={() => setIsOpen(false)} svgPath={svgPath} ref={listRef} />
                     )}
                 </AnimatePresence>
             </LazyMotion>
@@ -58,13 +77,13 @@ interface ListProps {
     systemTheme: ThemeType;
     setSvgPath: React.Dispatch<React.SetStateAction<SvgPathType>>
     closeList: () => void;
-    svgPath: SvgPathType; 
+    svgPath: SvgPathType;
 }
 
 type ButtonCustomEvent = React.MouseEvent<HTMLButtonElement & { name: 'light' | 'dark' | 'system' }> ;
 
 
-const PopupThemeList = ({ setTheme, systemTheme, setSvgPath, closeList, svgPath }: ListProps) => {
+const PopupThemeList = forwardRef(({ setTheme, systemTheme, setSvgPath, closeList, svgPath }: ListProps, ref: React.Ref<HTMLUListElement>) => {
 
     const handleChangeThemeClick = (e: ButtonCustomEvent) => {
         const { name } = e.currentTarget;
@@ -87,6 +106,8 @@ const PopupThemeList = ({ setTheme, systemTheme, setSvgPath, closeList, svgPath 
                 aria-live="polite"
                 aria-labelledby="theme-info"
                 role="listbox"
+                
+                ref={ref}
             >
                 <m.li role="option" variants={itemVariants} className={styles.li}>
                     <button 
@@ -128,4 +149,4 @@ const PopupThemeList = ({ setTheme, systemTheme, setSvgPath, closeList, svgPath 
             <p id="theme-info" className="sr-only">Выбор цветовой темы</p>
         </>
     )
-}
+});
