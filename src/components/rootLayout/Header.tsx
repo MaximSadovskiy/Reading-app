@@ -1,6 +1,4 @@
 import styles from '@/styles/modules/rootLayout/header.module.scss';
-// types
-import { ToggleTheme } from '@/hooks/useTheme';
 // components
 import Link from 'next/link';
 import Navbar from './Navbar';

@@ -85,6 +85,7 @@ const PopupThemeList = ({ setTheme, systemTheme, setSvgPath, closeList, svgPath 
                 
                 id='open-list'
                 aria-live="polite"
+                aria-labelledby="theme-info"
                 role="listbox"
             >
                 <m.li role="option" variants={itemVariants} className={styles.li}>
@@ -124,7 +125,7 @@ const PopupThemeList = ({ setTheme, systemTheme, setSvgPath, closeList, svgPath 
                     </button>
                 </m.li>
             </m.ul>
-            <p className="sr-only">Выбор цветовой темы</p>
+            <p id="theme-info" className="sr-only">Выбор цветовой темы</p>
         </>
     )
 }

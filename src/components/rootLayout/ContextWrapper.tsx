@@ -3,6 +3,9 @@ import React, { createContext, useContext } from 'react';
 import GlobalContextInterface from '@/interfaces/contextWrapper';
 // hooks
 import useTheme from '@/hooks/useTheme';
+// components
+import Header from '@/components/rootLayout/Header';
+
 
 // types
 interface GlobalContextProps {
@@ -20,7 +23,10 @@ const ContextWrapper = (props: GlobalContextProps) => {
             systemTheme,
             setTheme,
         }}>
-            {props.children}
+            <body data-dark={theme === 'dark' ? true : false}>
+                <Header />
+                {props.children}
+            </body>
         </GlobalContext.Provider>
     )
 };
