@@ -1,0 +1,7 @@
+@use 'utils/functions' as *;
+
+$headingPowers: (
+    2: pxIntoUnit(32),
+    3: pxIntoUnit(26),
+    4: pxIntoUnit(22),
+);

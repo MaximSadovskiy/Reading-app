@@ -45,11 +45,11 @@
     letter-spacing: 1.5px;
 };
 
-@mixin fontHeading($headingPower: 2){
+@mixin fontHeading($headingPower: 2, $weight: 600){
     font-size: map-get($map: m.$headingPowers, $key: $headingPower);
     letter-spacing: 1.5px;
     font-family: var(--font-pt-variable);
-    font-weight: 600;
+    font-weight: $weight;
 };
 
 @mixin fontMarc($size, $spacing: 0) {

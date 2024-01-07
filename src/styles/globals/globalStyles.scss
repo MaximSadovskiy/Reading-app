@@ -55,10 +55,18 @@ body {
 
     // rootPage
     --main-bg: var(--color-bisque);
+    --main-text: var(--color-darkbrown);
+    --main-text-highlight: var(--color-lightbrown);
+    --main-text-highlight-logo: var(--color-darkbrown);
 
+    // darkTheme colors
     &[data-dark='true'] {
-        --main-bg: var(--color-darkbrown);
+        // rootPage
         --header-border: var(--color-orange);
+        --main-bg: var(--color-darkbrown);
+        --main-text: var(--color-white);
+        --main-text-highlight: var(--color-orange);
+        --main-text-highlight-logo: var(--color-bisque);
     };
 };
 

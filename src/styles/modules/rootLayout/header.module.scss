@@ -7,12 +7,13 @@
     height: pxIntoUnit(125);
     padding-inline: 2rem;
     border-bottom: pxIntoUnit(2) solid var(--header-border);
+    position: sticky;
+    top: 0;
 };
 
 .logo {
-    font-family: var(--font-marckscript);
-    font-size: pxIntoUnit(52);
-    letter-spacing: -1px;
+    @include fontMarc(52, -1);
+    
     color: var(--logo-color);
     padding-left: pxIntoUnit(90);
     position: relative;
