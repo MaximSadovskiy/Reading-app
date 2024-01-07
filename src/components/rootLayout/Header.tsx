@@ -3,16 +3,20 @@ import styles from '@/styles/modules/rootLayout/header.module.scss';
 import Link from 'next/link';
 import Navbar from './Navbar';
 import ThemeChanger from './ThemeChanger';
+import AccountEnter from './AccountEnter';
 
 const Header = () => {
 
     return (
         <header className={styles.header}>
             <Link href='/'>
-                <h1 className={styles.logo}>БукЛайф</h1>
+                <h1 className={styles.logo}>
+                    Бук<span className={styles.span}>Лайф</span>
+                </h1>
             </Link>
             <Navbar />
             <ThemeChanger />
+            <AccountEnter />
         </header>
     )
 };

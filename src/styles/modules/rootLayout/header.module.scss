@@ -1,9 +1,10 @@
 @use 'utils' as *;
 
 .header {
+    @include flex(space-between, center);
+    
     background-color: var(--header-bg);
     height: pxIntoUnit(125);
-    @include flex(space-between, center);
     padding-inline: 2rem;
     border-bottom: pxIntoUnit(2) solid var(--header-border);
 };
@@ -23,5 +24,9 @@
         left: 0;
         top: 0;
         transform: translateY(-15%) rotate(10deg);
-    }
+    };
+
+    & .span {
+        color: var(--logo-color-second);
+    };
 };
