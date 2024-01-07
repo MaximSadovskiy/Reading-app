@@ -2,9 +2,10 @@ import type { Metadata } from 'next'
 // styles 
 import '@/styles/globals/globalStyles.scss';
 // font 
-import { marckScriptFont, ptRootBoldFont, ptRootRegularFont } from '@/fonts/fonts';
+import { marckScriptFont, ptRootVariableFont } from '@/fonts/fonts';
 // components
 import ContextWrapper from '@/components/rootLayout/ContextWrapper';
+import Header from '@/components/rootLayout/Header';
 
 export const metadata: Metadata = {
 	title: 'Create Next App',
@@ -18,8 +19,9 @@ export default function RootLayout({
 }) {
 
 	return (
-		<html lang="ru" className={`${marckScriptFont.variable} ${ptRootBoldFont.variable} ${ptRootRegularFont.variable}`}>
+		<html lang="ru" className={`${marckScriptFont.variable} ${ptRootVariableFont.variable}`}>
 			<ContextWrapper>
+				<Header />
 				{children}
 			</ContextWrapper>
 		</html>

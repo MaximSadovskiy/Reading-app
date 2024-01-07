@@ -31,14 +31,13 @@ export const listVariants: Variants = {
 interface AnimateProps {
     stiffness: number,
     damping?: number;
-    bounce: number;
+    bounce?: number;
 }
 
 // helpers
 const animateOpenProps: AnimateProps = {
-    stiffness: 250,
-    damping: 20,
-    bounce: 0.5
+    stiffness: 200,
+    damping: 25,
 };
 
 const animateCloseProps: AnimateProps = {
@@ -50,11 +49,9 @@ const animateCloseProps: AnimateProps = {
 
 export const itemVariants: Variants = {
     initial: {
-        filter: 'blur(20px)',
-        x: 50
+        x: 180
     },
     animate: {
-        filter: 'blur(0px)',
         x: 0,
         transition: {
             type: 'spring',
@@ -63,8 +60,7 @@ export const itemVariants: Variants = {
         }
     },
     exit: {
-        filter: 'blur(20px)',
-        x: 50,
+        x: 180,
         transition: {
             type: 'spring',
             duration: 0.5,

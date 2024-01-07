@@ -8,7 +8,7 @@ const Navbar = () => {
     const currentPath = usePathname();
 
     return (
-        <nav>
+        <nav className={styles.nav}>
             <ul className={styles.list}>
                 <li>
                     <Link 
