@@ -7,14 +7,8 @@ export const marckScriptFont = localFont({
     variable: '--font-marckscript'
 });
 
-export const ptRootRegularFont = localFont({
-    src: './PT-Root-UI_Regular.ttf',
+export const ptRootVariableFont = localFont({
+    src: './PT-Root-variable.ttf',
     display: 'swap',
-    variable: '--font-pt-regular'
-});
-
-export const ptRootBoldFont = localFont({
-    src: './PT-Root-UI_Bold.ttf',
-    display: 'swap',
-    variable: '--font-pt-bold'
+    variable: '--font-pt-variable',
 });

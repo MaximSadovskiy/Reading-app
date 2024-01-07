@@ -39,9 +39,10 @@
     letter-spacing: 1.5px;
 };
 
-@mixin fontDefault($fontSize: 16) {
+@mixin fontDefault($fontSize: 16, $weight: 500) {
     font-family: var(--font-pt-variable);
     font-size: pxIntoUnit($fontSize);
+    font-weight: $weight;
     letter-spacing: 1.5px;
 };
 

@@ -1,0 +1,61 @@
+@use 'utils' as *;
+
+.main {
+    min-height: 100vh;
+    background-color: var(--main-bg);
+    transition: background-color 300ms ease-in-out;
+
+    display: grid;
+    grid-template-columns: 15vw 1fr 15vw;
+    grid-template-areas: 
+        '. text .'
+    ;
+    justify-items: center;
+};
+
+.textSection {
+    @include colorTransition;
+
+    grid-area: text;
+    margin-top: pxIntoUnit(20);
+    color: var(--main-text);
+};
+
+.h2 {
+    @include fontHeading(2);
+
+    > strong {
+        @include fontMarc(52, 0);
+        color: var(--main-text-highlight);
+
+        > span {
+            color: var(--main-text-highlight-logo);
+        }
+    }
+}
+
+.h3 {
+    @include fontHeading(3);
+    margin-top: pxIntoUnit(25);
+
+    > strong {
+        color: var(--main-text-highlight-logo);
+        letter-spacing: 2px;
+    }
+};
+
+.list {
+    @include flex(start, start, pxIntoUnit(8), column);
+
+    list-style-type: square;
+    list-style-position: inside;
+    margin-top: pxIntoUnit(15);
+
+    > li {
+        @include fontDefault;
+        @include transition(color);
+
+        color: var(--main-text);
+    }
+};
+
