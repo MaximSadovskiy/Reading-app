@@ -16,6 +16,8 @@
     
     color: var(--logo-color);
     padding-left: pxIntoUnit(90);
+    padding-bottom: pxIntoUnit(20);
+    padding-right: pxIntoUnit(20);
     position: relative;
 
     &::before {
@@ -24,10 +26,20 @@
         position: absolute;
         left: 0;
         top: 0;
-        transform: translateY(-15%) rotate(10deg);
+        transform: translateY(-5%) rotate(10deg);
     };
 
     & .span {
         color: var(--logo-color-second);
     };
+
+    & .subLogo {
+        @include fontDefault(16);
+
+        color: var(--sublogo-color);
+        display: inline-block;
+        position: absolute;
+        top: pxIntoUnit(60);
+        right: pxIntoUnit(10);
+    }
 };

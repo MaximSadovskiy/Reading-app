@@ -1,3 +1,4 @@
+'use client';
 import { useState, useEffect, SetStateAction } from 'react';
 
 //types
@@ -5,7 +6,7 @@ export type ThemeType = 'light' | 'dark';
 export type ToggleTheme = () => void;
 export type SetThemeType = React.Dispatch<SetStateAction<ThemeType>>;
 
-type GetThemeFromLocalStorage = () => ThemeType;
+type GetThemeFromLocalStorage = () => ThemeType | null;
 type PostThemeToLocalStorage = (currentTheme: ThemeType) => void;
 type GetPreferredTheme = () => ThemeType;
 
@@ -28,7 +29,7 @@ const postThemeToLocalStorage: PostThemeToLocalStorage = (currentTheme) => {
 // hook
 const useTheme = () => {
     const [theme, setTheme] = useState(() => {
-        return getThemeFromLocalStorage() || getPreferredTheme() as ThemeType;
+        return getThemeFromLocalStorage() || getPreferredTheme() as ThemeType;    
     });
 
     // store systemTheme

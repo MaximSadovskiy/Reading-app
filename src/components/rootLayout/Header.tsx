@@ -12,6 +12,7 @@ const Header = () => {
             <Link href='/'>
                 <h1 className={styles.logo}>
                     Бук<span className={styles.span}>Лайф</span>
+                    <span className={styles.subLogo}>электронная библиотека</span>
                 </h1>
             </Link>
             <Navbar />
