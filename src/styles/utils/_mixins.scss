@@ -1,0 +1,60 @@
+@use 'functions' as *;
+@use 'maps' as m;
+
+// layouts
+@mixin flex($justify: stretch, $align: stretch, $gap: 0, $dir: row, $wrap: nowrap) {
+    display: flex;
+    flex-direction: $dir;
+    flex-wrap: $wrap;
+    justify-content: $justify;
+    align-items: $align;
+    gap: $gap;
+};
+
+// transition, animation
+@mixin colorTransition($duration: 300ms) {
+    transition: background-color $duration ease-in-out, color $duration ease-in-out;
+};
+
+@mixin transition($prop, $duration: 150ms, $ease: ease-in-out) {
+    transition: $prop $duration $ease;
+};
+
+// padding, margin
+@mixin padding($inline: pxIntoUnit(15), $block: pxIntoUnit(15)) {
+    padding-inline: $inline;
+    padding-block: $block;
+};
+
+// borders
+@mixin roundCorners($dir: top, $val: pxIntoUnit(15)) {
+    border-#{$dir}-left-radius: $val;
+    border-#{$dir}-right-radius: $val; 
+};
+
+// font, text
+@mixin fontClamp($bottom, $prefer, $high) {
+    font-family: var(--font-pt-variable);
+    font-size: clamp(pxIntoUnit($bottom), #{$prefer}vh, pxIntoUnit($high));
+    letter-spacing: 1.5px;
+};
+
+@mixin fontDefault($fontSize: 16, $weight: 500) {
+    font-family: var(--font-pt-variable);
+    font-size: pxIntoUnit($fontSize);
+    font-weight: $weight;
+    letter-spacing: 1.5px;
+};
+
+@mixin fontHeading($headingPower: 2, $weight: 600){
+    font-size: map-get($map: m.$headingPowers, $key: $headingPower);
+    letter-spacing: 1.5px;
+    font-family: var(--font-pt-variable);
+    font-weight: $weight;
+};
+
+@mixin fontMarc($size, $spacing: 0) {
+    font-family: var(--font-marckscript);
+    font-size: pxIntoUnit($size);
+    letter-spacing: #{$spacing}px;
+};

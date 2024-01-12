@@ -1,0 +1,49 @@
+@use 'utils' as *;
+
+.nav {
+    width: clamp(pxIntoUnit(350), 30vw, pxIntoUnit(450));
+    margin-left: auto;
+    flex-grow: 1 1 auto;;
+};
+
+.list {
+    @include flex(space-between, center, clamp(10px, 2vw, 30px));
+    list-style: none;
+};
+
+.link {
+    @include fontClamp(18, 2.3, 22);
+    @include transition(transform, 150ms);
+
+    color: var(--link-color);
+    position: relative;
+
+    &:hover, &:focus {
+        transform: scale(1.1);
+    };
+
+    &::before {
+        @include transition(transform, 300ms); 
+
+        content: '';
+        display: block;
+        height: pxIntoUnit(2);
+        width: 100%;
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        background-color: var(--link-underline);
+        border-radius: pxIntoUnit(5);
+        transform: scale(0);
+    };
+
+    &:hover::before, &:focus::before {
+        transform: scaleX(1);
+    }
+};
+
+
+.active {
+    color: var(--link-active);
+    font-weight: bold;
+};
