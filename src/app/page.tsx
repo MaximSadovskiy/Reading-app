@@ -1,4 +1,5 @@
 import styles from '@/styles/modules/rootPage/mainPage.module.scss';
+import BookRedirect from '../components/readLayout/BookRedirect';
 
 // main component
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
 						</li>
 					</ul>
 				</section>
+				<BookRedirect />
 			</section>
 		</main>
 	);

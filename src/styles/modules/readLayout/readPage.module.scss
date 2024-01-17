@@ -1,0 +1,34 @@
+.main {
+    min-height: 100vh;
+    background-color: #f6ecda;
+    transition: background-color 300ms ease-in-out;
+    display: flex;
+    justify-content: center;
+}
+.title {
+    text-align: center;
+}
+.readerBlock {
+    // Временно
+    // Рамка
+    border: solid 5px blue;
+    //
+    font-family: Roboto;
+    font-size: 1.25em;
+    box-sizing: border-box;
+    max-width: 900px;
+    font-weight: 400;
+    line-height: 140%;
+    overflow: hidden;
+}
+.img {
+    float: left;
+}
+.renderText {
+    margin-top: 15px;
+}
+@media (min-width: 950px) {
+  .readerBlock {
+    margin-top: 50px;
+  }
+}
