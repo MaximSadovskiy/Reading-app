@@ -70,10 +70,11 @@
 };
 
 // COMPONENTS
-@mixin linkWithUnderline {
+@mixin linkWithUnderline($fontWeight: 500) {
     @include fontClamp(18, 2.3, 22);
     @include transition(transform);
 
+    font-weight: $fontWeight;
     color: var(--link-color);
     position: relative;
 

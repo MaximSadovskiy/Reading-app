@@ -62,9 +62,12 @@ body {
     --main-text-highlight-logo: var(--color-darkbrown);
     --main-link: var(--color-darkbrown);
     --main-listmarker: var(--color-lightbrown);
+    --underline: var(--color-lightbrown);
 
     // darkTheme colors
     &[data-dark='true'] {
+        --underline: var(--color-orange);
+
         // rootPage
         --header-border: var(--color-orange);
         --main-bg: var(--color-darkbrown);

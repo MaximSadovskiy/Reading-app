@@ -17,7 +17,7 @@ export default function Home() {
 	const textOfLinkLC = 'Личный Кабинет';
 
 	const textBeforeLinkToRead = 'Если вы уже посещали наш сайт, и выбрали нужную книгу, можете перейти на страницу чтения: ';
-	const textOfLinkToRead = 'Страницу для Чтения';
+	const textOfLinkToRead = 'Страница для Чтения';
 
 	const textBeforeLinkToInfo = 'Если вас интересует информация о нашем сайте: ';
 	const textOfLinkToInfo = 'Информация о Сайте';

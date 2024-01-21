@@ -88,6 +88,10 @@
     @include linkWithUnderline;
     align-self: center;
     color: var(--main-link);
+    
+    &::before {
+        background-color: var(--underline);
+    }
 }
 
 
