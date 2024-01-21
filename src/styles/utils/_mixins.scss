@@ -11,6 +11,15 @@
     gap: $gap;
 };
 
+@mixin colFlex($align: stretch, $justify: stretch, $gap: 0, $wrap: nowrap) {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: $wrap;
+    justify-content: $justify;
+    align-items: $align;
+    gap: $gap;
+};
+
 // transition, animation
 @mixin colorTransition($duration: 300ms) {
     transition: background-color $duration ease-in-out, color $duration ease-in-out;
@@ -39,18 +48,19 @@
     letter-spacing: 1.5px;
 };
 
-@mixin fontDefault($fontSize: 16, $weight: 500) {
+@mixin fontDefault($fontSize: 17, $weight: 500) {
     font-family: var(--font-pt-variable);
     font-size: pxIntoUnit($fontSize);
     font-weight: $weight;
     letter-spacing: 1.5px;
 };
 
-@mixin fontHeading($headingPower: 2, $weight: 600){
+@mixin fontHeading($headingPower: 2, $weight: 600, $textAlign: center){
     font-size: map-get($map: m.$headingPowers, $key: $headingPower);
     letter-spacing: 1.5px;
     font-family: var(--font-pt-variable);
     font-weight: $weight;
+    text-align: $textAlign;
 };
 
 @mixin fontMarc($size, $spacing: 0) {
@@ -58,3 +68,35 @@
     font-size: pxIntoUnit($size);
     letter-spacing: #{$spacing}px;
 };
+
+// COMPONENTS
+@mixin linkWithUnderline {
+    @include fontClamp(18, 2.3, 22);
+    @include transition(transform);
+
+    color: var(--link-color);
+    position: relative;
+
+    &:hover, &:focus {
+        transform: scale(1.1);
+    };
+
+    &::before {
+        @include transition(transform, 300ms); 
+
+        content: '';
+        display: block;
+        height: pxIntoUnit(2);
+        width: 100%;
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        background-color: var(--link-underline);
+        border-radius: pxIntoUnit(5);
+        transform: scale(0);
+    };
+
+    &:hover::before, &:focus::before {
+        transform: scaleX(1);
+    }
+}

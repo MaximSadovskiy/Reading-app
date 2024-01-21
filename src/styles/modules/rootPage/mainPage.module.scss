@@ -6,7 +6,7 @@
     transition: background-color 300ms ease-in-out;
 
     display: grid;
-    grid-template-columns: 15vw 1fr 15vw;
+    grid-template-columns: 22vw 1fr 22vw;
     grid-template-areas: 
         '. text .'
     ;
@@ -19,6 +19,8 @@
     grid-area: text;
     margin-top: pxIntoUnit(20);
     color: var(--main-text);
+
+    padding-inline: pxIntoUnit(35); 
 };
 
 .h2 {
@@ -36,19 +38,18 @@
 
 .h3 {
     @include fontHeading(3);
-    margin-top: pxIntoUnit(25);
+    margin-block: pxIntoUnit(25);
 
     > strong {
         color: var(--main-text-highlight-logo);
         letter-spacing: 2px;
     }
-};
+}
 
 .list {
-    @include flex(start, start, pxIntoUnit(8), column);
+    @include flex(center, stretch, pxIntoUnit(8), column);
 
-    list-style-type: square;
-    list-style-position: inside;
+    list-style: none;
     margin-top: pxIntoUnit(15);
 
     > li {
@@ -57,5 +58,57 @@
 
         color: var(--main-text);
     }
-};
+}
 
+.listItem {
+    @include colFlex(stretch, center, pxIntoUnit(12));
+    margin-bottom: pxIntoUnit(20);
+
+    > p {
+        position: relative;
+        padding-left: pxIntoUnit(15);
+
+        &::before {
+            @include colorTransition;
+
+            content: '';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            left: -15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--main-listmarker);
+        }
+    }
+}
+
+.link {
+    @include linkWithUnderline;
+    align-self: center;
+    color: var(--main-link);
+}
+
+
+// asides
+.aside {
+    width: 100%;
+    border: none;
+}
+
+.innerDiv {
+    position: relative;
+    height: 33vh;
+
+    &::before {
+        content: '';
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.425);
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 5;
+    }
+}
