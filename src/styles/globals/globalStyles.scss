@@ -19,6 +19,7 @@ button {
     // colors
     --color-bisque: hsl(0, 52%, 84%);
     --color-darkbrown: hsl(0, 38%, 8%);
+    --color-darkbrown-blur: hsla(0, 37%, 8%, 0.795);
     --color-lightbrown: #421e1e;
     --color-orange: hsl(25, 100%, 82%);
     --color-gray: hsl(0, 1%, 83%);
@@ -32,6 +33,7 @@ body {
 
     // header
     --header-bg: var(--color-darkbrown);
+    --header-bg-blur: var(--color-darkbrown-blur);
     --header-border: var(--color-darkbrown);
     --logo-color: var(--color-orange);
     --logo-color-second: var(--color-bisque);
