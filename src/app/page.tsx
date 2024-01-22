@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 // main component
-export default function Home() {
+export default function RootPage() {
 
 	const asideImages1 = ['/bookImg1.jpg', '/bookImg2.jpg', '/bookImg3.jpg'];
 	const asideImages2 = ['/bookImg4.jpg', '/bookImg6.jpg', '/bookImg5.jpg'];
