@@ -9,7 +9,11 @@
     border-bottom: pxIntoUnit(2) solid var(--header-border);
     position: sticky;
     top: 0;
-};
+
+    opacity: 0.9;
+    backdrop-filter: blur(10px);
+    z-index: 100;
+}
 
 .logo {
     @include fontMarc(52, -1);
@@ -42,4 +46,4 @@
         top: pxIntoUnit(60);
         right: pxIntoUnit(10);
     }
-};
+}
