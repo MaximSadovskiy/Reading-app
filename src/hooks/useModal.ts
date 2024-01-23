@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { closeModalIfClickOutside, focusTrapKeyDown, focusTrapKeyUp } from '../utils/modalUtilities';
 
-type UseModalType = (modalRef: React.RefObject<HTMLDivElement>) => readonly (() => void)[];
+type ModalRefArg = React.RefObject<HTMLDivElement>;
 
-const useModal: UseModalType = (modalRef) => {
+const useModal = (modalRef: ModalRefArg, backdropRef: ModalRefArg) => {
 
     const [isOpen, setIsOpen] = useState(false);
     const openModal = () => {
@@ -19,7 +19,7 @@ const useModal: UseModalType = (modalRef) => {
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
-        const backdropElement = document.getElementById('backdrop') as HTMLDivElement;
+        const backdropElement = backdropRef.current as HTMLDivElement;
 
         // focus trap
         const keySet: Set<'Tab' | 'Shift'> = new Set();
@@ -38,8 +38,10 @@ const useModal: UseModalType = (modalRef) => {
             document.removeEventListener('keyup', onKeyUp);
             document.removeEventListener('click', handleClick);
         }
-    }, [isOpen]);
+    }, [isOpen, backdropRef, modalRef]);
 
 
-    return [openModal, closeModal] as const;
-}
+    return { isOpen, openModal, closeModal } as const;
+};
+
+export default useModal;

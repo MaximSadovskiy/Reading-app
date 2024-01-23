@@ -8,10 +8,12 @@ type FocusTrapUpType = (e: KeyboardEvent, keySet: Set<Keys>) => void;
 
 
 // Functions
-const closeModalIfClickOutside: CloseModalType = (e, backdrop, closeCallback) => {
+const closeModalIfClickOutside: CloseModalType = (e, backdropEl, closeCallback) => {
+    if (!backdropEl) return;
+
     const target = e.target as Node;
-    if (backdrop.contains(target)) {
-        closeCallback;
+    if (backdropEl.contains(target)) {
+        closeCallback();
     }
     else {
         return;
