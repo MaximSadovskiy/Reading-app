@@ -4,6 +4,7 @@
     @include flex(center, center, pxIntoUnit(10), column);
     @include transition(background-color);
 
+    background-color: var(--acc-bg);
     border: pxIntoUnit(2) solid var(--acc-wrapper-border);
     border-radius: pxIntoUnit(15);
     padding: pxIntoUnit(10);

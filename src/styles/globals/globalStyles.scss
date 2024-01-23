@@ -18,13 +18,14 @@ button {
 :root {
     // colors
     --color-bisque: hsl(0, 52%, 84%);
-    --color-darkbrown: hsl(0, 38%, 8%);
-    --color-darkbrown-blur: hsla(0, 37%, 8%, 0.795);
-    --color-lightbrown: #421e1e;
+    --color-light-bisque: hsl(0, 100%, 97%); 
+    --color-darkbrown: hsl(0, 36%, 10%);
+    --color-darkbrown-blur: hsla(0, 29%, 10%, 0.822);
+    --color-lightbrown: hsl(0, 38%, 19%);
+    --color-lightbrown-hover: hsl(0, 30%, 24%);
     --color-orange: hsl(25, 100%, 82%);
     --color-gray: hsl(0, 1%, 83%);
     --color-white: hsl(0, 0%, 100%); 
-    --color-light-bisque: hsl(0, 100%, 97%); 
 };
 
 body {
@@ -55,6 +56,7 @@ body {
     // accountEnter
     --acc-wrapper-border: var(--color-white);
     --acc-text: var(--color-white);
+    --acc-bg: var(--color-darkbrown);
     --acc-bg-hover: var(--color-lightbrown);
 
     // rootPage
@@ -65,6 +67,14 @@ body {
     --main-link: var(--color-darkbrown);
     --main-listmarker: var(--color-lightbrown);
     --underline: var(--color-lightbrown);
+
+    // booksPage
+    --btn-bg: var(--color-darkbrown);
+    --btn-hover: hsl(0, 30%, 24%);
+    --btn-text: var(--color-white);
+    --btn-text-hover: var(--color-orange);
+    --svg: var(--color-bisque);
+    --svg-hover: var(--color-orange); 
 
     // darkTheme colors
     &[data-dark='true'] {
@@ -78,6 +88,14 @@ body {
         --main-text-highlight-logo: var(--color-bisque);
         --main-link: var(--color-orange);
         --main-listmarker: var(--color-bisque);
+
+        // booksPage
+        --btn-bg: var(--color-white); 
+        --btn-hover: var(--color-light-bisque);
+        --btn-text: var(--color-darkbrown);
+        --btn-text-hover: var(--color-lightbrown);
+        --svg: var(--color-lightbrown);
+        --svg-hover: var(--color-darkbrown);
     };
 };
 
