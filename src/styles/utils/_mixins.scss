@@ -22,7 +22,7 @@
 
 // transition, animation
 @mixin colorTransition($duration: 300ms) {
-    transition: background-color $duration ease-in-out, color $duration ease-in-out;
+    transition: background-color $duration ease-in-out, color $duration ease-in-out, border-color $duration ease-in-out, stroke 300ms ease-in-out, fill 300ms ease-in-out;
 };
 
 @mixin transition($prop, $duration: 150ms, $ease: ease-in-out) {
@@ -78,7 +78,7 @@
     color: var(--link-color);
     position: relative;
 
-    &:hover, &:focus {
+    &:hover {
         transform: scale(1.1);
     };
 
@@ -97,7 +97,18 @@
         transform: scale(0);
     };
 
-    &:hover::before, &:focus::before {
+    &:hover::before {
         transform: scaleX(1);
+    }
+}
+
+
+@mixin btnDefault {
+    &:hover {
+        transform: scale(1.1);
+    };
+
+    &:active {
+        transform: scale(0.9);
     }
 }

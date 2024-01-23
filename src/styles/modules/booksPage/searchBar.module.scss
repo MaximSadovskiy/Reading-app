@@ -1,0 +1,59 @@
+@use 'utils' as *;
+
+.wrapper {
+    @include colFlex(center);
+        
+    margin-top: pxIntoUnit(30);
+    align-self: center;
+    width: max(pxIntoUnit(225), 25vw);
+    height: max(pxIntoUnit(130), 25vh);
+    z-index: 99;
+    border-radius: pxIntoUnit(17);
+
+    //temp
+    border: 1px solid orange;
+}
+
+.openBtn {
+    @include fontDefault(17, 600);
+    @include transition(transform);
+    @include btnDefault;
+    @include flex(center, center, pxIntoUnit(5));
+
+    padding: pxIntoUnit(22);
+    border-radius: pxIntoUnit(15);
+    height: pxIntoUnit(60);
+    width: clamp(pxIntoUnit(235), max-content, pxIntoUnit(280));
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+
+    > svg {
+        @include transition(transform);
+        transition: stroke 300ms ease-in-out;
+        stroke: var(--svg);
+    }
+
+    &:hover, &:focus {
+        background-color: var(--btn-hover);
+        color: var(--btn-text-hover);
+
+        > svg {
+            stroke: var(--svg-hover);
+            animation: upDown 0.8s ease-out backwards;
+
+            @keyframes upDown {
+                0% {
+                    transform: rotate(0);
+                }
+
+                50% {
+                    transform: rotate(-20deg);
+                }
+
+                100% {
+                    transform: rotate(0deg);
+                }
+            }
+        }
+    }
+}

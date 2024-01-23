@@ -1,19 +1,23 @@
 @use 'utils' as *;
 
+@supports (backdrop-filter: blur(0px)) {
+    .header {
+        backdrop-filter: blur(pxIntoUnit(3.5));
+    }
+}
+
 .header {
     @include flex(space-between, center);
-    
-    background-color: var(--header-bg);
+
+    background-color: var(--header-bg-blur);
     height: pxIntoUnit(125);
     padding-inline: 2rem;
     border-bottom: pxIntoUnit(2) solid var(--header-border);
     position: sticky;
     top: 0;
-
-    opacity: 0.9;
-    backdrop-filter: blur(10px);
-    z-index: 100;
+    z-index: 10;
 }
+
 
 .logo {
     @include fontMarc(52, -1);

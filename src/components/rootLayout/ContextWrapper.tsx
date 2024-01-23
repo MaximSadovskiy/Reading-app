@@ -1,6 +1,8 @@
 'use client';
 import React, { createContext, useContext } from 'react';
 import GlobalContextInterface from '@/interfaces/contextWrapper';
+// redux
+import StoreProvider from './StoreProvider';
 // hooks
 import useTheme from '@/hooks/useTheme';
 
@@ -21,9 +23,11 @@ const ContextWrapper = (props: GlobalContextProps) => {
             systemTheme,
             setTheme,
         }}>
-            <body data-dark={theme === 'dark' ? true : false}>
-                {props.children}
-            </body>
+            <StoreProvider>
+                <body data-dark={theme === 'dark' ? true : false}>
+                    {props.children}
+                </body>
+            </StoreProvider>
         </GlobalContext.Provider>
     )
 };
