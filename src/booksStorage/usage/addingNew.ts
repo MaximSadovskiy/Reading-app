@@ -1,4 +1,4 @@
-import { addBook, addBookType } from './storage';
+import { addBook } from './storage';
 import { BookInputInterface } from '@/interfaces/bookInterface';
 
 // helper funcs

@@ -34,6 +34,7 @@ const useModal = (modalRef: ModalRefArg, backdropRef: ModalRefArg) => {
 
         // clean up
         return () => {
+            document.body.style.overflow = 'unset';
             document.removeEventListener('keydown', onKeyDown);
             document.removeEventListener('keyup', onKeyUp);
             document.removeEventListener('click', handleClick);
