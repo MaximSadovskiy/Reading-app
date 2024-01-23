@@ -112,4 +112,16 @@ class File {
         } while (match.done === false)
     }
 }
-export {Section, HeaderPart, File}
+async function BookRead() {
+    let buf = await fs.readFile("src/books/srcs/books/.txt");
+    const file = new File(buf);
+    console.log("fdssfdd");
+    let bookStr = "ERROR";
+    if (file != null) bookStr = file.readSection("I");
+    return (
+        <p className={styles.renderText}>
+            {bookStr}
+        </p>
+    );
+};
+export default BookRead;

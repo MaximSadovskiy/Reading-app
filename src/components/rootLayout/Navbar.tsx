@@ -26,9 +26,9 @@ const Navbar = () => {
                 </li>
                 <li>
                     <Link 
-                        href='/writers' 
+                        href='/read' 
                         className={`${styles.link} ${currentPath === '/writers' ? styles.active : ''}`}
-                    >Писатели
+                    >Чтение
                     </Link>
                 </li>
                 <li>
