@@ -1,22 +1,21 @@
-import styles from '@/styles/modules/readLayout/readPage.module.scss';
-import { promises as fs } from 'fs';
-
 class Section {
-    sectionName : string | undefined;
-    index : number | undefined;
+    public sectionName : string | undefined = undefined;
+    public index : number = 0;
 }
 class HeaderPart {
-    authorName = "";
-    bookName = "";
-    size = 0;
+    private authorName = "";
+    private bookName = "";
+    private size = 0;
 
     constructor(buffer : Buffer) {
         // Порядок важен
         this.authorName = this.nextHeaderLine(buffer, 0);
         this.bookName = this.nextHeaderLine(buffer, this.size);
     }
-    //private
-    nextHeaderLine(buffer : Buffer, offset : number) {
+    public getAuthorName() { return this.authorName; }
+    public getBookName() { return this.bookName; }
+    public getSize() { return this.size; }
+    private nextHeaderLine(buffer : Buffer, offset : number) {
         let i = offset;
         let found = false;
 
@@ -30,23 +29,22 @@ class HeaderPart {
         }
 
         if (!found) {
-            console.error("Failed to read header");
+            console.error("Failed to read header at index: " + i);
         }
 
-        let bufferSlice = buffer.slice(offset, i);
+        const bufferSlice = buffer.slice(offset, i);
         this.size += i - offset + 2;
 
-        let str = bufferSlice.toString('utf-8');
-        return str;
+        return bufferSlice.toString('utf-8');
     }
 }
 class File {
-    header : HeaderPart | undefined = undefined;
-    sectionsArr : Array<Section> = [];
-    currentSection : Section | undefined = undefined;
-    buffer : Buffer | undefined   = undefined;
-    text : string = "";
-    textIndex = 0;
+    //make private later
+    public header : HeaderPart | undefined = undefined;
+    public sectionsArr : Array<Section> = [];
+    public buffer : Buffer | undefined = undefined;
+    public text : string = "";
+    public textIndex = 0;
 
     constructor(buffer : Buffer) {
         if (buffer.length < 20) {
@@ -58,38 +56,14 @@ class File {
         this.parseHeader(buffer);
         this.parseSections(buffer);
     }
-    getListOfSections() {
-        // fuck js
-        return JSON.parse(JSON.stringify(this.sectionsArr));
+    public getListOfSections() {
+        return this.sectionsArr.slice();
     }
-    // искать по имени скорее всего не очень хорошая идея
-    // потом можно ввести id, у каждой секции, чтобы легче искать
-    readSection(sectionName : string | undefined) : string {
-        if (sectionName == undefined) return "";
-
-        let index = this.sectionsArr.findIndex(el => el.sectionName === sectionName);
-        if (index === -1) return "";
-        this.currentSection = this.sectionsArr[index];
-
-        let end : number | undefined = 0;
-        let nextSection = this.sectionsArr[index + 1];
-        if (nextSection === undefined && this.buffer != undefined) {
-            end = this.buffer.length;
-        } else {
-            end = nextSection.index;
-        }
-        if (this.buffer != undefined && this.currentSection.index
-                != undefined && this.currentSection.sectionName != undefined) {
-            return this.text.slice(this.currentSection.index + this.currentSection.sectionName.length + 12, end);
-        }
-        return "";
-    }
-    //private
-    parseHeader(buffer : Buffer) {
+    private parseHeader(buffer : Buffer) {
         this.header = new HeaderPart(buffer);
-        this.textIndex += this.header.size;
+        this.textIndex += this.header.getSize();
     }
-    parseSections(buffer : Buffer) {
+    private parseSections(buffer : Buffer) {
         let start = this.textIndex;
         let end = this.textIndex;
         while (end < buffer.length - 3) {
@@ -130,22 +104,12 @@ class File {
                 if (sectionIndex === -1) {
                     console.error(`Секция ${sectionStr} была обьявленна, но не найдена в тексте`);
                 } else {
-                    this.sectionsArr[sectionIndex].index = match.value.index;
+                    if (match.value != undefined && match.value.index != undefined) {
+                        this.sectionsArr[sectionIndex].index = match.value.index;
+                    }
                 }
             }
         } while (match.done === false)
     }
 }
-async function BookRead() {
-    let buf = await fs.readFile("src/books/test.txt");
-    const file = new File(buf);
-    console.log("fdssfdd");
-    let bookStr = "ERROR";
-    if (file != null) bookStr = file.readSection("I");
-    return (
-        <p className={styles.renderText}>
-            {bookStr}
-        </p>
-    );
-};
-export default BookRead;
+export {Section, HeaderPart, File}
