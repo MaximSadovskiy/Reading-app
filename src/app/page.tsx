@@ -94,8 +94,8 @@ const AsideWithImages = (props: AsideProps) => {
 	const { imgSrcs } = props;
 
 	const renderImgList = imgSrcs.map(src => (
-		<div className={styles.innerDiv}>
-			<Image src={src} fill={true} alt='' role='presentation' />
+		<div className={styles.innerDiv} key={src}>
+			<Image src={src} fill={true} alt='' role='presentation' sizes='100%' quality={50} />
 		</div>
 	));
 
