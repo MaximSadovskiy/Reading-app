@@ -21,7 +21,7 @@ const getSvgPath: GetSvgPath = (theme: CustomThemeType) => {
 
 // main component
 const ThemeChanger = () => {
-    const { theme, systemTheme, setTheme } = useGlobalContext();
+    const { theme, setTheme } = useGlobalContext();
     const [isOpen, setIsOpen] = useState(false);
     const [svgPath, setSvgPath] = useState<SvgPathType>(() => {
         return getSvgPath(theme);
@@ -49,6 +49,23 @@ const ThemeChanger = () => {
         }
     }, [buttonRef, listRef]);
 
+
+    // get system theme
+    const systemThemeRef = useRef<ThemeType | null>(null);
+
+    useEffect(() => {
+        // helper
+        const themeCondition = '(prefers-color-scheme: dark)';
+        const getPreferredTheme: () => ThemeType = () => {
+            const prefersDark = window.matchMedia(themeCondition).matches;
+            return prefersDark ? 'dark' : 'light';
+        };
+
+        // getting system theme
+        const systemTheme = getPreferredTheme();
+        systemThemeRef.current = systemTheme;
+    }, []);
+
     return (
         <div className={styles.container}>
             <button 
@@ -65,7 +82,7 @@ const ThemeChanger = () => {
             <LazyMotion features={domAnimation} strict>
                 <AnimatePresence>
                     {isOpen && (
-                        <PopupThemeList setTheme={setTheme} systemTheme={systemTheme} setSvgPath={setSvgPath} closeList={() => setIsOpen(false)} svgPath={svgPath} ref={listRef} />
+                        <PopupThemeList setTheme={setTheme} systemTheme={systemThemeRef.current} setSvgPath={setSvgPath} closeList={() => setIsOpen(false)} svgPath={svgPath} ref={listRef} />
                     )}
                 </AnimatePresence>
             </LazyMotion>
@@ -78,7 +95,7 @@ export default ThemeChanger;
 // types of list
 interface ListProps {
     setTheme: SetThemeType;
-    systemTheme: ThemeType;
+    systemTheme: ThemeType | null;
     setSvgPath: React.Dispatch<React.SetStateAction<SvgPathType>>
     closeList: () => void;
     svgPath: SvgPathType;
@@ -91,7 +108,17 @@ const PopupThemeList = forwardRef(({ setTheme, systemTheme, setSvgPath, closeLis
 
     const handleChangeThemeClick = (e: ButtonCustomEvent) => {
         const { name } = e.currentTarget;
-        setTheme(name === 'system' ? systemTheme : name);
+        setTheme(() => {
+            if (name === 'system' && systemTheme != null) {
+                return systemTheme
+            }
+            else if (name === 'system') {
+                return 'dark'
+            }
+            else {
+                return name
+            }
+        });
         // extract new path
         const path = getSvgPath(name);
         setSvgPath(path);
