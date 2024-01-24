@@ -3,7 +3,6 @@ import { useGlobalContext } from "./ContextWrapper";
 import styles from '@/styles/modules/rootLayout/themeChanger.module.scss';
 import Image from "next/image";
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
-import closeIfOutsideClick from "@/utils/clickOutsideCloseFunction";
 // framer
 import { m, LazyMotion, domAnimation, AnimatePresence } from 'framer-motion';
 import { listVariants, itemVariants } from "@/styles/variants/themeToggler/themeTogglerVariants";
@@ -34,16 +33,21 @@ const ThemeChanger = () => {
 
     // close if 'isOpen' + clickOutside
     useEffect(() => {
-        const handleClick = (e: MouseEvent) => {
-            closeIfOutsideClick<HTMLButtonElement | HTMLUListElement>([buttonRef, listRef], e, () => setIsOpen(false));
-        };
-
-        document.addEventListener('click', handleClick);
-
-        return () => {
-            document.removeEventListener('click', handleClick);
-        };
-    }, []);
+        if (buttonRef.current && listRef.current) {
+            const handleClick = (e: MouseEvent) => {
+                const target = e.target as HTMLElement;
+                if (!buttonRef.current?.contains(target) && !listRef.current?.contains(target)) {
+                    setIsOpen(false);
+                }
+            };
+    
+            document.addEventListener('click', handleClick, true);
+    
+            return () => {
+                document.removeEventListener('click', handleClick, true);
+            };
+        }
+    }, [buttonRef, listRef]);
 
     return (
         <div className={styles.container}>

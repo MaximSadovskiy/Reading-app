@@ -2,17 +2,18 @@
 type CloseCallback = () => void;
 type CloseModalType = (e: MouseEvent, backdropElement: HTMLDivElement, closeCallback: CloseCallback) => void;
 
-type Keys = 'Tab' | 'Shift'; 
-type FocusTrapDownType = (e: KeyboardEvent, modalEl: HTMLElement, closeCallback: CloseCallback, keySet: Set<Keys>) => void;
-type FocusTrapUpType = (e: KeyboardEvent, keySet: Set<Keys>) => void;
+type Keys = 'Tab' | 'Shift';
+type KeySetRefType = React.MutableRefObject<Set<Keys>>;
+type FocusTrapDownType = (e: KeyboardEvent, modalEl: HTMLElement, closeCallback: CloseCallback, keySetRef: KeySetRefType, focusIndexRef: React.MutableRefObject<number>) => void;
+type FocusTrapUpType = (e: KeyboardEvent, keySetRef: KeySetRefType) => void;
 
 
 // Functions
 const closeModalIfClickOutside: CloseModalType = (e, backdropEl, closeCallback) => {
     if (!backdropEl) return;
 
-    const target = e.target as Node;
-    if (backdropEl.contains(target)) {
+    const target = e.target as HTMLElement;
+    if (target.id === 'backdrop') {
         closeCallback();
     }
     else {
@@ -22,7 +23,7 @@ const closeModalIfClickOutside: CloseModalType = (e, backdropEl, closeCallback) 
 
 
 // Focus Trap
-const focusTrapKeyDown: FocusTrapDownType = (e, modalEl, closeCallback, keySet) => {
+const focusTrapKeyDown: FocusTrapDownType = (e, modalEl, closeCallback, keySetRef, focusIndexRef) => {
     // edge cases
     if (e.key === 'Escape') {
         closeCallback();
@@ -32,39 +33,45 @@ const focusTrapKeyDown: FocusTrapDownType = (e, modalEl, closeCallback, keySet) 
 
     e.preventDefault();
 
-    keySet.add(e.key);
+    if (keySetRef.current == null || focusIndexRef.current == null) return;
+
+
+    keySetRef.current.add(e.key);
     if (e.key === 'Shift') return;
 
-    console.log('current keySEt: ', keySet);
 
-    let focusElIndex = 0;
     let allElementsInsideModal: NodeListOf<HTMLInputElement | HTMLButtonElement | HTMLAnchorElement | HTMLSelectElement | HTMLTextAreaElement> = modalEl.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
 
-    if (keySet.has('Shift')) {
-        if (focusElIndex > 0) {
-            focusElIndex--;
-            allElementsInsideModal[focusElIndex].focus();
+
+    if (keySetRef.current?.has('Shift')) {
+        
+
+        if (focusIndexRef.current > 0) {
+            focusIndexRef.current -= 1;
+            allElementsInsideModal[focusIndexRef.current].focus();
         }
         else {
-            focusElIndex = allElementsInsideModal.length;
-            allElementsInsideModal[focusElIndex].focus();
+            focusIndexRef.current = allElementsInsideModal.length - 1;
+            allElementsInsideModal[focusIndexRef.current].focus();
         }
     } else {
-        if (focusElIndex < allElementsInsideModal.length) {
-            focusElIndex++;
-            allElementsInsideModal[focusElIndex].focus();
+
+
+        if (focusIndexRef.current < allElementsInsideModal.length - 1) {
+            focusIndexRef.current++;
+            allElementsInsideModal[focusIndexRef.current].focus();
         }
         else {
-            focusElIndex = 0;
-            allElementsInsideModal[focusElIndex].focus();
+            focusIndexRef.current = 0;
+            allElementsInsideModal[focusIndexRef.current].focus();
         }
     }
 };
 
 
-const focusTrapKeyUp: FocusTrapUpType = (e, keySet) => {
+const focusTrapKeyUp: FocusTrapUpType = (e, keySetRef) => {
     if (e.key === 'Shift') {
-        keySet.delete('Shift');
+        keySetRef.current?.delete('Shift');
     }
 };
 
