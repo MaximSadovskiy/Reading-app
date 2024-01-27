@@ -7,11 +7,15 @@
     align-self: center;
     width: max(pxIntoUnit(225), 25vw);
     height: max(pxIntoUnit(130), 25vh);
-    z-index: 99;
     border-radius: pxIntoUnit(17);
 
     //temp
     border: 1px solid orange;
+}
+
+.searchPar {
+    @include fontDefault(24, 600);
+    margin-bottom: pxIntoUnit(10);
 }
 
 .openBtn {
@@ -56,4 +60,193 @@
             }
         }
     }
+}
+
+
+.searchBarModalWrapper {
+    @include colFlex(center);
+    @include fontDefault(18);
+    @include colorTransition;
+
+    // positioning
+    $clampWidth: clamp(320px, 30vw, 400px);
+    width: $clampWidth;
+    position: fixed;
+    top: pxIntoUnit(140);
+    right: calc(50vw - $clampWidth);
+    transform: translateX(-50%);
+
+    height: max(pxIntoUnit(130), 25vh);
+    z-index: 99;
+    background-color: var(--search-modal-bg);
+    padding: pxIntoUnit(15);
+    border: pxIntoUnit(5) groove var(--search-modal-border);
+    border-radius: pxIntoUnit(17);
+
+    &:hover {
+        background-color: var(--search-modal-bg-hover);
+    }
+}
+
+
+.toggleWrapper {
+    position: relative;
+    margin-bottom: pxIntoUnit(50);
+}
+
+.toggleLabel {
+    font-weight: 600;
+    color: var(--toggle-label-color);
+}
+
+.toggleOpenBtn {
+    @include colorTransformTransition;
+    
+    padding: pxIntoUnit(15);
+    border-radius: pxIntoUnit(15);
+    position: relative;
+    padding-right: pxIntoUnit(25);
+    background-color: var(--toggle-btn-bg);
+    
+    > p {
+        font-size: 17;
+        font-weight: 500;
+    }
+
+    > svg {
+        @include svgTransition;
+
+        transform: rotate(90deg);
+        position: absolute;
+        right: pxIntoUnit(0);
+        top: calc(50% - 14px);
+        fill: var(--color-orange);
+
+        &[data-open=true] {
+            transform: rotate(180deg);
+        }
+    }
+
+    &:hover {
+        background-color: var(--toggle-btn-hover);
+        transform: scale(1.05);
+
+        > svg {
+            fill: var(--color-darkbrown);
+        }
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+}
+
+
+.toggleList {
+    @include colFlex;
+    position: absolute;
+    bottom: calc(-10px - 100px);
+    right: pxIntoUnit(-14);
+    list-style: none;
+    background-color: var(--toggle-list-bg);
+    border: pxIntoUnit(4) solid var(--toggle-list-border);
+    border-radius: pxIntoUnit(15);
+    width: pxIntoUnit(150);
+    min-height: pxIntoUnit(100);
+    z-index: 101;
+}
+
+
+.toggleListItem {
+
+    @include flex;
+    font-size: pxIntoUnit(16);
+    width: 100%;
+    flex: 1 1 auto;
+
+    > button {
+        @include colorTransition;
+        background-color: var(--toggle-btn-bg);
+        color: var(--toggle-btn-text);
+        width: 100%;
+        flex: 1 1 auto;
+
+        > p {
+            @include fontDefault(18)    
+        }
+
+        &:hover {
+            background-color: var(--toggle-list-btn-hover);
+            color: var(--toggle-list-btn-text-hover);
+        }
+    }
+
+    &:first-of-type {
+        @include roundCorners(top, pxIntoUnit(10));
+
+        border-bottom: pxIntoUnit(2) solid var(--toggle-listItem-border);
+
+        > button {
+            @include roundCorners(top, pxIntoUnit(10));
+        }
+    }
+
+    &:last-of-type {
+        @include roundCorners(bottom, pxIntoUnit(10));
+
+        > button {
+            @include roundCorners(bottom, pxIntoUnit(10));
+        }
+    }
+}
+
+
+.searchInput {
+    @include colorTransition;
+
+    height: pxIntoUnit(50);
+    border-radius: pxIntoUnit(15);
+    padding: pxIntoUnit(15);
+    border: pxIntoUnit(4) solid white;
+    color: var(--search-input-text);
+
+    &:focus {
+        border-color: var(--search-input-border);
+    }
+}
+
+
+// SEARCH RESULTS
+.resultsWrapper {
+    @include colFlex(center, center);
+    @include fontDefault(20);
+    @include colorTransition;
+    @include customScrollBar(var(--results-scroll-thumb), var(--results-scroll-track));
+
+    // positioning
+    $clampWidth: clamp(320px, 50vw, 560px);
+    $parentHeight: max(pxIntoUnit(130), 25vh);
+    width: $clampWidth;
+    position: fixed;
+    right: calc(50vw - $clampWidth / 2);
+    
+    top: calc(pxIntoUnit(140) + $parentHeight);
+    height: clamp(pxIntoUnit(200), 45vh, pxIntoUnit(600));
+    border-radius: pxIntoUnit(17);
+    z-index: 99;
+    background-color: var(--results-bg);
+    border: pxIntoUnit(5) groove var(--search-modal-border);
+    padding: pxIntoUnit(15);
+    margin-top: pxIntoUnit(10);
+    overflow-y: scroll;
+
+
+    & > p {
+        color: var(--results-text);
+    }  
+}
+
+.noResultsText {
+    font-weight: 600;
+    position: relative;
 }

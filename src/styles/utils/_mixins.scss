@@ -22,12 +22,20 @@
 
 // transition, animation
 @mixin colorTransition($duration: 300ms) {
-    transition: background-color $duration ease-in-out, color $duration ease-in-out, border-color $duration ease-in-out, stroke 300ms ease-in-out, fill 300ms ease-in-out;
+    transition: background-color $duration ease-in-out, color $duration ease-in-out, border-color $duration ease-in-out;
 };
 
 @mixin transition($prop, $duration: 150ms, $ease: ease-in-out) {
     transition: $prop $duration $ease;
 };
+
+@mixin svgTransition($duration: 150ms) {
+    transition: fill $duration ease-in-out, transform $duration ease-in-out;
+};
+
+@mixin colorTransformTransition($colorDur: 150ms, $transformDur: 150ms, $ease: ease-in-out) {
+    transition: background-color $colorDur $ease, color $colorDur $ease, transform $transformDur $ease;
+}
 
 // padding, margin
 @mixin padding($inline: pxIntoUnit(15), $block: pxIntoUnit(15)) {
@@ -63,7 +71,7 @@
     text-align: $textAlign;
 };
 
-@mixin fontMarc($size, $spacing: 0) {
+@mixin fontMarc($size: 30, $spacing: 0) {
     font-family: var(--font-marckscript);
     font-size: pxIntoUnit($size);
     letter-spacing: #{$spacing}px;
@@ -111,4 +119,10 @@
     &:active {
         transform: scale(0.9);
     }
+}
+
+
+@mixin customScrollBar($thumbColor, $trackColor, $width: thin) {
+    scrollbar-width: $width;
+    scrollbar-color: $thumbColor $trackColor;
 }

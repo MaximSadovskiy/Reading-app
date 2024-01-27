@@ -3,28 +3,25 @@
 import { useState, useRef, useEffect, SetStateAction } from "react";
 import useModal from "@/hooks/useModal";
 import debounce from "@/utils/debounceDecorator";
-import BookInterface from "@/interfaces/bookInterface";
+import { BookInterface } from "@/interfaces/bookInterface";
+import { BooksForSearch } from "@/app/api/books/search/route";
 import styles from '@/styles/modules/booksPage/searchBar.module.scss';
 import Backdrop from "@/lib/features/backdrop/Backdrop";
+import Image from "next/image";
 // анимации
 import { m, LazyMotion, domAnimation, AnimatePresence } from "framer-motion";
 import { listVariants, itemVariants } from "@/styles/variants/themeToggler/themeTogglerVariants";
+import getModalBlurVariants from "@/animation/variants/modalBlurVariants";
 // modal
 import closeIfOutsideClick from "@/utils/clickOutsideCloseFunction";
 
 
-// other
-const apiUrl = '/api/books';
+const baseApiUrl = 'http://localhost:3000/api/books/search';
 
-// main component
-interface SearchBarProps {
+// WRAPPER
 
-}
+const SearchBar = () => {
 
-const SearchBar = (props: SearchBarProps) => {
-
-    // Modal & Backdrop refs
-    const modalRef = useRef<HTMLDivElement>(null);
     // Modal and Backdrop Open state 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const openModal = () => {
@@ -33,9 +30,6 @@ const SearchBar = (props: SearchBarProps) => {
     const closeModal = () => {
         if (isModalOpen) setIsModalOpen(false);
     }
-
-    // custom hook (effect)
-    useModal(modalRef, closeModal, isModalOpen);
 
     // open / close Search Modal
     const buttonHandleClick = () => {
@@ -47,32 +41,7 @@ const SearchBar = (props: SearchBarProps) => {
         }
     };
 
-    // search state
-    const [query, setQuery] = useState('');
-    const [searchMode, setSearchMode] = useState<'name' | 'author'>('name');
-    const [results, setResults] = useState<BookInterface[]>([]);
-
-    // search request
-    const search = debounce(async (query: string) => {
-        const response = await fetch(`${apiUrl}?mode=${searchMode}&query=${query}`);
-
-        if (response.ok == false) {
-            console.log('Something went wrong');
-        } 
-        else {
-            const data = await response.json();
-            setResults(data);
-        }
-        
-    }, 1000);
-
-    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setQuery(e.target.value);
-        search(query);
-    };
-
-    // output of results list
-    let resultsListToRender: Omit<BookInterface, 'files'>[];
+    
 
     return (
         <div className={styles.wrapper}>
@@ -81,22 +50,16 @@ const SearchBar = (props: SearchBarProps) => {
                 <SearchSvg width={40} height={40} />
                 <p>Найдётся всё...</p>
             </button>
-            {isModalOpen &&(
-                <>
-                    <div className={styles.searchBarModalWrapper} ref={modalRef}>
-                        <Toggler searchMode={searchMode} setSearchMode={setSearchMode} />
-                        <input
-                            className={styles.searchInput}
-                            id='search' 
-                            value={query}
-                            onChange={handleSearch}
-                            autoComplete="off"
-                            placeholder={`например: ${searchMode === 'name' ? 'Война и мир' : 'Лев Толстой'}`}
-                        />
-                    </div>
-                    <Backdrop />
-                </>
-            )}
+            <LazyMotion features={domAnimation} strict>
+                <AnimatePresence>
+                    {isModalOpen && (
+                        <>
+                            <SearchModal isModalOpen={isModalOpen} closeModal={closeModal} />
+                            <Backdrop />
+                        </>
+                    )}
+                </AnimatePresence>
+            </LazyMotion>
         </div>
     )
 };
@@ -105,7 +68,125 @@ export default SearchBar;
 
 // helper components
 
-// Toggler
+// MODAL
+
+interface SearchModalProps {
+    isModalOpen: boolean;
+    closeModal: () => void;
+}
+
+const SearchModal = ({ isModalOpen, closeModal }: SearchModalProps) => {
+
+    const modalRef = useRef<HTMLDivElement>(null);
+
+    // custom hook (effect)
+    useModal(modalRef, closeModal, isModalOpen);
+
+    // search state
+    const [query, setQuery] = useState('');
+    const [searchMode, setSearchMode] = useState<'name' | 'author'>('name');
+    const [results, setResults] = useState<BookInterface[]>([]);
+
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setQuery(e.target.value);
+    };
+
+    // search request
+    useEffect(() => {
+        if (query.length > 1) {
+            try {
+                // declare request
+                const doSearch = async () => {
+                    const encodedQuery = encodeURIComponent(query);
+                    const searchParams = `?query=${encodedQuery}&mode=${searchMode};`;
+                    const apiURL = new URL(`${baseApiUrl}${searchParams}`);
+
+                    console.log('apiURL: ', apiURL);
+
+                    const response = await fetch(apiURL, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    const data = await response.json();
+
+                    console.log('data: ', data);
+                }
+
+                // call request
+            
+                doSearch();
+            } catch (err) {
+                console.log('error on client: ', err);
+            }
+        }
+    }, [query, searchMode]);
+
+    return (
+        <>
+            <m.div className={styles.searchBarModalWrapper} ref={modalRef}
+
+                variants={getModalBlurVariants('17px')}
+                initial='initial'
+                animate='animate'
+                exit='exit'
+
+                key='searchModal'
+                >
+                <Toggler searchMode={searchMode} setSearchMode={setSearchMode} />
+                <input
+                    className={styles.searchInput}
+                    id='search' 
+                    value={query}
+                    onChange={handleSearch}
+                    autoComplete="off"
+                    placeholder={`например: ${searchMode === 'name' ? 'Война и мир' : 'Лев Толстой'}`}
+                />
+            </m.div>
+            <SearchResults inputQuery={query} searchResults={results} />
+        </>
+    )
+}
+
+// SEARCH RESULTS
+interface SearchResultsProps {
+    inputQuery: string;
+    searchResults: BooksForSearch;
+}
+
+const SearchResults = (props: SearchResultsProps) => {
+
+    const { inputQuery, searchResults } = props;
+
+    // if input empty
+    if (inputQuery.length === 0) {
+        return (
+            <div className={styles.resultsWrapper}>
+                <p className={styles.noResultsText}>К сожалению, ничего не нашлось...</p>
+                <Image src="/emotions/sad.svg" width={100} height={100} alt='sad emoji'/>
+            </div>
+        )
+    }
+
+    const renderedList = searchResults.map(searchResult => (
+        <li className={styles.resultsItem}>
+            <p className={styles.resultsAuthor}>{searchResult.author}</p>
+            <p className={styles.resultsName}>{searchResult.name}</p>
+        </li>
+    ));
+
+    return (
+        <div className={styles.resultsWrapper}>
+            <ul className={styles.resultsList}>
+                {renderedList}
+            </ul>
+        </div>
+    );
+};
+
+
+// TOGGLER inside modal
 
 interface TogglerProps {
     searchMode: 'name' | 'author';
@@ -118,13 +199,6 @@ const Toggler = ({ searchMode, setSearchMode }: TogglerProps) => {
     const [isToggleOpen, setIsToggleOpen] = useState(false);
     const listRef = useRef<HTMLUListElement>(null);
     const btnRef = useRef<HTMLButtonElement>(null);
-
-
-    // TESTING - DELETE LATER
-    useEffect(() => {
-        if (isToggleOpen) console.log('isToggleOpen = true');
-        else console.log('isToggleOpen = false');
-    }, [isToggleOpen]);
 
     // helpers functions
     const openBtnClick = () => {
@@ -156,11 +230,9 @@ const Toggler = ({ searchMode, setSearchMode }: TogglerProps) => {
                 closeIfOutsideClick<HTMLUListElement | HTMLButtonElement>([listRef, btnRef], e, () => setIsToggleOpen(false));   
             };
             
-            console.log('Toggler: ADD event listener');
             document.addEventListener('click', handleOutsideClick);
     
             return () => {
-                console.log('Toggler: CLEAN event listener');
                 document.removeEventListener('click', handleOutsideClick);
             }
         }
@@ -203,10 +275,14 @@ const Toggler = ({ searchMode, setSearchMode }: TogglerProps) => {
                             ref={listRef}
                         >
                             <m.li className={styles.toggleListItem} role="option" variants={itemVariants}>
-                                <button onClick={() => setModeToName()}>названию</button>
+                                <button onClick={() => setModeToName()}>
+                                    <p>названию</p>
+                                </button>
                             </m.li>
                             <m.li className={styles.toggleListItem} role="option" variants={itemVariants}>
-                                <button onClick={(e) => setModeToAuthor()}>автору</button>
+                                <button onClick={(e) => setModeToAuthor()}>
+                                    <p>автору</p>
+                                </button>
                             </m.li>
                         </m.ul>
                     )}
