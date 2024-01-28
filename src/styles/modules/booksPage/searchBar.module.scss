@@ -6,15 +6,14 @@
     margin-top: pxIntoUnit(30);
     align-self: center;
     width: max(pxIntoUnit(225), 25vw);
-    height: max(pxIntoUnit(130), 25vh);
+    height: auto;
     border-radius: pxIntoUnit(17);
-
-    //temp
-    border: 1px solid orange;
 }
 
 .searchPar {
     @include fontDefault(24, 600);
+
+    color: var(--main-text);
     margin-bottom: pxIntoUnit(10);
 }
 
@@ -91,7 +90,7 @@
 
 .toggleWrapper {
     position: relative;
-    margin-bottom: pxIntoUnit(50);
+    margin-bottom: pxIntoUnit(30);
 }
 
 .toggleLabel {
@@ -209,14 +208,41 @@
     padding: pxIntoUnit(15);
     border: pxIntoUnit(4) solid white;
     color: var(--search-input-text);
+    margin-bottom: pxIntoUnit(25);
 
     &:focus {
         border-color: var(--search-input-border);
     }
 }
 
+.exitSearchBtn {
+    @include colorTransformTransition;
 
-// SEARCH RESULTS
+    padding: pxIntoUnit(12);
+    border-radius: pxIntoUnit(15);
+    border: pxIntoUnit(3) solid var(--exit-btn-border);
+    background-color: var(--toggle-btn-bg);
+    align-self: flex-start;
+
+    &:hover {
+        background-color: var(--exit-btn-hover);
+        transform: scale(1.1);
+
+        & > p {
+            color: var(--exit-text-hover);
+        }
+    }
+
+    &:active {
+        transform: scale(0.9);
+    }
+
+    & > p {
+        @include fontDefault(18, 600, 1px);
+    }
+}
+
+
 .resultsWrapper {
     @include colFlex(center, center);
     @include fontDefault(20);

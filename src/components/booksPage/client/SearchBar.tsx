@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, SetStateAction } from "react";
+import { useState, useRef, useEffect, SetStateAction, Suspense } from "react";
 import useModal from "@/hooks/useModal";
 import debounce from "@/utils/debounceDecorator";
 import { BookInterface } from "@/interfaces/bookInterface";
@@ -8,10 +8,12 @@ import { BooksForSearch } from "@/app/api/books/search/route";
 import styles from '@/styles/modules/booksPage/searchBar.module.scss';
 import Backdrop from "@/lib/features/backdrop/Backdrop";
 import Image from "next/image";
+import { ArrowSvg, SearchSvg } from "@/components/shared/Svg";
 // анимации
 import { m, LazyMotion, domAnimation, AnimatePresence } from "framer-motion";
 import { listVariants, itemVariants } from "@/styles/variants/themeToggler/themeTogglerVariants";
 import getModalBlurVariants from "@/animation/variants/modalBlurVariants";
+import upDownVariants from "@/animation/variants/upDownVariants";
 // modal
 import closeIfOutsideClick from "@/utils/clickOutsideCloseFunction";
 
@@ -115,7 +117,6 @@ const SearchModal = ({ isModalOpen, closeModal }: SearchModalProps) => {
                 }
 
                 // call request
-            
                 doSearch();
             } catch (err) {
                 console.log('error on client: ', err);
@@ -143,6 +144,8 @@ const SearchModal = ({ isModalOpen, closeModal }: SearchModalProps) => {
                     autoComplete="off"
                     placeholder={`например: ${searchMode === 'name' ? 'Война и мир' : 'Лев Толстой'}`}
                 />
+                <button onClick={() => closeModal()}
+                className={styles.exitSearchBtn}><p>Выйти</p></button>
             </m.div>
             <SearchResults inputQuery={query} searchResults={results} />
         </>
@@ -162,10 +165,15 @@ const SearchResults = (props: SearchResultsProps) => {
     // if input empty
     if (inputQuery.length === 0) {
         return (
-            <div className={styles.resultsWrapper}>
+            <m.div className={styles.resultsWrapper}
+                variants={upDownVariants}
+                initial='initial'
+                animate='animate'
+                exit='exit'    
+            >
                 <p className={styles.noResultsText}>К сожалению, ничего не нашлось...</p>
                 <Image src="/emotions/sad.svg" width={100} height={100} alt='sad emoji'/>
-            </div>
+            </m.div>
         )
     }
 
@@ -177,14 +185,18 @@ const SearchResults = (props: SearchResultsProps) => {
     ));
 
     return (
-        <div className={styles.resultsWrapper}>
+        <m.div className={styles.resultsWrapper}
+            variants={getModalBlurVariants('0px')}
+            initial='initial'
+            animate='animate'
+            exit='exit'
+        >
             <ul className={styles.resultsList}>
                 {renderedList}
             </ul>
-        </div>
+        </m.div>
     );
 };
-
 
 // TOGGLER inside modal
 
@@ -290,34 +302,5 @@ const Toggler = ({ searchMode, setSearchMode }: TogglerProps) => {
             </LazyMotion>
             <p id="search-info" className="sr-only">Выберите режим поиска</p>
         </div>
-    )
-}
-
-// Svg
-const SearchSvg = ({width = 80, height = 80}: {color?: string, width?: number, height?: number}) => {
-    return (
-        <svg width={`${width}px`} height={`${height}px`} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(0)">
-            <g id="SVGRepo_bgCarrier" strokeWidth="0"/>
-            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"/>
-            <g id="SVGRepo_iconCarrier">
-                <path d="M11 6C13.7614 6 16 8.23858 16 11M16.6588 16.6549L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </g>
-        </svg>
-    )
-};
-
-
-const ArrowSvg = ({width = 30, height = 30, isOpen}: {width: number, height: number, isOpen: boolean}) => {
-
-    return (
-        <svg data-open={isOpen} width={`${width}px`} height={`${height}px`} viewBox="0 0 24.00 24.00" xmlns="http://www.w3.org/2000/svg" stroke="#ffc9a3" strokeWidth="0.00024000000000000003" transform='rotate(90deg)'>
-
-            <g id="SVGRepo_bgCarrier" strokeWidth="0"/>
-
-            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"/>
-
-            <g id="SVGRepo_iconCarrier"> <path d="M18.2929 15.2893C18.6834 14.8988 18.6834 14.2656 18.2929 13.8751L13.4007 8.98766C12.6195 8.20726 11.3537 8.20757 10.5729 8.98835L5.68257 13.8787C5.29205 14.2692 5.29205 14.9024 5.68257 15.2929C6.0731 15.6835 6.70626 15.6835 7.09679 15.2929L11.2824 11.1073C11.673 10.7168 12.3061 10.7168 12.6966 11.1073L16.8787 15.2893C17.2692 15.6798 17.9024 15.6798 18.2929 15.2893Z"/> </g>
-
-        </svg>
     )
 }

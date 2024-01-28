@@ -6,7 +6,7 @@ const getOpenClipPath = (roundInPx: string) => `inset(0 0 0 0 round ${roundInPx}
 const getModalBlurVariants = (roundInPx: string): Variants => ({
     initial: {
         clipPath: getInitClipPath(roundInPx),
-        filter: 'blur(10px)',
+        filter: 'blur(15px)',
     },
     animate: {
         clipPath: getOpenClipPath(roundInPx),
@@ -18,6 +18,7 @@ const getModalBlurVariants = (roundInPx: string): Variants => ({
     },
     exit: {
         clipPath: getInitClipPath(roundInPx),
+        filter: 'blur(15px)',
         transition: {
             duration: 0.3,
             ease: 'circIn'
