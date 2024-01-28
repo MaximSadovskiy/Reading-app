@@ -3,11 +3,11 @@
 import { useState, useRef, useEffect, SetStateAction, Suspense } from "react";
 import useModal from "@/hooks/useModal";
 import debounce from "@/utils/debounceDecorator";
-import { BookInterface } from "@/interfaces/bookInterface";
-import { BooksForSearch } from "@/app/api/books/search/route";
+import { BooksForSearch } from "@/booksStorage/usage/storage";
 import styles from '@/styles/modules/booksPage/searchBar.module.scss';
 import Backdrop from "@/lib/features/backdrop/Backdrop";
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowSvg, SearchSvg } from "@/components/shared/Svg";
 // анимации
 import { m, LazyMotion, domAnimation, AnimatePresence } from "framer-motion";
@@ -86,41 +86,65 @@ const SearchModal = ({ isModalOpen, closeModal }: SearchModalProps) => {
 
     // search state
     const [query, setQuery] = useState('');
-    const [searchMode, setSearchMode] = useState<'name' | 'author'>('name');
-    const [results, setResults] = useState<BookInterface[]>([]);
+    const [searchMode, setSearchMode] = useState<'title' | 'author'>('title');
+    const [results, setResults] = useState<BooksForSearch>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isNoResults, setIsNoResults] = useState(false);
 
     const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.value.length > 0) setIsLoading(true);
+        if (isNoResults === true) setIsNoResults(false); 
         setQuery(e.target.value);
     };
 
     // search request
+    const controllerRef = useRef<AbortController | null>(null);
+
     useEffect(() => {
-        if (query.length > 1) {
-            try {
-                // declare request
-                const doSearch = async () => {
-                    const encodedQuery = encodeURIComponent(query);
-                    const searchParams = `?query=${encodedQuery}&mode=${searchMode};`;
-                    const apiURL = new URL(`${baseApiUrl}${searchParams}`);
-
-                    console.log('apiURL: ', apiURL);
-
-                    const response = await fetch(apiURL, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        }
-                    });
-                    const data = await response.json();
-
-                    console.log('data: ', data);
+        if (query.length > 0) {
+                // aborting mechanism
+                if (controllerRef.current !== null) {
+                    controllerRef.current.abort();
                 }
+
+                controllerRef.current = new AbortController();
+                const signal = controllerRef.current.signal;
+
+                // declare request (try catch - for aborting)
+                const doSearch = debounce(async () => {
+                    try {
+                        const encodedQuery = encodeURIComponent(query);
+                        const searchParams = `?mode=${searchMode}&query=${encodedQuery}`;
+                        const apiURL = new URL(`${baseApiUrl}${searchParams}`);
+
+                        const response = await fetch(apiURL, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            // abort signal
+                            signal,
+                            // caching behaviour
+                            next: {
+                                revalidate: 0
+                            },
+                            cache: 'no-store'
+                        });
+
+                        // RESULT
+                        const searchedBooks: BooksForSearch = await response.json();
+
+                        setResults(searchedBooks);
+                        setIsLoading(false);
+                        if (searchedBooks.length === 0) setIsNoResults(true);
+
+                    } catch (err) {
+
+                    }
+                }, 1000);
 
                 // call request
                 doSearch();
-            } catch (err) {
-                console.log('error on client: ', err);
-            }
         }
     }, [query, searchMode]);
 
@@ -142,12 +166,12 @@ const SearchModal = ({ isModalOpen, closeModal }: SearchModalProps) => {
                     value={query}
                     onChange={handleSearch}
                     autoComplete="off"
-                    placeholder={`например: ${searchMode === 'name' ? 'Война и мир' : 'Лев Толстой'}`}
+                    placeholder={`например: ${searchMode === 'title' ? 'Война и мир' : 'Лев Толстой'}`}
                 />
                 <button onClick={() => closeModal()}
                 className={styles.exitSearchBtn}><p>Выйти</p></button>
             </m.div>
-            <SearchResults inputQuery={query} searchResults={results} />
+            <SearchResults inputQuery={query} searchResults={results} isLoading={isLoading} isNoResults={isNoResults} />
         </>
     )
 }
@@ -156,20 +180,61 @@ const SearchModal = ({ isModalOpen, closeModal }: SearchModalProps) => {
 interface SearchResultsProps {
     inputQuery: string;
     searchResults: BooksForSearch;
+    isLoading: boolean;
+    isNoResults: boolean;
 }
 
 const SearchResults = (props: SearchResultsProps) => {
 
-    const { inputQuery, searchResults } = props;
+    const { inputQuery, searchResults, isLoading, isNoResults } = props;
 
-    // if input empty
+    // if query is empty
     if (inputQuery.length === 0) {
         return (
             <m.div className={styles.resultsWrapper}
                 variants={upDownVariants}
                 initial='initial'
                 animate='animate'
-                exit='exit'    
+                exit='exit'
+                key='search-results'
+                
+                data-results={false}
+            >
+                <p  className={styles.noResultsText}>Ожидаем Ваш запрос...</p>
+                <Image src="/emotions/happy.svg" width={100} height={100} alt='happy emoji'/>
+            </m.div>
+        )
+    }
+
+    // loading state
+    else if (isLoading === true) {
+        return (
+            <m.div className={styles.resultsWrapper}
+                variants={upDownVariants}
+                initial='initial'
+                animate='animate'
+                exit='exit'
+                key='search-results'
+                
+                data-results={false}
+            >
+                <p className={styles.noResultsText}>Загружаем книги...</p>
+                <Image src="/emotions/loading.svg" width={100} height={100} alt='happy emoji'/>
+            </m.div>
+        )
+    }
+
+    // if result empty
+    else if (isNoResults === true) {
+        return (
+            <m.div className={styles.resultsWrapper}
+                variants={upDownVariants}
+                initial='initial'
+                animate='animate'
+                exit='exit'
+                key='search-results'
+                
+                data-results={false}
             >
                 <p className={styles.noResultsText}>К сожалению, ничего не нашлось...</p>
                 <Image src="/emotions/sad.svg" width={100} height={100} alt='sad emoji'/>
@@ -177,19 +242,27 @@ const SearchResults = (props: SearchResultsProps) => {
         )
     }
 
+    // results ready to watch
     const renderedList = searchResults.map(searchResult => (
-        <li className={styles.resultsItem}>
-            <p className={styles.resultsAuthor}>{searchResult.author}</p>
-            <p className={styles.resultsName}>{searchResult.name}</p>
+        <li key={searchResult.id} className={styles.resultsItem}>
+            <Link href={`/books/${searchResult.id}`} className={styles.resultsWrapperUnderP}>
+                <p className={styles.resultsAuthor}>{searchResult.author}</p>
+                <p className={styles.resultsDash}>&#8212;</p>
+                <p className={styles.resultsTitle}>"{searchResult.title}"</p>
+                <p className={styles.resultsRating}>{searchResult.rating}</p>
+            </Link>
         </li>
     ));
 
     return (
         <m.div className={styles.resultsWrapper}
-            variants={getModalBlurVariants('0px')}
+            variants={upDownVariants}
             initial='initial'
             animate='animate'
             exit='exit'
+            key='search-results'
+
+            data-results={true}
         >
             <ul className={styles.resultsList}>
                 {renderedList}
@@ -201,8 +274,8 @@ const SearchResults = (props: SearchResultsProps) => {
 // TOGGLER inside modal
 
 interface TogglerProps {
-    searchMode: 'name' | 'author';
-    setSearchMode: React.Dispatch<SetStateAction<'name' | 'author'>>;
+    searchMode: 'title' | 'author';
+    setSearchMode: React.Dispatch<SetStateAction<'title' | 'author'>>;
 }
 
 const Toggler = ({ searchMode, setSearchMode }: TogglerProps) => {
@@ -222,8 +295,8 @@ const Toggler = ({ searchMode, setSearchMode }: TogglerProps) => {
     };
 
     const setModeToName = () => {
-        if (searchMode !== 'name') {
-            setSearchMode('name');
+        if (searchMode !== 'title') {
+            setSearchMode('title');
         }
         setIsToggleOpen(false);
     };
@@ -251,7 +324,7 @@ const Toggler = ({ searchMode, setSearchMode }: TogglerProps) => {
     }, [isToggleOpen, listRef, btnRef]);
 
     // text
-    const btnText = searchMode === 'name' ? 'Названию' : 'Автору';
+    const btnText = searchMode === 'title' ? 'Названию' : 'Автору';
 
     return (
         <div className={styles.toggleWrapper}>

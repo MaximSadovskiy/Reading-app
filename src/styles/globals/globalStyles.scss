@@ -34,6 +34,7 @@ input {
     --color-orange: hsl(25, 100%, 82%);
     --color-gray: hsl(0, 1%, 83%);
     --color-white: hsl(0, 0%, 100%); 
+    --color-red: hsl(0, 89%, 31%);
 }
 
 body {
@@ -97,7 +98,7 @@ body {
     --toggle-btn-bg: var(--color-white);
     --toggle-btn-hover: var(--color-light-bisque);
     --toggle-btn-text: var(--color-darkbrown);
-    --toggle-list-bg: var(--color-white);
+    --toggle-list-bg: var(--color-lightbrown);
     --toggle-list-border: var(--color-bisque);
     --toggle-list-btn-hover: var(--color-lightbrown);
     --toggle-list-btn-text-hover: var(--color-light-bisque);
@@ -106,10 +107,20 @@ body {
     --search-input-text: var(--color-darkbrown);
     --search-input-border: var(--color-orange);
 
+    --exit-btn-border: var(--color-bisque);
+    --exit-btn-hover: var(--color-red);
+    --exit-text-hover: var(--color-white);
+
     --results-bg: var(--color-light-bisque);
     --results-text: var(--color-darkbrown);
     --results-scroll-thumb: var(--color-orange);
     --results-scroll-track: var(--color-darkbrown);
+    --results-item-bg: var(--color-lightbrown);
+    --results-item-hover: var(--color-lightbrown-hover);
+    --results-item-border: var(--color-orange);
+    --results-item-text: var(--color-white);
+    --results-title-text: var(--color-orange);
+    --results-rating: var(--color-bisque);
 
     // darkTheme colors
     &[data-dark='true'] {

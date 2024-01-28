@@ -208,7 +208,7 @@
     padding: pxIntoUnit(15);
     border: pxIntoUnit(4) solid white;
     color: var(--search-input-text);
-    margin-bottom: pxIntoUnit(25);
+    margin-bottom: pxIntoUnit(17);
 
     &:focus {
         border-color: var(--search-input-border);
@@ -244,13 +244,18 @@
 
 
 .resultsWrapper {
-    @include colFlex(center, center);
+    @include colFlex;
+    &[data-results=false] {
+        justify-content: center;
+        align-items: center;
+    }
+
     @include fontDefault(20);
     @include colorTransition;
     @include customScrollBar(var(--results-scroll-thumb), var(--results-scroll-track));
 
     // positioning
-    $clampWidth: clamp(320px, 50vw, 560px);
+    $clampWidth: clamp(pxIntoUnit(340), 55vw, pxIntoUnit(750));
     $parentHeight: max(pxIntoUnit(130), 25vh);
     width: $clampWidth;
     position: fixed;
@@ -262,17 +267,95 @@
     z-index: 99;
     background-color: var(--results-bg);
     border: pxIntoUnit(5) groove var(--search-modal-border);
-    padding: pxIntoUnit(15);
+    padding: pxIntoUnit(10);
     margin-top: pxIntoUnit(10);
     overflow-y: scroll;
 
 
     & > p {
         color: var(--results-text);
-    }  
+    }
 }
 
 .noResultsText {
-    font-weight: 600;
+    @include fontClamp(22, 6.5, 28);
     position: relative;
+}
+
+.resultsList {
+    @include colFlex(stretch, stretch, pxIntoUnit(15));
+    list-style: none;
+}
+
+.resultsItem {
+    @include colorTransition;
+
+    background-color: var(--results-item-bg);
+    color: var(--results-item-text);
+    border: 3px solid var(--results-item-border);
+    border-radius: pxIntoUnit(12);
+    height: pxIntoUnit(100);
+    padding: pxIntoUnit(15);
+    padding-left: pxIntoUnit(25);
+    cursor: pointer;
+
+
+    &:hover {
+        background-color: var(--results-item-hover);
+    }
+}
+
+.resultsWrapperUnderP {
+    @include flex(center, center, pxIntoUnit(10));
+
+    width: 100%;
+    height: 100%;
+
+    & > p {
+        display: inline-block;
+    }
+
+    &::before {
+        content: url('/book-1.svg');
+        position: absolute;
+        left: pxIntoUnit(40);
+    }
+}
+
+.resultsAuthor {
+    @include fontMarc(30);
+
+    color: var(--color-bisque);
+}
+
+.resultsDash {
+    color: var(--color-white);
+}
+
+.resultsTitle {
+    @include fontMarc(30);
+    
+    color: var(--results-title-text);
+    text-align: center;
+}
+
+.resultsRating {
+    @include fontDefault(26);
+
+    font-style: italic;
+    display: inline-flex;
+    color: var(--results-rating);
+    margin-left: auto;
+    margin-right: pxIntoUnit(40);
+    line-height: 1.2;
+    border-bottom: 2px solid var(--results-rating);
+    position: absolute;
+    right: pxIntoUnit(30);
+
+    &::before {
+        content: url('/star.svg');
+        position: absolute;
+        right: pxIntoUnit(-37);
+        top: calc(50% - 12.5px);
+    }
 }

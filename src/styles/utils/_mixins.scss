@@ -20,6 +20,11 @@
     gap: $gap;
 };
 
+
+@mixin childFlex($grow: 1, $shrink: 1, $basis: auto) {
+    flex: $grow $shrink $basis;
+}
+
 // transition, animation
 @mixin colorTransition($duration: 300ms) {
     transition: background-color $duration ease-in-out, color $duration ease-in-out, border-color $duration ease-in-out;
@@ -56,11 +61,11 @@
     letter-spacing: 1.5px;
 };
 
-@mixin fontDefault($fontSize: 17, $weight: 500) {
+@mixin fontDefault($fontSize: 17, $weight: 500, $spacingWithPx: 1.5px) {
     font-family: var(--font-pt-variable);
     font-size: pxIntoUnit($fontSize);
     font-weight: $weight;
-    letter-spacing: 1.5px;
+    letter-spacing: $spacingWithPx;
 };
 
 @mixin fontHeading($headingPower: 2, $weight: 600, $textAlign: center){

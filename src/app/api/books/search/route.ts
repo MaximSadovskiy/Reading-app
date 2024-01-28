@@ -1,54 +1,52 @@
 import { NextRequest, NextResponse } from 'next/server';
-import books, { retrieveBooksWithoutFiles } from '@/booksStorage/usage/storage';
-import { BookInterface } from '@/interfaces/bookInterface'; 
+import { retrieveBooksWithoutFiles, retrieveBooks } from '@/booksStorage/usage/storage';
+import { BooksForSearch } from '@/booksStorage/usage/storage';
 
 export const dynamic = 'force-dynamic';
 
-// types
-type BooksWithoutFiles = Omit<BookInterface, 'files'>[];
-export type BooksForSearch = Pick<BookInterface, 'name' | 'author'>[];
-
 export async function GET(request: NextRequest) {
-    console.log('get request');
 
     try {
         const searchParams = request.nextUrl.searchParams;
 
         // working on query
-        const query = searchParams.get('query') as string;
-        const mode = searchParams.get('mode') as 'name' | 'author';
-        const caseInsensetiveQuery = decodeURIComponent(query.toString().toLowerCase().trim());
-
+        const mode = searchParams.get('mode') as 'title' | 'author';
+        const query = searchParams.get('query')?.toLowerCase() as string;
 
         // formatting data for response
-        const initBooks: BooksWithoutFiles = retrieveBooksWithoutFiles();
+        const initBooks = retrieveBooksWithoutFiles();
         let responseBooks: BooksForSearch = [];
-        
-        let filteredBooks: BooksWithoutFiles = [];
-        if (mode === 'name') {
+
+        let filteredBooks = [];
+        if (mode === 'title') {
             filteredBooks = initBooks.filter(book => {
-                return book.name.includes(caseInsensetiveQuery);
+                const lowercasedBookTitle = book.title.toLowerCase();
+
+                return lowercasedBookTitle.includes(query);
             });
         }
 
         else {
             filteredBooks = initBooks.filter(book => {
-                return book.author.includes(caseInsensetiveQuery);
+                const lowercasedAuthorName = book.author.toLowerCase();
+
+                return lowercasedAuthorName.includes(query);
             });
         }
-        
 
         responseBooks = filteredBooks.map(book => {
-            const { name, author } = book;
+            const { id, title, author, rating } = book;
 
             return {
-                name,
-                author
+                id,
+                title,
+                author,
+                rating
             }
         });
 
-        return new Response(JSON.stringify(responseBooks));
+        return NextResponse.json(responseBooks);
     } catch (err) {
-        console.log('error on server: ', err);
+        
     }
 }
