@@ -1,6 +1,6 @@
 'use client';
-import React, { createContext, useContext } from 'react';
-import GlobalContextInterface from '@/interfaces/contextWrapper';
+import React from 'react';
+import { GlobalContext } from '@/hooks/useContext';
 // hooks
 import useTheme from '@/hooks/useTheme';
 
@@ -10,7 +10,6 @@ interface GlobalContextProps {
     children: React.ReactNode;
 }
 
-const GlobalContext = createContext<GlobalContextInterface | null>(null);
 
 const ContextWrapper = (props: GlobalContextProps) => {
     const [theme, setTheme] = useTheme();
@@ -28,7 +27,3 @@ const ContextWrapper = (props: GlobalContextProps) => {
 };
 
 export default ContextWrapper;
-
-export const useGlobalContext = () => {
-    return useContext(GlobalContext) as GlobalContextInterface;
-};

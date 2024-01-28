@@ -1,5 +1,5 @@
 'use client';
-import { useGlobalContext } from "./ContextWrapper";
+import { useGlobalContext } from "@/hooks/useContext";
 import styles from '@/styles/modules/rootLayout/themeChanger.module.scss';
 import Image from "next/image";
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
