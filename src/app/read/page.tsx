@@ -15,7 +15,7 @@ async function getFile(path: string): Promise<File | null> {
 }
 export default async function Read(context: any) {
   if (context == undefined) return <div>CONTEXT NOT FOUND!</div>;
-  let path = "src/books/";
+  let path = "books/";
   let query = context.searchParams.book;
   if (typeof query === "string") {
     path = path.concat(query);
