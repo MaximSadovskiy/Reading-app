@@ -1,0 +1,78 @@
+@use 'utils' as *;
+
+.slideBtn {
+    @include colorTransformTransition;
+    @include flex(stretch, center, pxIntoUnit(5));
+    @include padding(pxIntoUnit(10), pxIntoUnit(5));
+
+    background-color: var(--carousel-slideBtn-bg);
+    border-radius: pxIntoUnit(10);
+    width: fit-content;
+
+    /* positioning arrows */
+    position: absolute;
+    top: pxIntoUnit(45);
+    &[data-direction='left'] {
+        left: 0;
+    }
+    &[data-direction='right'] {
+        right: 0;
+    }
+
+    /* svg color */
+    & g {
+        stroke: var(--carousel-slideBtn-color);
+    }
+
+    & > svg[data-direction='right'] {
+        transform: rotate(180deg);
+    }
+
+    &:hover {
+        background-color: var(--carousel-slideBtn-hover);
+        transform: scale(1.08);
+
+        > svg[data-direction='left'] {
+            animation: rightLeft 0.5s ease-in-out;
+
+            @keyframes rightLeft {
+                0% {
+                    transform: translateX(0);
+                }
+                50% {
+                    transform: translateX(-12px);
+                }
+                100% {
+                    transform: translateX(0);
+                }
+            }
+        }
+
+        > svg[data-direction='right'] {
+            animation: leftRight 0.5s ease-in-out;
+
+            @keyframes leftRight {
+                0% {
+                    transform: translateX(0) rotate(180deg);
+                }
+                50% {
+                    transform: translateX(12px) rotate(180deg);
+                }
+                100% {
+                    transform: translateX(0) rotate(180deg);
+                }
+            }
+        }
+    }
+
+    &:active {
+        transform: scale(0.9);
+    }
+
+
+    /* span text */
+    & > span {
+        @include fontDefault(16);
+        color: var(--carousel-slideBtn-color);
+    }
+}

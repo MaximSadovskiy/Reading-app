@@ -1,7 +1,8 @@
 @use 'utils' as *;
 
 .main {
-    @include colFlex;
+    @include colFlex(center);
+    @include colorTransition;
 
     background-color: var(--main-bg);
     min-height: 100vh;
