@@ -137,7 +137,7 @@ class File {
     }
 }
 async function BookRead() {
-    let buf = await fs.readFile("src/books/srcs/books/.txt");
+    let buf = await fs.readFile("src/booksStorage/srcs/books/отверженные.txt");
     const file = new File(buf);
     console.log("fdssfdd");
     let bookStr = "ERROR";
