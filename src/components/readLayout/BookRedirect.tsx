@@ -4,7 +4,7 @@ import Link from 'next/link';
 const BookRedirect = () => {
     const bookStr = "Тестовая книга: " + Math.round(Math.random() * 1000 % 999);
     return (
-        <Link href='/read' className={styles.redirect}>
+        <Link href='/read?book=test.txt' className={styles.redirect}>
             <div>{bookStr}</div>
         </Link>
     );
