@@ -86,6 +86,7 @@ body {
     --svg-hover: var(--color-orange); 
 
     // searchBar (theme agnostic)
+    --search-text: var(--color-lightbrown);
     --search-modal-bg: var(--color-lightbrown);
     --search-modal-bg-hover: var(--color-lightbrown-hover);
     --search-modal-border: var(--color-bisque);
@@ -122,6 +123,16 @@ body {
     --results-title-text: var(--color-orange);
     --results-rating: var(--color-bisque);
 
+    // carousels
+    --carousel-heading-color: var(--color-darkbrown);
+    --carousel-wrapper-bg: var(--color-light-bisque);
+    --carousel-wrapper-border: var(--color-lightbrown);
+    --carousel-card-bg: var(--color-lightbrown);
+    --carousel-card-text: var(--color-light-bisque);
+    --carousel-slideBtn-bg: var(--color-lightbrown);
+    --carousel-slideBtn-hover: var(--color-lightbrown-hover);
+    --carousel-slideBtn-color: var(--color-light-bisque);
+
     // darkTheme colors
     &[data-dark='true'] {
         --underline: var(--color-orange);
@@ -142,6 +153,17 @@ body {
         --btn-text-hover: var(--color-lightbrown);
         --svg: var(--color-lightbrown);
         --svg-hover: var(--color-darkbrown);
+        --search-text: var(--color-orange);
+
+        // carousels
+        --carousel-heading-color: var(--color-orange);
+        --carousel-wrapper-bg: var(--color-lightbrown);
+        --carousel-wrapper-border: var(--color-bisque);
+        --carousel-card-bg: var(--color-light-bisque);
+        --carousel-card-text: var(--color-darkbrown);
+        --carousel-slideBtn-bg: var(--color-light-bisque);
+        --carousel-slideBtn-hover: var(--color-white);
+        --carousel-slideBtn-color: var(--color-darkbrown);
     };
 };
 

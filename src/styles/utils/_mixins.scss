@@ -131,3 +131,16 @@
     scrollbar-width: $width;
     scrollbar-color: $thumbColor $trackColor;
 }
+
+/* breakpont */
+@mixin breakpointUp($minWidth) {
+    @media (min-width: #{$minWidth}px) {
+        @content;
+    }
+}
+
+@mixin breakpointDown($maxWidth) {
+    @media (max-width: #{$maxWidth}px) {
+        @content;
+    }
+}
