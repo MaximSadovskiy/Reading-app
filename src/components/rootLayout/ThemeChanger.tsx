@@ -47,7 +47,7 @@ const ThemeChanger = () => {
                 document.removeEventListener('click', handleClick, true);
             };
         }
-    }, [buttonRef, listRef]);
+    }, [buttonRef.current, listRef.current]);
 
 
     // get system theme

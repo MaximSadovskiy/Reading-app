@@ -58,6 +58,7 @@
     background-color: var(--theme-list-bg);
     border-radius: pxIntoUnit(15);
     border: pxIntoUnit(2) solid var(--theme-list-border);
+    overflow-x: hidden;
 };
 
 .li {

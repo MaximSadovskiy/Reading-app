@@ -8,17 +8,19 @@
     width: max(pxIntoUnit(225), 25vw);
     height: auto;
     border-radius: pxIntoUnit(17);
+
+    margin-bottom: pxIntoUnit(100);
 }
 
 .searchPar {
     @include fontDefault(24, 600);
 
-    color: var(--main-text);
+    color: var(--search-text);
     margin-bottom: pxIntoUnit(10);
 }
 
 .openBtn {
-    @include fontDefault(17, 600);
+    @include fontDefault(20, 600);
     @include transition(transform);
     @include btnDefault;
     @include flex(center, center, pxIntoUnit(5));

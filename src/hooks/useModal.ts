@@ -16,7 +16,6 @@ const useModal = (modalRef: ModalRefArg, closeCallback: () => void, modalState: 
             const backdropElement = document.getElementById('backdrop') as HTMLDivElement;
             
             // focus trap
-            let keySet: KeysetType | null = new Set();
             const onKeyDown = (e: KeyboardEvent) => focusTrapKeyDown(e, modalRef.current as HTMLDivElement, closeCallback, keySetRef, focusIndexRef);
             const onKeyUp = (e: KeyboardEvent) => focusTrapKeyUp(e, keySetRef);
             document.addEventListener('keydown', onKeyDown);
@@ -28,7 +27,6 @@ const useModal = (modalRef: ModalRefArg, closeCallback: () => void, modalState: 
 
             // clean up
             return () => {
-                keySet = null;
                 document.body.style.overflow = 'unset';
                 document.removeEventListener('keydown', onKeyDown);
                 document.removeEventListener('keyup', onKeyUp);
