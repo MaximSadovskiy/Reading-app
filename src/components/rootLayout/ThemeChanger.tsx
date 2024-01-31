@@ -1,9 +1,8 @@
 'use client';
-import { useGlobalContext } from "./ContextWrapper";
+import { useGlobalContext } from "@/hooks/useContext";
 import styles from '@/styles/modules/rootLayout/themeChanger.module.scss';
 import Image from "next/image";
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
-import closeIfOutsideClick from "@/utils/clickOutsideCloseFunction";
 // framer
 import { m, LazyMotion, domAnimation, AnimatePresence } from 'framer-motion';
 import { listVariants, itemVariants } from "@/styles/variants/themeToggler/themeTogglerVariants";
@@ -22,7 +21,7 @@ const getSvgPath: GetSvgPath = (theme: CustomThemeType) => {
 
 // main component
 const ThemeChanger = () => {
-    const { theme, systemTheme, setTheme } = useGlobalContext();
+    const { theme, setTheme } = useGlobalContext();
     const [isOpen, setIsOpen] = useState(false);
     const [svgPath, setSvgPath] = useState<SvgPathType>(() => {
         return getSvgPath(theme);
@@ -34,15 +33,37 @@ const ThemeChanger = () => {
 
     // close if 'isOpen' + clickOutside
     useEffect(() => {
-        const handleClick = (e: MouseEvent) => {
-            closeIfOutsideClick<HTMLButtonElement | HTMLUListElement>([buttonRef, listRef], e, () => setIsOpen(false));
+        if (buttonRef.current && listRef.current) {
+            const handleClick = (e: MouseEvent) => {
+                const target = e.target as HTMLElement;
+                if (!buttonRef.current?.contains(target) && !listRef.current?.contains(target)) {
+                    setIsOpen(false);
+                }
+            };
+    
+            document.addEventListener('click', handleClick, true);
+    
+            return () => {
+                document.removeEventListener('click', handleClick, true);
+            };
+        }
+    }, [buttonRef.current, listRef.current]);
+
+
+    // get system theme
+    const systemThemeRef = useRef<ThemeType | null>(null);
+
+    useEffect(() => {
+        // helper
+        const themeCondition = '(prefers-color-scheme: dark)';
+        const getPreferredTheme: () => ThemeType = () => {
+            const prefersDark = window.matchMedia(themeCondition).matches;
+            return prefersDark ? 'dark' : 'light';
         };
 
-        document.addEventListener('click', handleClick);
-
-        return () => {
-            document.removeEventListener('click', handleClick);
-        };
+        // getting system theme
+        const systemTheme = getPreferredTheme();
+        systemThemeRef.current = systemTheme;
     }, []);
 
     return (
@@ -61,7 +82,7 @@ const ThemeChanger = () => {
             <LazyMotion features={domAnimation} strict>
                 <AnimatePresence>
                     {isOpen && (
-                        <PopupThemeList setTheme={setTheme} systemTheme={systemTheme} setSvgPath={setSvgPath} closeList={() => setIsOpen(false)} svgPath={svgPath} ref={listRef} />
+                        <PopupThemeList setTheme={setTheme} systemTheme={systemThemeRef.current} setSvgPath={setSvgPath} closeList={() => setIsOpen(false)} svgPath={svgPath} ref={listRef} />
                     )}
                 </AnimatePresence>
             </LazyMotion>
@@ -74,7 +95,7 @@ export default ThemeChanger;
 // types of list
 interface ListProps {
     setTheme: SetThemeType;
-    systemTheme: ThemeType;
+    systemTheme: ThemeType | null;
     setSvgPath: React.Dispatch<React.SetStateAction<SvgPathType>>
     closeList: () => void;
     svgPath: SvgPathType;
@@ -87,7 +108,17 @@ const PopupThemeList = forwardRef(({ setTheme, systemTheme, setSvgPath, closeLis
 
     const handleChangeThemeClick = (e: ButtonCustomEvent) => {
         const { name } = e.currentTarget;
-        setTheme(name === 'system' ? systemTheme : name);
+        setTheme(() => {
+            if (name === 'system' && systemTheme != null) {
+                return systemTheme
+            }
+            else if (name === 'system') {
+                return 'dark'
+            }
+            else {
+                return name
+            }
+        });
         // extract new path
         const path = getSvgPath(name);
         setSvgPath(path);

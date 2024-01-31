@@ -6,16 +6,21 @@
     margin-top: pxIntoUnit(30);
     align-self: center;
     width: max(pxIntoUnit(225), 25vw);
-    height: max(pxIntoUnit(130), 25vh);
-    z-index: 99;
+    height: auto;
     border-radius: pxIntoUnit(17);
 
-    //temp
-    border: 1px solid orange;
+    margin-bottom: pxIntoUnit(100);
+}
+
+.searchPar {
+    @include fontDefault(24, 600);
+
+    color: var(--search-text);
+    margin-bottom: pxIntoUnit(10);
 }
 
 .openBtn {
-    @include fontDefault(17, 600);
+    @include fontDefault(20, 600);
     @include transition(transform);
     @include btnDefault;
     @include flex(center, center, pxIntoUnit(5));
@@ -55,5 +60,304 @@
                 }
             }
         }
+    }
+}
+
+
+.searchBarModalWrapper {
+    @include colFlex(center);
+    @include fontDefault(18);
+    @include colorTransition;
+
+    // positioning
+    $clampWidth: clamp(320px, 30vw, 400px);
+    width: $clampWidth;
+    position: fixed;
+    top: pxIntoUnit(140);
+    right: calc(50vw - $clampWidth);
+    transform: translateX(-50%);
+
+    height: max(pxIntoUnit(130), 25vh);
+    z-index: 99;
+    background-color: var(--search-modal-bg);
+    padding: pxIntoUnit(15);
+    border: pxIntoUnit(5) groove var(--search-modal-border);
+    border-radius: pxIntoUnit(17);
+
+    &:hover {
+        background-color: var(--search-modal-bg-hover);
+    }
+}
+
+
+.toggleWrapper {
+    position: relative;
+    margin-bottom: pxIntoUnit(30);
+}
+
+.toggleLabel {
+    font-weight: 600;
+    color: var(--toggle-label-color);
+}
+
+.toggleOpenBtn {
+    @include colorTransformTransition;
+    
+    padding: pxIntoUnit(15);
+    border-radius: pxIntoUnit(15);
+    position: relative;
+    padding-right: pxIntoUnit(25);
+    background-color: var(--toggle-btn-bg);
+    
+    > p {
+        font-size: 17;
+        font-weight: 500;
+    }
+
+    > svg {
+        @include svgTransition;
+
+        transform: rotate(90deg);
+        position: absolute;
+        right: pxIntoUnit(0);
+        top: calc(50% - 14px);
+        fill: var(--color-orange);
+
+        &[data-open=true] {
+            transform: rotate(180deg);
+        }
+    }
+
+    &:hover {
+        background-color: var(--toggle-btn-hover);
+        transform: scale(1.05);
+
+        > svg {
+            fill: var(--color-darkbrown);
+        }
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+}
+
+
+.toggleList {
+    @include colFlex;
+    position: absolute;
+    bottom: calc(-10px - 100px);
+    right: pxIntoUnit(-14);
+    list-style: none;
+    background-color: var(--toggle-list-bg);
+    border: pxIntoUnit(4) solid var(--toggle-list-border);
+    border-radius: pxIntoUnit(15);
+    width: pxIntoUnit(150);
+    min-height: pxIntoUnit(100);
+    z-index: 101;
+}
+
+
+.toggleListItem {
+
+    @include flex;
+    font-size: pxIntoUnit(16);
+    width: 100%;
+    flex: 1 1 auto;
+
+    > button {
+        @include colorTransition;
+        background-color: var(--toggle-btn-bg);
+        color: var(--toggle-btn-text);
+        width: 100%;
+        flex: 1 1 auto;
+
+        > p {
+            @include fontDefault(18)    
+        }
+
+        &:hover {
+            background-color: var(--toggle-list-btn-hover);
+            color: var(--toggle-list-btn-text-hover);
+        }
+    }
+
+    &:first-of-type {
+        @include roundCorners(top, pxIntoUnit(10));
+
+        border-bottom: pxIntoUnit(2) solid var(--toggle-listItem-border);
+
+        > button {
+            @include roundCorners(top, pxIntoUnit(10));
+        }
+    }
+
+    &:last-of-type {
+        @include roundCorners(bottom, pxIntoUnit(10));
+
+        > button {
+            @include roundCorners(bottom, pxIntoUnit(10));
+        }
+    }
+}
+
+
+.searchInput {
+    @include colorTransition;
+
+    height: pxIntoUnit(50);
+    border-radius: pxIntoUnit(15);
+    padding: pxIntoUnit(15);
+    border: pxIntoUnit(4) solid white;
+    color: var(--search-input-text);
+    margin-bottom: pxIntoUnit(17);
+
+    &:focus {
+        border-color: var(--search-input-border);
+    }
+}
+
+.exitSearchBtn {
+    @include colorTransformTransition;
+
+    padding: pxIntoUnit(12);
+    border-radius: pxIntoUnit(15);
+    border: pxIntoUnit(3) solid var(--exit-btn-border);
+    background-color: var(--toggle-btn-bg);
+    align-self: flex-start;
+
+    &:hover {
+        background-color: var(--exit-btn-hover);
+        transform: scale(1.1);
+
+        & > p {
+            color: var(--exit-text-hover);
+        }
+    }
+
+    &:active {
+        transform: scale(0.9);
+    }
+
+    & > p {
+        @include fontDefault(18, 600, 1px);
+    }
+}
+
+
+.resultsWrapper {
+    @include colFlex;
+    &[data-results=false] {
+        justify-content: center;
+        align-items: center;
+    }
+
+    @include fontDefault(20);
+    @include colorTransition;
+    @include customScrollBar(var(--results-scroll-thumb), var(--results-scroll-track));
+
+    // positioning
+    $clampWidth: clamp(pxIntoUnit(340), 55vw, pxIntoUnit(750));
+    $parentHeight: max(pxIntoUnit(130), 25vh);
+    width: $clampWidth;
+    position: fixed;
+    right: calc(50vw - $clampWidth / 2);
+    
+    top: calc(pxIntoUnit(140) + $parentHeight);
+    height: clamp(pxIntoUnit(200), 45vh, pxIntoUnit(600));
+    border-radius: pxIntoUnit(17);
+    z-index: 99;
+    background-color: var(--results-bg);
+    border: pxIntoUnit(5) groove var(--search-modal-border);
+    padding: pxIntoUnit(10);
+    margin-top: pxIntoUnit(10);
+    overflow-y: scroll;
+
+
+    & > p {
+        color: var(--results-text);
+    }
+}
+
+.noResultsText {
+    @include fontClamp(22, 6.5, 28);
+    position: relative;
+}
+
+.resultsList {
+    @include colFlex(stretch, stretch, pxIntoUnit(15));
+    list-style: none;
+}
+
+.resultsItem {
+    @include colorTransition;
+
+    background-color: var(--results-item-bg);
+    color: var(--results-item-text);
+    border: 3px solid var(--results-item-border);
+    border-radius: pxIntoUnit(12);
+    height: pxIntoUnit(100);
+    padding: pxIntoUnit(15);
+    padding-left: pxIntoUnit(25);
+    cursor: pointer;
+
+
+    &:hover {
+        background-color: var(--results-item-hover);
+    }
+}
+
+.resultsWrapperUnderP {
+    @include flex(center, center, pxIntoUnit(10));
+
+    width: 100%;
+    height: 100%;
+
+    & > p {
+        display: inline-block;
+    }
+
+    &::before {
+        content: url('/book-1.svg');
+        position: absolute;
+        left: pxIntoUnit(40);
+    }
+}
+
+.resultsAuthor {
+    @include fontMarc(30);
+
+    color: var(--color-bisque);
+}
+
+.resultsDash {
+    color: var(--color-white);
+}
+
+.resultsTitle {
+    @include fontMarc(30);
+    
+    color: var(--results-title-text);
+    text-align: center;
+}
+
+.resultsRating {
+    @include fontDefault(26);
+
+    font-style: italic;
+    display: inline-flex;
+    color: var(--results-rating);
+    margin-left: auto;
+    margin-right: pxIntoUnit(40);
+    line-height: 1.2;
+    border-bottom: 2px solid var(--results-rating);
+    position: absolute;
+    right: pxIntoUnit(30);
+
+    &::before {
+        content: url('/star.svg');
+        position: absolute;
+        right: pxIntoUnit(-37);
+        top: calc(50% - 12.5px);
     }
 }

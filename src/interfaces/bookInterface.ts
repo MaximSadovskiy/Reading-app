@@ -1,19 +1,20 @@
-export default interface BookInterface {
+export interface BookInterface {
     id: string;
-    name: string;
+    title: string;
     author: string;
     year: string;
+    rating: number;
+    genres: Genre | Genre[];
     description: string;
     quotes: string[] | string;
+    // temporary optional 
+    thumbnail?: Buffer;
     files: {
-        book: Buffer | string;
-        img: Buffer | string;
-    }   
+        book: Buffer | string; // temp
+        img: Buffer | string; // temp
+    } 
 }
 
-export type BookInputInterface = Omit<BookInterface, 'id' | 'files'> & {
-    paths: {
-        book: string;
-        img: string;
-    }
-};
+
+// Жанры книг
+type Genre = 'исторический роман' | 'психологический роман';

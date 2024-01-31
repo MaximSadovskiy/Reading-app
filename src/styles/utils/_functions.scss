@@ -3,3 +3,8 @@
 @function pxIntoUnit($count, $unit: 'rem', $basis: 16) {
     @return #{m.div($count, $basis)}#{$unit};
 };
+
+@function calcWidthInSlider($cardCount, $cardWidth, $paddingWidth: 20, $borderWidth: 3) {
+    $paddingCount: $cardCount + 1;
+    @return pxIntoUnit(($cardCount * $cardWidth) + ($paddingWidth * $paddingCount) + ($borderWidth * 2));
+}

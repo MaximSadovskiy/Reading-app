@@ -3,16 +3,24 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-};
+}
 
 a {
     text-decoration: none;
     display: inline-block;
-};
+}
 
 button {
     cursor: pointer;
     border: none;
+}
+
+button, input {
+    font: inherit;
+}
+
+input {
+    outline: none;
 }
 
 :root {
@@ -26,7 +34,8 @@ button {
     --color-orange: hsl(25, 100%, 82%);
     --color-gray: hsl(0, 1%, 83%);
     --color-white: hsl(0, 0%, 100%); 
-};
+    --color-red: hsl(0, 89%, 31%);
+}
 
 body {
     min-height: 100vh;
@@ -70,11 +79,59 @@ body {
 
     // booksPage
     --btn-bg: var(--color-darkbrown);
-    --btn-hover: hsl(0, 30%, 24%);
+    --btn-hover: var(--color-lightbrown-hover);
     --btn-text: var(--color-white);
     --btn-text-hover: var(--color-orange);
     --svg: var(--color-bisque);
     --svg-hover: var(--color-orange); 
+
+    // searchBar (theme agnostic)
+    --search-text: var(--color-lightbrown);
+    --search-modal-bg: var(--color-lightbrown);
+    --search-modal-bg-hover: var(--color-lightbrown-hover);
+    --search-modal-border: var(--color-bisque);
+    --search-modal-border-hover: var(--color-orange);
+    --search-modal-label-text: var(--color-orange);
+    --search-modal-btn-bg: var(--color-bisque);
+    --search-modal-btn-color: var(--color-darkbrown); 
+
+    --toggle-label-color: var(--color-white);
+    --toggle-btn-bg: var(--color-white);
+    --toggle-btn-hover: var(--color-light-bisque);
+    --toggle-btn-text: var(--color-darkbrown);
+    --toggle-list-bg: var(--color-lightbrown);
+    --toggle-list-border: var(--color-bisque);
+    --toggle-list-btn-hover: var(--color-lightbrown);
+    --toggle-list-btn-text-hover: var(--color-light-bisque);
+    --toggle-listItem-border: var(--color-lightbrown); 
+
+    --search-input-text: var(--color-darkbrown);
+    --search-input-border: var(--color-orange);
+
+    --exit-btn-border: var(--color-bisque);
+    --exit-btn-hover: var(--color-red);
+    --exit-text-hover: var(--color-white);
+
+    --results-bg: var(--color-light-bisque);
+    --results-text: var(--color-darkbrown);
+    --results-scroll-thumb: var(--color-orange);
+    --results-scroll-track: var(--color-darkbrown);
+    --results-item-bg: var(--color-lightbrown);
+    --results-item-hover: var(--color-lightbrown-hover);
+    --results-item-border: var(--color-orange);
+    --results-item-text: var(--color-white);
+    --results-title-text: var(--color-orange);
+    --results-rating: var(--color-bisque);
+
+    // carousels
+    --carousel-heading-color: var(--color-darkbrown);
+    --carousel-wrapper-bg: var(--color-light-bisque);
+    --carousel-wrapper-border: var(--color-lightbrown);
+    --carousel-card-bg: var(--color-lightbrown);
+    --carousel-card-text: var(--color-light-bisque);
+    --carousel-slideBtn-bg: var(--color-lightbrown);
+    --carousel-slideBtn-hover: var(--color-lightbrown-hover);
+    --carousel-slideBtn-color: var(--color-light-bisque);
 
     // darkTheme colors
     &[data-dark='true'] {
@@ -96,6 +153,17 @@ body {
         --btn-text-hover: var(--color-lightbrown);
         --svg: var(--color-lightbrown);
         --svg-hover: var(--color-darkbrown);
+        --search-text: var(--color-orange);
+
+        // carousels
+        --carousel-heading-color: var(--color-orange);
+        --carousel-wrapper-bg: var(--color-lightbrown);
+        --carousel-wrapper-border: var(--color-bisque);
+        --carousel-card-bg: var(--color-light-bisque);
+        --carousel-card-text: var(--color-darkbrown);
+        --carousel-slideBtn-bg: var(--color-light-bisque);
+        --carousel-slideBtn-hover: var(--color-white);
+        --carousel-slideBtn-color: var(--color-darkbrown);
     };
 };
 

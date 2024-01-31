@@ -20,14 +20,35 @@
     gap: $gap;
 };
 
+
+@mixin childFlex($grow: 1, $shrink: 1, $basis: auto) {
+    flex: $grow $shrink $basis;
+}
+
 // transition, animation
 @mixin colorTransition($duration: 300ms) {
-    transition: background-color $duration ease-in-out, color $duration ease-in-out, border-color $duration ease-in-out, stroke 300ms ease-in-out, fill 300ms ease-in-out;
+    transition: background-color $duration ease-in-out, color $duration ease-in-out, border-color $duration ease-in-out;
 };
 
 @mixin transition($prop, $duration: 150ms, $ease: ease-in-out) {
     transition: $prop $duration $ease;
 };
+
+@mixin svgTransition($duration: 150ms) {
+    transition: fill $duration ease-in-out, transform $duration ease-in-out;
+};
+
+@mixin colorTransformTransition($colorDur: 150ms, $transformDur: 150ms, $ease: ease-in-out) {
+    transition: background-color $colorDur $ease, color $colorDur $ease, transform $transformDur $ease;
+}
+
+@mixin multipleTransition($properties, $duration: 150ms, $ease: ease-in-out) {
+    $transitions: ();
+    @each $prop in $properties {
+        $transitions: append($transitions, $prop $duration $ease, comma);
+    }
+    transition: $transitions;
+}
 
 // padding, margin
 @mixin padding($inline: pxIntoUnit(15), $block: pxIntoUnit(15)) {
@@ -48,11 +69,11 @@
     letter-spacing: 1.5px;
 };
 
-@mixin fontDefault($fontSize: 17, $weight: 500) {
+@mixin fontDefault($fontSize: 17, $weight: 500, $spacingWithPx: 1.5px) {
     font-family: var(--font-pt-variable);
     font-size: pxIntoUnit($fontSize);
     font-weight: $weight;
-    letter-spacing: 1.5px;
+    letter-spacing: $spacingWithPx;
 };
 
 @mixin fontHeading($headingPower: 2, $weight: 600, $textAlign: center){
@@ -63,7 +84,7 @@
     text-align: $textAlign;
 };
 
-@mixin fontMarc($size, $spacing: 0) {
+@mixin fontMarc($size: 30, $spacing: 0) {
     font-family: var(--font-marckscript);
     font-size: pxIntoUnit($size);
     letter-spacing: #{$spacing}px;
@@ -110,5 +131,24 @@
 
     &:active {
         transform: scale(0.9);
+    }
+}
+
+
+@mixin customScrollBar($thumbColor, $trackColor, $width: thin) {
+    scrollbar-width: $width;
+    scrollbar-color: $thumbColor $trackColor;
+}
+
+/* breakpont */
+@mixin breakpointUp($minWidth) {
+    @media (min-width: #{$minWidth}px) {
+        @content;
+    }
+}
+
+@mixin breakpointDown($maxWidth) {
+    @media (max-width: #{$maxWidth}px) {
+        @content;
     }
 }

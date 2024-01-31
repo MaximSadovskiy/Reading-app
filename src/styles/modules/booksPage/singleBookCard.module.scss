@@ -1,0 +1,24 @@
+@use 'utils' as *;
+
+.listItem {
+    background-color: var(--carousel-card-bg);
+    min-height: 87%;
+    width: pxIntoUnit(220);
+    border-radius: pxIntoUnit(18);
+    padding-block: pxIntoUnit(13);
+    padding-inline: pxIntoUnit(20);
+}
+
+.link {
+    @include colFlex;
+
+    color: var(--carousel-card-text);
+    white-space: nowrap;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+
+    & > p {
+        @include fontDefault(18);
+    }
+}

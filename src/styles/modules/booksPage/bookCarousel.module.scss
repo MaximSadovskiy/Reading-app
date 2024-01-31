@@ -1,0 +1,53 @@
+@use 'utils' as *;
+
+.popularSection {
+    @include colFlex(flex-start, stretch, pxIntoUnit(20));
+    @include colorTransition;
+
+    position: relative;
+}
+
+/* container of carousel */
+.popularContainer {
+    height: pxIntoUnit(300);
+    padding-block: pxIntoUnit(12);
+    padding-inline: pxIntoUnit(20);
+    border: 3px solid var(--carousel-wrapper-border);
+    border-radius: pxIntoUnit(17);
+    overflow: hidden;
+
+    width: calcWidthInSlider(1, 220, 20);
+    @include breakpointUp(550) {
+        width: calcWidthInSlider(2, 220, 20);
+    }
+    @include breakpointUp(850) {
+        width: calcWidthInSlider(3, 220, 20);
+    }
+    @include breakpointUp(1150) {
+        width: calcWidthInSlider(4, 220, 20);
+    }
+    @include breakpointUp(1450) {
+        width: calcWidthInSlider(5, 220, 20);
+    }
+    @include breakpointUp(1550) {
+        width: calcWidthInSlider(6, 220, 20);
+    }
+}
+
+
+.popularTitle {
+    @include fontHeading;
+    
+    align-self: center;
+    margin-bottom: pxIntoUnit(55);
+    color: var(--carousel-heading-color);
+}
+
+
+.popularList {
+    @include flex(flex-start, center, pxIntoUnit(20));
+
+    height: 100%;
+    width: fit-content;
+    list-style: none;
+}

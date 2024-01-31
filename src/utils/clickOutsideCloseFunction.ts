@@ -10,6 +10,7 @@ export default function closeIfOutsideClick<T extends HTMLElement>(elementRefs: 
     else {
         for (const elem of noNullElements) {
             if (elem.current?.contains(target as Node)) {
+                console.log('click inside');
                 return;
             }
         }

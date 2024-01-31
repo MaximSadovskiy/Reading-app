@@ -15,7 +15,8 @@
     border-bottom: pxIntoUnit(2) solid var(--header-border);
     position: sticky;
     top: 0;
-    z-index: 10;
+    // must be highest
+    z-index: 1000;
 }
 
 
