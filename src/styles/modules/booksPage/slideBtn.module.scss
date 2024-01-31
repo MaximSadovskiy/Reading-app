@@ -1,7 +1,7 @@
 @use 'utils' as *;
 
 .slideBtn {
-    @include colorTransformTransition;
+    @include multipleTransition((filter, color, background-color, transform, opacity), 200ms);
     @include flex(stretch, center, pxIntoUnit(5));
     @include padding(pxIntoUnit(10), pxIntoUnit(5));
 
@@ -28,7 +28,7 @@
         transform: rotate(180deg);
     }
 
-    &:hover {
+    &:not(.slideBtnDisabled):hover {
         background-color: var(--carousel-slideBtn-hover);
         transform: scale(1.08);
 
@@ -65,7 +65,7 @@
         }
     }
 
-    &:active {
+    &:not(.slideBtnDisabled):active {
         transform: scale(0.9);
     }
 
@@ -74,5 +74,12 @@
     & > span {
         @include fontDefault(16);
         color: var(--carousel-slideBtn-color);
+    }
+
+
+    /* disabled mode */
+    &.slideBtnDisabled {
+        opacity: 0.8;
+        filter: blur(5px);
     }
 }

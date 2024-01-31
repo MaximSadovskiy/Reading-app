@@ -42,6 +42,14 @@
     transition: background-color $colorDur $ease, color $colorDur $ease, transform $transformDur $ease;
 }
 
+@mixin multipleTransition($properties, $duration: 150ms, $ease: ease-in-out) {
+    $transitions: ();
+    @each $prop in $properties {
+        $transitions: append($transitions, $prop $duration $ease, comma);
+    }
+    transition: $transitions;
+}
+
 // padding, margin
 @mixin padding($inline: pxIntoUnit(15), $block: pxIntoUnit(15)) {
     padding-inline: $inline;

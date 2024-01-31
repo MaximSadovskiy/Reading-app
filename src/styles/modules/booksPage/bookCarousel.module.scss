@@ -46,7 +46,6 @@
 
 .popularList {
     @include flex(flex-start, center, pxIntoUnit(20));
-    @include transition(transform, 300ms);
 
     height: 100%;
     width: fit-content;
