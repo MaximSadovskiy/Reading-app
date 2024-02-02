@@ -6,6 +6,7 @@ import Link from "next/link";
 import styles from '@/styles/modules/booksPage/singleBookCard.module.scss';
 import { m, LazyMotion, domAnimation, useMotionValue, useAnimate } from "framer-motion";
 import type { AnimationSequence } from "framer-motion";
+import debounce from "@/utils/debounceDecorator";
 
 
 type PlainMouseHandler = (e: MouseEvent) => void;
@@ -28,51 +29,54 @@ const BookCard = memo(({ book }: BookCardProps) => {
     // event handlers
     const handleMouseMove: PlainMouseHandler = (e) => {
         const target = (e.target as HTMLElement).closest('li') as HTMLLIElement;
-        const maxRotationX = 30;
-        const maxRotationY = 30;
-        // center
-        // *** LOG
-        console.log(`offsetWidth: ${target.offsetWidth} ; height: ${target.offsetHeight}`);
-
-        const rangeOnX = target.offsetWidth / 2;
-        const rangeOnY = target.offsetHeight / 2;
-        
         const coords = target.getBoundingClientRect();
 
-        console.log(`RANGE x: ${rangeOnX} ; rangeY: ${rangeOnY}`);
-        // положение мыши, не учитывая расстояние вне контейнера
-        const eventClientX = e.clientX - coords.left;
-        const eventClientY = e.clientY - coords.top;
-        console.log(`clientX: ${eventClientX}, clientY: ${eventClientY}`);
-        // x
-        const shiftX = rangeOnX - eventClientX;
-        const proportionX = shiftX / rangeOnX;
-        // y
-        const shiftY = rangeOnY - eventClientY;
-        const proportionY = shiftY / rangeOnY;
+        /* max rotation (in deg) */
+        const maxRotationHor = 25;
+        const maxRotationVert = 20;
 
-        console.log(`shiftX: ${shiftX}, shiftY: ${shiftY}`);
-        console.log(`proportionX: ${proportionX}, proportionY: ${proportionY}`);
+        /* half of width / height to calculate posibility / degree of rotation */
+        const rangeOfRotationHor = coords.width / 2;
+        const rangeOfRotationVert = coords.height / 2;
 
-        // rotation
-        const yRotation = maxRotationX * +proportionX;
-        const xRotation = maxRotationY * +proportionY;
+        /* location of mouse relatively to card-container */
+        const shiftFromLeftEdge = e.clientX - coords.left;
+        const shiftFromTopEdge = e.clientY - coords.top;
 
-        console.log(`X rotation: ${xRotation} ; Y rotatio: ${yRotation}`);
+        /* location of mouse relatively to center of card, maybe + or - */
+        const shiftFromCenterHorizontal = shiftFromLeftEdge - rangeOfRotationHor;
+        const shiftFromCenterVertical = shiftFromTopEdge - rangeOfRotationVert;
 
-        /* x rotation - вверх вниз, y rotation - лево право */
-        animate(rotateXvalue, -yRotation, { duration: 0.3 });
-        animate(rotateYvalue, xRotation, { duration: 0.3 });
+        /* для одновременной анимации */
+        const sequencesToAnimate: AnimationSequence = [];
+
+        /* HORIZONTAL */
+        const rotationHorDegrees = shiftFromCenterHorizontal / rangeOfRotationHor * maxRotationHor;
+
+        // HORIZONTAL rotation
+        sequencesToAnimate.push([rotateYvalue, rotationHorDegrees]);
+
+
+        /* VERTICAL */
+        let rotationVertDegrees: number;
+        rotationVertDegrees = shiftFromCenterVertical / rangeOfRotationVert * maxRotationVert; 
+    
+        // inversion
+        rotationVertDegrees *= -1;
+        
+        // VERTICAL rotation
+        sequencesToAnimate.push([rotateXvalue, rotationVertDegrees, { at: '<' }]);
+
+        /* ANIMATING */
+        animate(sequencesToAnimate);
     };
 
-    const handleMouseEnter: ReactMouseHandler = async (e) => {
+    const handleMouseEnter: ReactMouseHandler = (e) => {
         const target = e.target as HTMLLIElement;
 
-        animate(scaleValue, 1.25, { duration: 0.4 });
+        animate(scaleValue, 1.2, { duration: 0.4 });
 
-        await new Promise(res => setTimeout(res, 0.6)); 
-
-        target.addEventListener('mousemove', handleMouseMove);
+        setTimeout(() => target.addEventListener('mousemove', handleMouseMove), 400);
     };
 
     const handleMouseLeave: ReactMouseHandler = (e) => {

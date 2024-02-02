@@ -136,7 +136,7 @@ const BookCarousel = ({ title, books }: CarouselProps) => {
 
                         ref={scope}
                         style={{
-                            x: currentScrollValue
+                            x: currentScrollValue,
                         }}
                     >
                         {renderBooks}

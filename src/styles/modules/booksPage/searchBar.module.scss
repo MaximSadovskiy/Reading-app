@@ -77,7 +77,7 @@
     right: calc(50vw - $clampWidth);
     transform: translateX(-50%);
 
-    height: max(pxIntoUnit(130), 25vh);
+    height: pxIntoUnit(240);
     z-index: 99;
     background-color: var(--search-modal-bg);
     padding: pxIntoUnit(15);
@@ -247,6 +247,7 @@
 
 .resultsWrapper {
     @include colFlex;
+    /* show emoji in center if no displaying results */
     &[data-results=false] {
         justify-content: center;
         align-items: center;
@@ -258,7 +259,7 @@
 
     // positioning
     $clampWidth: clamp(pxIntoUnit(340), 55vw, pxIntoUnit(750));
-    $parentHeight: max(pxIntoUnit(130), 25vh);
+    $parentHeight: pxIntoUnit(240);
     width: $clampWidth;
     position: fixed;
     right: calc(50vw - $clampWidth / 2);
