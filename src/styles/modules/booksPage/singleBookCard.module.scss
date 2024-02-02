@@ -1,17 +1,22 @@
 @use 'utils' as *;
 
 .listItem {
+    @include colorTransformTransition(150ms, 400ms, ease-out);
+
     background-color: var(--carousel-card-bg);
-    min-height: 87%;
+    height: 80%;
     width: pxIntoUnit(220);
     border-radius: pxIntoUnit(18);
-    padding-block: pxIntoUnit(13);
-    padding-inline: pxIntoUnit(20);
+    border: pxIntoUnit(4) solid var(--carousel-card-border);
+    perspective: 800px;
 }
 
 .link {
     @include colFlex;
+    
 
+    padding-block: pxIntoUnit(13);
+    padding-inline: pxIntoUnit(20);
     color: var(--carousel-card-text);
     white-space: nowrap;
     width: 100%;

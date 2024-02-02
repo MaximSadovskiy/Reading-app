@@ -5,8 +5,8 @@ import BookCard from "../client/SingleBookCard";
 import SlideBtn from "../client/SlideBtn";
 import styles from '@/styles/modules/booksPage/bookCarousel.module.scss';
 // animation
-import { useAnimate, useMotionValue, m, LazyMotion, domAnimation } from "framer-motion";
-import { getScrollDistanceOnBreakpoint, getCurrentVisibleDistance } from "@/hooks/useSlideContainer";
+import { useAnimate, useMotionValue, useMotionValueEvent, m, LazyMotion, domAnimation } from "framer-motion";
+import { getScrollDistanceOnBreakpoint, getCurrentVisibleDistance, getMaxScrollDistance } from "@/utils/carouselUtils";
 import { useState } from "react";
 
 // types
@@ -31,7 +31,35 @@ const BookCarousel = ({ title, books }: CarouselProps) => {
     // helper values
     const cardCount = renderBooks.length;
     const cardWidth = 220;
-    const gapWidth = 20;
+    const gapWidth = 35;
+
+
+    /* Event which disables buttons, when certain values of "currentScrollValue" achieved */
+    useMotionValueEvent(currentScrollValue, 'change', (latestValue) => {
+        /* PREV button state */
+        if ((latestValue <= 0 && latestValue > -50) && !isPrevBtnDisabled) {
+            setIsPrevBtnDisabled(true);
+        }
+
+        else if ((latestValue < -50) && isPrevBtnDisabled) {
+            setIsPrevBtnDisabled(false);
+        }
+        
+        /* NEXT button state */
+        const windowWidth = document.documentElement.clientWidth;
+        const maxScrollDistance = -getMaxScrollDistance(windowWidth, cardCount, cardWidth, gapWidth);
+
+            
+        /* if its === maxScrollDist disable NEXT button */
+        if ((latestValue >= maxScrollDistance && (latestValue < maxScrollDistance + 20)) && !isNextBtnDisabled) {
+            setIsNextBtnDisabled(true);
+        }
+
+        else if ((latestValue > maxScrollDistance + 20) && isNextBtnDisabled) {
+            setIsNextBtnDisabled(false);
+        }
+    });
+
 
     /* EVENT HANDLERS (on BTNs) */
     const handlePrevClick = () => {
@@ -45,9 +73,7 @@ const BookCarousel = ({ title, books }: CarouselProps) => {
             if (currentScrollDistance !== 0) {
                 /* scroll to 0 */
                 const distanceToScroll = 0;
-                animate(currentScrollValue, distanceToScroll, { type: 'spring', ease: 'circOut', duration: 1, damping: 15, stiffness: 60 });
-
-                if (!isPrevBtnDisabled) setIsPrevBtnDisabled(true);
+                animate(currentScrollValue, distanceToScroll, { type: 'spring', ease: 'circOut', duration: 0.95 });
             }
             /* scroll == 0, do not scroll back, return */
             else {
@@ -57,12 +83,7 @@ const BookCarousel = ({ title, books }: CarouselProps) => {
         /* not edge case, just scroll */
         else {
             const distanceToScroll = -(currentScrollDistance - wantToScrollDistance);
-            animate(currentScrollValue, distanceToScroll, { type: 'spring', ease: 'circOut', duration: 1, damping: 15, stiffness: 60 });
-
-            if (isNextBtnDisabled) setIsNextBtnDisabled(false);
-            if (!isPrevBtnDisabled && currentScrollValue.get() === 0) {
-                setIsPrevBtnDisabled(true);
-            }
+            animate(currentScrollValue, distanceToScroll, { type: 'spring', ease: 'circOut', duration: 0.95 });
         }
     };
 
@@ -84,12 +105,9 @@ const BookCarousel = ({ title, books }: CarouselProps) => {
 
         if (wantToScrollDistance > maxScrollDistance - currentScrollDistance) {
             if (currentScrollDistance !== maxScrollDistance) {
-
                 /* scroll to maxDistance */
                 const scrollDistance = -maxScrollDistance;
-                animate(currentScrollValue, scrollDistance, { type: 'spring', ease: 'circOut', duration: 1, damping: 15, stiffness: 60 });
-
-                if (!isNextBtnDisabled) setIsNextBtnDisabled(true);
+                animate(currentScrollValue, scrollDistance, { type: 'spring', ease: 'circOut', duration: 0.95 });
             }
             /* scroll == maxDistance, do not scroll forward, return */
             else {
@@ -99,10 +117,7 @@ const BookCarousel = ({ title, books }: CarouselProps) => {
         /* not edge case, just scroll */
         else {
             const scrollDistance = -(currentScrollDistance + wantToScrollDistance);
-            animate(currentScrollValue, scrollDistance, { type: 'spring', ease: 'circOut', duration: 1, damping: 15, stiffness: 60 });
-
-            if (isPrevBtnDisabled) setIsPrevBtnDisabled(false);
-            if (!isNextBtnDisabled && Math.abs(currentScrollValue.get()) === maxScrollDistance) setIsNextBtnDisabled(true);
+            animate(currentScrollValue, scrollDistance, { type: 'spring', ease: 'circOut', duration: 0.95 });
         }
     };
 
@@ -118,6 +133,7 @@ const BookCarousel = ({ title, books }: CarouselProps) => {
             <div className={styles.popularContainer}>
                 <LazyMotion features={domAnimation}>
                     <m.ul className={styles.popularList}
+
                         ref={scope}
                         style={{
                             x: currentScrollValue
