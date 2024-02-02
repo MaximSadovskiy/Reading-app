@@ -34,3 +34,16 @@ export const getCurrentVisibleDistance = (windowWidth: number, cardWidth: number
 
     return (cardCount * cardWidth) + (gapCount * gapWidth)
 };
+
+
+/* получить максимальную дистанцию скролла */
+export const getMaxScrollDistance = (windowWidth: number, cardCount: number, cardWidth: number, gapWidth: number) => {
+    const visibleDistance = getCurrentVisibleDistance(windowWidth, cardWidth, gapWidth);
+
+    const gapCount = cardCount - 1;
+    /* visible + maxScroll */
+    const wholeContainerDistance = (cardCount * cardWidth) + (gapCount * gapWidth);
+
+    /* maxScroll */
+    return wholeContainerDistance - visibleDistance;
+};

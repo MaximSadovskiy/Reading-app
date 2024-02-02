@@ -4,9 +4,9 @@ export interface BookInterface {
     author: string;
     year: string;
     rating: number;
-    genres: Genre | Genre[];
+    genres: Genre[];
     description: string;
-    quotes: string[] | string;
+    quotes: string[];
     // temporary optional 
     thumbnail?: Buffer;
     files: {
