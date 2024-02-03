@@ -5,8 +5,8 @@ import { CarouselBooks } from "@/booksStorage/usage/storage";
 import Link from "next/link";
 import styles from '@/styles/modules/booksPage/singleBookCard.module.scss';
 import { m, LazyMotion, domAnimation, useMotionValue, useAnimate } from "framer-motion";
-import type { AnimationSequence } from "framer-motion";
-import debounce from "@/utils/debounceDecorator";
+import type { AnimationSequence, MotionValue } from "framer-motion";
+import { getCenterOfCard, getPerspectiveOriginCenter } from "@/utils/carouselUtils";
 
 
 type PlainMouseHandler = (e: MouseEvent) => void;
@@ -14,9 +14,14 @@ type ReactMouseHandler = (e: React.MouseEvent<HTMLLIElement>) => void;
 
 interface BookCardProps {
     book: CarouselBooks[0];
+    perspectiveOriginValue: MotionValue<string>;
+    currentScrollValue: MotionValue<number>;
+    cardWidth: number;
+    gapWidth: number;
+    timerRef: React.MutableRefObject<number | null>;
 }
 
-const BookCard = memo(({ book }: BookCardProps) => {
+const BookCard = memo(({ book, perspectiveOriginValue, currentScrollValue, cardWidth, gapWidth, timerRef }: BookCardProps) => {
     const { id, title, author, rating } = book;
 
     const [scope, animate] = useAnimate();
@@ -32,8 +37,8 @@ const BookCard = memo(({ book }: BookCardProps) => {
         const coords = target.getBoundingClientRect();
 
         /* max rotation (in deg) */
-        const maxRotationHor = 25;
-        const maxRotationVert = 20;
+        const maxRotationHor = 35;
+        const maxRotationVert = 30;
 
         /* half of width / height to calculate posibility / degree of rotation */
         const rangeOfRotationHor = coords.width / 2;
@@ -71,25 +76,51 @@ const BookCard = memo(({ book }: BookCardProps) => {
         animate(sequencesToAnimate);
     };
 
-    const handleMouseEnter: ReactMouseHandler = (e) => {
-        const target = e.target as HTMLLIElement;
+    /* timer ref for correct perspective update (without lagging) */
+    
+    
+    const handleMouseEnter: ReactMouseHandler = async (e) => {
+        // delete timer on perspective resetting
+        if (timerRef.current != null) {
+            clearTimeout(timerRef.current);
+            timerRef.current = null;
+        }
 
-        animate(scaleValue, 1.2, { duration: 0.4 });
+        const target = (e.target as HTMLElement).closest('li') as HTMLLIElement;
+        // updating perspective
 
-        setTimeout(() => target.addEventListener('mousemove', handleMouseMove), 400);
+        const windowWidth = document.documentElement.clientWidth;
+        const coords = target.getBoundingClientRect();
+        const newPerspectiveValue = getCenterOfCard(windowWidth, currentScrollValue.get(), cardWidth, gapWidth, coords);
+
+
+        await animate(scaleValue, 1.2, { duration: 0.4 });
+        target.addEventListener('mousemove', handleMouseMove);
+
+        //update
+        perspectiveOriginValue.set(newPerspectiveValue);
     };
 
-    const handleMouseLeave: ReactMouseHandler = (e) => {
-        const target = e.target as HTMLLIElement;
-        
+
+    const handleMouseLeave: ReactMouseHandler = async (e) => {
+        // schedule reset timeout
+        timerRef.current = window.setTimeout(() => {
+            const windowWidth = document.documentElement.clientWidth;
+            const defaultPerspective = getPerspectiveOriginCenter(windowWidth, currentScrollValue.get(), cardWidth, gapWidth);
+            perspectiveOriginValue.set(defaultPerspective);
+        }, 800);
+
+        const target = (e.target as HTMLElement).closest('li') as HTMLLIElement;
+
         // back rotate values to 0, then scale to 0
         const animateSequence: AnimationSequence = [
             [rotateXvalue, 0],
             [rotateYvalue, 0, { at: '<' }],
             [scaleValue, 1, { at: +0 }],
         ];
-        animate(animateSequence);
 
+        await animate(animateSequence);
+        
         target.removeEventListener('mousemove', handleMouseMove);
     };
 

@@ -63,3 +63,18 @@ export const getPerspectiveOriginCenter = (windowWidth: number, currentScrollVal
 
     return `${perspectiveOriginWithScroll}px`;
 };
+
+
+/* найти координату карточки (центр) относительно середины контейнера */
+export const getCenterOfCard = (windowWidth: number, currentScrollValue: number, cardWidth: number, gapWidth: number, coords: DOMRect) => {
+
+    const visibleDistance = getCurrentVisibleDistance(windowWidth, cardWidth, gapWidth);
+    const centerOfVisibleContainerWithScroll = visibleDistance / 2 + Math.abs(currentScrollValue);
+    const centerOfCardWithScroll = coords.left + Math.abs(currentScrollValue);
+
+    const difference = centerOfCardWithScroll - centerOfVisibleContainerWithScroll;
+
+    const newPerspectiveValue = centerOfVisibleContainerWithScroll + difference;
+
+    return `${newPerspectiveValue}px`;
+};

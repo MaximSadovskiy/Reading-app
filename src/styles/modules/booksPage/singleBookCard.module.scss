@@ -3,7 +3,7 @@
 .listItem {
     @include colorTransformTransition(150ms, 400ms, ease-out);
 
-    background-color: var(--carousel-card-bg);
+    background: linear-gradient(150deg, var(--carousel-card-gradient1), var(--carousel-card-gradient2), var(--carousel-card-gradient3)); 
     height: 80%;
     width: pxIntoUnit(220);
     border-radius: pxIntoUnit(18);
