@@ -6,8 +6,8 @@ import SlideBtn from "../client/SlideBtn";
 import styles from '@/styles/modules/booksPage/bookCarousel.module.scss';
 // animation
 import { useAnimate, useMotionValue, useMotionValueEvent, m, LazyMotion, domAnimation } from "framer-motion";
-import { getScrollDistanceOnBreakpoint, getCurrentVisibleDistance, getMaxScrollDistance } from "@/utils/carouselUtils";
-import { useState } from "react";
+import { getScrollDistanceOnBreakpoint, getCurrentVisibleDistance, getMaxScrollDistance, getPerspectiveOriginCenter } from "@/utils/carouselUtils";
+import { useState, useRef } from "react";
 
 // types
 type Title = 'Популярные книги' | 'Новое';
@@ -19,7 +19,10 @@ interface CarouselProps {
 // server component
 const BookCarousel = ({ title, books }: CarouselProps) => {
 
-    const renderBooks = books.map(book => <BookCard key={book.id} book={book} />);
+    /* Perspective for animations */
+    const perspectiveOriginValue = useMotionValue<string>('20%');
+
+    const renderBooks = books.map(book => <BookCard key={book.id} book={book} perspectiveOriginValue={perspectiveOriginValue} />);
 
     /* Carousel Logic */
     const currentScrollValue = useMotionValue(0);
@@ -30,8 +33,26 @@ const BookCarousel = ({ title, books }: CarouselProps) => {
 
     // helper values
     const cardCount = renderBooks.length;
-    const cardWidth = 220;
-    const gapWidth = 35;
+    const cardWidthRef = useRef<number>(220);
+    const gapWidthRef = useRef<number>(35);
+    
+
+    /* Event for perspective update */
+    useMotionValueEvent(currentScrollValue, 'animationComplete', () => {
+        const windowWidth = document.documentElement.clientWidth;
+        
+        //log
+        console.log(`bookCar MotionEvent_complete, cardWidth: ${cardWidthRef.current}`);
+
+        const updatedValue = getPerspectiveOriginCenter(
+            windowWidth, 
+            currentScrollValue.get(),
+            cardWidthRef.current,
+            gapWidthRef.current,
+        );
+
+        perspectiveOriginValue.set(updatedValue); 
+    });
 
 
     /* Event which disables buttons, when certain values of "currentScrollValue" achieved */
@@ -47,9 +68,8 @@ const BookCarousel = ({ title, books }: CarouselProps) => {
         
         /* NEXT button state */
         const windowWidth = document.documentElement.clientWidth;
-        const maxScrollDistance = -getMaxScrollDistance(windowWidth, cardCount, cardWidth, gapWidth);
+        const maxScrollDistance = -getMaxScrollDistance(windowWidth, cardCount, cardWidthRef.current, gapWidthRef.current);
 
-            
         /* if its === maxScrollDist disable NEXT button */
         if ((latestValue >= maxScrollDistance && (latestValue < maxScrollDistance + 20)) && !isNextBtnDisabled) {
             setIsNextBtnDisabled(true);
@@ -64,8 +84,11 @@ const BookCarousel = ({ title, books }: CarouselProps) => {
     /* EVENT HANDLERS (on BTNs) */
     const handlePrevClick = () => {
         const windowWidth = document.documentElement.clientWidth;
+
+         //log
+         console.log(`bookCar handlePrevClick, cardWidth: ${cardWidthRef.current}`);
         /* желаемая дистанция скролла (зависит от ширины окна) */
-        const wantToScrollDistance = Math.abs(getScrollDistanceOnBreakpoint(windowWidth, cardWidth, gapWidth));
+        const wantToScrollDistance = Math.abs(getScrollDistanceOnBreakpoint(windowWidth, cardWidthRef.current, gapWidthRef.current));
         /* текущая дистанция скролла */
         const currentScrollDistance = Math.abs(currentScrollValue.get());
 
@@ -90,15 +113,19 @@ const BookCarousel = ({ title, books }: CarouselProps) => {
 
     const handleNextClick = () => {
         const windowWidth = document.documentElement.clientWidth;
+
         const gapCount = cardCount - 1;
+
+        //log
+        console.log(`bookCar handleNextClick, cardWidth: ${cardWidthRef.current}`);
         /* дистанция для кард, видимых на экране (внутри лист-контейнера) */
-        const visibleCardDistance = getCurrentVisibleDistance(windowWidth, cardWidth, gapWidth);
+        const visibleCardDistance = getCurrentVisibleDistance(windowWidth, cardWidthRef.current, gapWidthRef.current);
         /* максимальная дистанция которую охватывают все карточки (учитывая видимые) */
-        const wholeDistanceWithVisibleCards = (cardCount * cardWidth) + (gapCount * gapWidth);
+        const wholeDistanceWithVisibleCards = (cardCount * cardWidthRef.current) + (gapCount * gapWidthRef.current);
         /* дистанция для скролла, не включая уже видимые карточки в контейнере */
         let maxScrollDistance = wholeDistanceWithVisibleCards - visibleCardDistance;
         /* желаемая дистанция скролла (зависит от ширины окна) */
-        const wantToScrollDistance = Math.abs(getScrollDistanceOnBreakpoint(windowWidth, cardWidth, gapWidth));
+        const wantToScrollDistance = Math.abs(getScrollDistanceOnBreakpoint(windowWidth, cardWidthRef.current, gapWidthRef.current));
         /* текущая дистанция скролла */
         const currentScrollDistance = Math.abs(currentScrollValue.get());
         
@@ -137,6 +164,7 @@ const BookCarousel = ({ title, books }: CarouselProps) => {
                         ref={scope}
                         style={{
                             x: currentScrollValue,
+                            perspectiveOrigin: perspectiveOriginValue,
                         }}
                     >
                         {renderBooks}

@@ -14,12 +14,13 @@ export const getScrollDistanceOnBreakpoint = (windowWidth: number, cardWidth: nu
     }
 
     gapCount = cardCount;
-    return (cardCount * cardWidth) + (gapCount * gapWidth)
+    return (cardCount * cardWidth) + (gapCount * gapWidth);
 };
 
 
 /* получить дистанцию видмимых кард (внутри лист-контейнера) */
 export const getCurrentVisibleDistance = (windowWidth: number, cardWidth: number, gapWidth: number) => {
+
     let cardCount: number, gapCount: number;
 
     if (windowWidth < 550) cardCount = 1;
@@ -32,7 +33,9 @@ export const getCurrentVisibleDistance = (windowWidth: number, cardWidth: number
 
     gapCount = cardCount - 1;
 
-    return (cardCount * cardWidth) + (gapCount * gapWidth)
+    const output = (cardCount * cardWidth) + (gapCount * gapWidth);
+
+    return output;
 };
 
 
@@ -46,4 +49,17 @@ export const getMaxScrollDistance = (windowWidth: number, cardCount: number, car
 
     /* maxScroll */
     return wholeContainerDistance - visibleDistance;
+};
+
+
+/* посчитать perspectiveOrigin */
+export const getPerspectiveOriginCenter = (windowWidth: number, currentScrollValue: number, cardWidth: number, gapWidth: number) => {
+
+    const visibleDistance = getCurrentVisibleDistance(windowWidth, cardWidth, gapWidth);
+
+    const centerOfVisibleContainer = visibleDistance / 2;
+
+    const perspectiveOriginWithScroll = Math.abs(currentScrollValue) + centerOfVisibleContainer;
+
+    return `${perspectiveOriginWithScroll}px`;
 };
