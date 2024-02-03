@@ -7,6 +7,7 @@ import styles from '@/styles/modules/booksPage/singleBookCard.module.scss';
 import { m, LazyMotion, domAnimation, useMotionValue, useAnimate } from "framer-motion";
 import type { AnimationSequence, MotionValue } from "framer-motion";
 import { getCenterOfCard, getPerspectiveOriginCenter } from "@/utils/carouselUtils";
+import Image from "next/image";
 
 
 type PlainMouseHandler = (e: MouseEvent) => void;
@@ -22,7 +23,7 @@ interface BookCardProps {
 }
 
 const BookCard = memo(({ book, perspectiveOriginValue, currentScrollValue, cardWidth, gapWidth, timerRef }: BookCardProps) => {
-    const { id, title, author, rating } = book;
+    const { id, title, author, rating, thumbnail } = book;
 
     const [scope, animate] = useAnimate();
 
@@ -133,7 +134,8 @@ const BookCard = memo(({ book, perspectiveOriginValue, currentScrollValue, cardW
                 ref={scope}
             >
                 <Link href={`/books/${id}`} className={styles.link}>
-                    <p>{title}</p>
+                    <Image src={thumbnail} alt={`иллюстрация из книги "${title}"`} width={180} height={215} />
+                    <p>"{title}"</p>
                     <p>{author}</p>
                     <p>{rating}</p>
                 </Link>

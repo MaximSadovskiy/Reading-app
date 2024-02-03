@@ -9,28 +9,28 @@
 
 /* container of carousel */
 .popularContainer {
-    height: pxIntoUnit(350);
+    height: pxIntoUnit(440);
     padding-block: pxIntoUnit(12);
     padding-inline: pxIntoUnit(35);
     border: 3px solid var(--carousel-wrapper-border);
     border-radius: pxIntoUnit(17);
     overflow: hidden;
 
-    width: calcWidthInSlider(1, 220, 35);
+    width: calcWidthInSlider(1, 230, 35);
     @include breakpointUp(550) {
-        width: calcWidthInSlider(2, 220, 35);
+        width: calcWidthInSlider(2, 230, 35);
     }
     @include breakpointUp(850) {
-        width: calcWidthInSlider(3, 220, 35);
+        width: calcWidthInSlider(3, 230, 35);
     }
     @include breakpointUp(1150) {
-        width: calcWidthInSlider(4, 220, 35);
+        width: calcWidthInSlider(4, 230, 35);
     }
     @include breakpointUp(1450) {
-        width: calcWidthInSlider(5, 220, 35);
+        width: calcWidthInSlider(5, 230, 35);
     }
     @include breakpointUp(1550) {
-        width: calcWidthInSlider(6, 220, 35);
+        width: calcWidthInSlider(6, 230, 35);
     }
 }
 

@@ -44,7 +44,7 @@ body {
     // header
     --header-bg: var(--color-darkbrown);
     --header-bg-blur: var(--color-darkbrown-blur);
-    --header-border: var(--color-darkbrown);
+    --header-border: var(--color-orange);
     --logo-color: var(--color-orange);
     --logo-color-second: var(--color-bisque);
     --sublogo-color: var(--color-white);
@@ -127,7 +127,9 @@ body {
     --carousel-heading-color: var(--color-darkbrown);
     --carousel-wrapper-bg: var(--color-light-bisque);
     --carousel-wrapper-border: var(--color-lightbrown);
-    --carousel-card-bg: var(--color-light-bisque);
+    --carousel-card-gradient1: var(--color-orange);
+    --carousel-card-gradient2: var(--color-bisque);
+    --carousel-card-gradient3: var(--color-light-bisque);
     --carousel-card-border: var(--color-lightbrown);
     --carousel-card-text: var(--color-darkbrown);
     --carousel-slideBtn-bg: var(--color-lightbrown);
@@ -160,7 +162,9 @@ body {
         --carousel-heading-color: var(--color-orange);
         --carousel-wrapper-bg: var(--color-lightbrown);
         --carousel-wrapper-border: var(--color-bisque);
-        --carousel-card-bg: var(--color-lightbrown);
+        --carousel-card-gradient1: var(--color-light-bisque);
+        --carousel-card-gradient2: var(--color-orange);
+        --carousel-card-gradient3: var(--color-lightbrown) 50%;
         --carousel-card-border: var(--color-bisque);
         --carousel-card-text: var(--color-white);
         --carousel-slideBtn-bg: var(--color-light-bisque);

@@ -24,7 +24,7 @@ const BookCarousel = ({ title, books }: CarouselProps) => {
 
     const currentScrollValue = useMotionValue(0);
 
-    const cardWidthRef = useRef<number>(220);
+    const cardWidthRef = useRef<number>(230);
     const gapWidthRef = useRef<number>(35);
     // timerRef (общая для всех кард) to reset / stopReset perspective
     const timerRef = useRef<number | null>(null);

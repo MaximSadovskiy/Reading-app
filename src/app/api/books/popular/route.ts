@@ -8,9 +8,9 @@ export async function GET() {
     const initBooks = retrieveBooksWithoutFiles();
 
     const responseBooks: CarouselBooks = initBooks.map(book => {
-      const { id, title, author, rating } = book;
+      const { id, title, author, rating, thumbnail } = book;
 
-      return { id, title, author, rating };
+      return { id, title, author, rating, thumbnail };
     });
 
     return NextResponse.json(responseBooks);
