@@ -1,0 +1,190 @@
+@use 'utils' as *;
+
+.slidingBigText {
+    @include colFlex(center, flex-start, pxIntoUnit(20));
+
+    text-align: center;
+    min-height: 50vh;
+
+    & > .staticText {
+        @include fontMarc(55);
+    }
+
+    & ul {
+        list-style: none;
+    }
+
+    /* containers */
+
+    & > div {
+        overflow: hidden;
+        white-space: nowrap;
+        text-transform: uppercase;
+    }
+    
+    /* list 1 (topToBottom) */
+    $liHeight: pxIntoUnit(140);
+    $gapVert: pxIntoUnit(20);
+    /* высота листа = (кол-во li * высота li) + (кол-во gaps * высота gap) */
+    $ulHeight: calc(($liHeight * 5) + ($gapVert * 4));
+    $initTranslateY: calc($ulHeight * (-1));
+    /* шаг */
+    $transformStep: $liHeight;
+    $transformStepWithGap: calc($liHeight + $gapVert);
+
+    /* function to calculate transform on step */
+     @function calcTransformStep($stepCount) {
+        $transformNeeded: 0;
+        /* на первом шаге мы не учитываем gap */
+        @if ($stepCount == 1) {
+            $transformNeeded: $transformStep;
+        }
+        /* последний шаг */
+        @else if ($stepCount == 6) {
+            $transformNeeded: calc(($transformStep * 2) + $transformStepWithGap * ($stepCount - 1));
+        }
+        @else {
+            $transformNeeded: calc($transformStep + $transformStepWithGap * ($stepCount - 1));
+        }
+
+        $result: calc($initTranslateY + $transformNeeded);
+        @return $result;
+    } 
+
+    & > .container1 {
+        height: $liHeight;
+        padding-inline: pxIntoUnit(20);
+        background-color: var(--running-text1-bg);
+        border: pxIntoUnit(3) solid var(--running-text1-border);
+        border-radius: pxIntoUnit(20);
+        color: var(--running-text1-color);
+        // for circle
+        position: relative;
+
+
+        /* li height */
+        & li {
+            height: $liHeight;
+            display: flex;
+            align-items: center;
+        }
+    }  
+
+    & .list1 {
+        @include colFlex(center, center, $gapVert);
+        @include fontDefault(55, 600, pxIntoUnit(1.7));
+
+        height: $ulHeight;
+        
+        animation: topToBottom 10s linear infinite;
+
+        @keyframes topToBottom {
+            0% {
+                transform: translateY(calc($initTranslateY - $gapVert));
+            }
+            16% {
+                transform: translateY(calcTransformStep(1));
+            }
+            /* delay */
+            24% {
+                transform: translateY(calcTransformStep(1));
+            }
+            32% {
+                transform: translateY(calcTransformStep(2));
+            }
+            /* delay */
+            40% {
+                transform: translateY(calcTransformStep(2));
+            }
+            48% {
+                transform: translateY(calcTransformStep(3));
+            }   
+            /* delay */
+            56% {
+                transform: translateY(calcTransformStep(3));
+            }
+            64% {
+                transform: translateY(calcTransformStep(4));
+            }
+            /* delay */
+            72% {
+                transform: translateY(calcTransformStep(4));
+            }
+            80% {
+                transform: translateY(calcTransformStep(5));
+            }
+            /* delay */
+            88% {
+                transform: translateY(calcTransformStep(5));
+            }
+            100% {
+                transform: translateY(calcTransformStep(6));
+            }
+        }
+    }
+
+    /* list 2 leftToRight */
+    $liWidth: pxIntoUnit(640);
+    $ulWidth: calc($liWidth * 2);
+    $initTranslateX: calc($liWidth * (-2));
+    $translateStepHor: $liWidth;
+    
+    @function calcTransformStepWidth($stepCount) {
+        $result: calc($initTranslateX + ($translateStepHor * $stepCount));
+        @return $result;
+    }
+
+    & > .container2 {
+        width: $liWidth;
+    } 
+
+    & .list2 {
+        @include flex(center, center);
+        @include fontDefault(52, 600);
+
+        width: $ulWidth;
+
+        animation: leftToRight 10s linear infinite;
+
+        & > li {
+            display: block;
+            width: $liWidth;
+        }
+
+        @keyframes leftToRight {
+            0% {
+                transform: translateX($initTranslateX);
+            }
+            16% {
+                transform: translateX(calcTransformStepWidth(1));
+            }
+            /* step delay */
+            56% {
+                transform: translateX(calcTransformStepWidth(1));
+            }
+            64% {
+                transform: translateX(calcTransformStepWidth(2));
+            }
+            /* step delay */
+            88% {
+                transform: translateX(calcTransformStepWidth(2));
+            }
+            100% {
+                transform: translateX(calcTransformStepWidth(3));
+            }
+        }
+    }
+}
+
+
+// Circle
+.circle {
+    width: pxIntoUnit(65);
+    height: pxIntoUnit(65);
+    border-radius: 50%;
+    background-color: var(--circle-bg);
+    position: absolute;
+    top: 0;
+    left: 0;
+    backdrop-filter: invert(1);
+}

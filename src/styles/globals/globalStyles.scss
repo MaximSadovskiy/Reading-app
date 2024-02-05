@@ -76,6 +76,13 @@ body {
     --main-link: var(--color-darkbrown);
     --main-listmarker: var(--color-lightbrown);
     --underline: var(--color-lightbrown);
+    // бегущий текст 
+    --running-text1-bg: var(--color-lightbrown);
+    --running-text1-border: var(--color-orange);
+    --running-text1-color: var(--color-white);
+    // circle
+    --circle-bg: hsla(25, 100%, 80%, 0.507);
+
 
     // booksPage
     --btn-bg: var(--color-darkbrown);
@@ -148,6 +155,10 @@ body {
         --main-text-highlight-logo: var(--color-bisque);
         --main-link: var(--color-orange);
         --main-listmarker: var(--color-bisque);
+        // бегущий текст 
+        --running-text1-bg: var(--color-darkbrown);
+        --running-text1-border: var(--color-orange);
+        --running-text1-color: var(--color-orange);
 
         // booksPage
         --btn-bg: var(--color-white); 

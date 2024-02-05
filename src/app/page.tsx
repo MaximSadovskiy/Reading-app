@@ -2,6 +2,7 @@ import styles from '@/styles/modules/rootPage/mainPage.module.scss';
 import BookRedirect from '../components/readLayout/BookRedirect';
 import Image from 'next/image';
 import Link from 'next/link';
+import SlidingLogo from '../components/rootPage/server/SlidingLogo';
 
 // main component
 export default function RootPage() {
@@ -25,6 +26,9 @@ export default function RootPage() {
 	return (
 		<main className={styles.main}>
 			<section className={styles.textSection}>
+				{/* big sliding text */}
+				<SlidingLogo />
+
 				<h2 className={styles.h2}>
 					Добро пожаловать на <strong>Бук<span>Лайф</span></strong>!
 				</h2>
