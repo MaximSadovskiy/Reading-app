@@ -92,7 +92,7 @@
 
 // COMPONENTS
 @mixin linkWithUnderline($fontWeight: 500) {
-    @include fontClamp(18, 2.3, 22);
+    @include fontClamp(20, 2.3, 24);
     @include transition(transform);
 
     font-weight: $fontWeight;
@@ -111,7 +111,7 @@
         height: pxIntoUnit(2);
         width: 100%;
         position: absolute;
-        bottom: -10px;
+        bottom: pxIntoUnit(-10);
         left: 0;
         background-color: var(--link-underline);
         border-radius: pxIntoUnit(5);

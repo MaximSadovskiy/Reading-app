@@ -1,10 +1,11 @@
 @use 'utils' as *;
 
 .slidingBigText {
-    @include colFlex(center, flex-start, pxIntoUnit(20));
+    @include colFlex(center, center, pxIntoUnit(20));
 
     text-align: center;
     min-height: 50vh;
+    margin-bottom: pxIntoUnit(50);
 
     & > .staticText {
         @include fontMarc(55);

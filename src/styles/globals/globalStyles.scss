@@ -69,13 +69,14 @@ body {
     --acc-bg-hover: var(--color-lightbrown);
 
     // rootPage
-    --main-bg: var(--color-light-bisque);
+    --main-bg: var(--color-white);
     --main-text: var(--color-darkbrown);
     --main-text-highlight: var(--color-lightbrown);
     --main-text-highlight-logo: var(--color-darkbrown);
     --main-link: var(--color-darkbrown);
     --main-listmarker: var(--color-lightbrown);
     --underline: var(--color-lightbrown);
+    --main-aside-border: var(--color-lightbrown);
     // бегущий текст 
     --running-text1-bg: var(--color-lightbrown);
     --running-text1-border: var(--color-orange);
@@ -155,6 +156,7 @@ body {
         --main-text-highlight-logo: var(--color-bisque);
         --main-link: var(--color-orange);
         --main-listmarker: var(--color-bisque);
+        --main-aside-border: var(--color-orange);
         // бегущий текст 
         --running-text1-bg: var(--color-darkbrown);
         --running-text1-border: var(--color-orange);

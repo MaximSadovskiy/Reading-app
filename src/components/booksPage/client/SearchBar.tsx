@@ -11,7 +11,7 @@ import Link from "next/link";
 import { ArrowSvg, SearchSvg } from "@/components/shared/Svg";
 // анимации
 import { m, LazyMotion, domAnimation, AnimatePresence } from "framer-motion";
-import { listVariants, itemVariants } from "@/styles/variants/themeToggler/themeTogglerVariants";
+import { listVariants, itemVariants } from "@/animation/variants/themeToggler/themeTogglerVariants";
 import getModalBlurVariants from "@/animation/variants/modalBlurVariants";
 import upDownVariants from "@/animation/variants/upDownVariants";
 // modal
