@@ -5,7 +5,7 @@ import Image from "next/image";
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
 // framer
 import { m, LazyMotion, domAnimation, AnimatePresence } from 'framer-motion';
-import { listVariants, itemVariants } from "@/styles/variants/themeToggler/themeTogglerVariants";
+import { listVariants, itemVariants } from "@/animation/variants/themeToggler/themeTogglerVariants";
 import { SetThemeType, ThemeType } from "@/hooks/useTheme";
 
 // types & helpers

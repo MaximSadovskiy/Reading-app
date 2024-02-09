@@ -23,87 +23,25 @@
     padding-inline: pxIntoUnit(35); 
 };
 
-.h2 {
-    @include fontHeading(2);
-
-    > strong {
-        @include fontMarc(52, 0);
-        color: var(--main-text-highlight);
-
-        > span {
-            color: var(--main-text-highlight-logo);
-        }
-    }
-}
-
-.h3 {
-    @include fontHeading(3);
-    margin-block: pxIntoUnit(25);
-
-    > strong {
-        color: var(--main-text-highlight-logo);
-        letter-spacing: 2px;
-    }
-}
-
-.list {
-    @include flex(center, stretch, pxIntoUnit(8), column);
-
-    list-style: none;
-    margin-top: pxIntoUnit(15);
-
-    > li {
-        @include fontDefault;
-        @include transition(color);
-
-        color: var(--main-text);
-    }
-}
-
-.listItem {
-    @include colFlex(stretch, center, pxIntoUnit(12));
-    margin-bottom: pxIntoUnit(20);
-
-    > p {
-        position: relative;
-        padding-left: pxIntoUnit(15);
-
-        &::before {
-            @include colorTransition;
-
-            content: '';
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            left: -15px;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: var(--main-listmarker);
-        }
-    }
-}
-
-.link {
-    @include linkWithUnderline;
-    align-self: center;
-    color: var(--main-link);
-    
-    &::before {
-        background-color: var(--underline);
-    }
-}
-
 
 // asides
 .aside {
+    @include colFlex(center, space-between);
     width: 100%;
-    border: none;
+
+    &:first-of-type {
+        border-right: pxIntoUnit(5) solid var(--main-aside-border);
+    }
+
+    &:last-of-type {
+        border-left: pxIntoUnit(5) solid var(--main-aside-border);
+    }
 }
 
 .innerDiv {
     position: relative;
-    height: 33vh;
+    width: 100%;
+    height: pxIntoUnit(400);
 
     &::before {
         content: '';

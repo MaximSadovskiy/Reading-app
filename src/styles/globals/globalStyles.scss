@@ -44,7 +44,7 @@ body {
     // header
     --header-bg: var(--color-darkbrown);
     --header-bg-blur: var(--color-darkbrown-blur);
-    --header-border: var(--color-darkbrown);
+    --header-border: var(--color-orange);
     --logo-color: var(--color-orange);
     --logo-color-second: var(--color-bisque);
     --sublogo-color: var(--color-white);
@@ -69,13 +69,21 @@ body {
     --acc-bg-hover: var(--color-lightbrown);
 
     // rootPage
-    --main-bg: var(--color-light-bisque);
+    --main-bg: var(--color-white);
     --main-text: var(--color-darkbrown);
     --main-text-highlight: var(--color-lightbrown);
     --main-text-highlight-logo: var(--color-darkbrown);
     --main-link: var(--color-darkbrown);
     --main-listmarker: var(--color-lightbrown);
     --underline: var(--color-lightbrown);
+    --main-aside-border: var(--color-lightbrown);
+    // бегущий текст 
+    --running-text1-bg: var(--color-lightbrown);
+    --running-text1-border: var(--color-orange);
+    --running-text1-color: var(--color-white);
+    // circle
+    --circle-bg: hsla(25, 100%, 80%, 0.507);
+
 
     // booksPage
     --btn-bg: var(--color-darkbrown);
@@ -127,8 +135,11 @@ body {
     --carousel-heading-color: var(--color-darkbrown);
     --carousel-wrapper-bg: var(--color-light-bisque);
     --carousel-wrapper-border: var(--color-lightbrown);
-    --carousel-card-bg: var(--color-lightbrown);
-    --carousel-card-text: var(--color-light-bisque);
+    --carousel-card-gradient1: var(--color-orange);
+    --carousel-card-gradient2: var(--color-bisque);
+    --carousel-card-gradient3: var(--color-light-bisque);
+    --carousel-card-border: var(--color-lightbrown);
+    --carousel-card-text: var(--color-darkbrown);
     --carousel-slideBtn-bg: var(--color-lightbrown);
     --carousel-slideBtn-hover: var(--color-lightbrown-hover);
     --carousel-slideBtn-color: var(--color-light-bisque);
@@ -145,6 +156,11 @@ body {
         --main-text-highlight-logo: var(--color-bisque);
         --main-link: var(--color-orange);
         --main-listmarker: var(--color-bisque);
+        --main-aside-border: var(--color-orange);
+        // бегущий текст 
+        --running-text1-bg: var(--color-darkbrown);
+        --running-text1-border: var(--color-orange);
+        --running-text1-color: var(--color-orange);
 
         // booksPage
         --btn-bg: var(--color-white); 
@@ -159,8 +175,11 @@ body {
         --carousel-heading-color: var(--color-orange);
         --carousel-wrapper-bg: var(--color-lightbrown);
         --carousel-wrapper-border: var(--color-bisque);
-        --carousel-card-bg: var(--color-light-bisque);
-        --carousel-card-text: var(--color-darkbrown);
+        --carousel-card-gradient1: var(--color-light-bisque);
+        --carousel-card-gradient2: var(--color-orange);
+        --carousel-card-gradient3: var(--color-lightbrown) 50%;
+        --carousel-card-border: var(--color-bisque);
+        --carousel-card-text: var(--color-white);
         --carousel-slideBtn-bg: var(--color-light-bisque);
         --carousel-slideBtn-hover: var(--color-white);
         --carousel-slideBtn-color: var(--color-darkbrown);

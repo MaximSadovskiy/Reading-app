@@ -1,17 +1,20 @@
 @use 'utils' as *;
 
 .listItem {
-    background-color: var(--carousel-card-bg);
-    min-height: 87%;
-    width: pxIntoUnit(220);
+    @include colorTransformTransition(150ms, 400ms, ease-out);
+
+    background: linear-gradient(150deg, var(--carousel-card-gradient1), var(--carousel-card-gradient2), var(--carousel-card-gradient3)); 
+    height: 82%;
+    width: pxIntoUnit(230);
     border-radius: pxIntoUnit(18);
-    padding-block: pxIntoUnit(13);
-    padding-inline: pxIntoUnit(20);
+    border: pxIntoUnit(4) solid var(--carousel-card-border);
 }
 
 .link {
-    @include colFlex;
-
+    @include colFlex(center, center, pxIntoUnit(5));
+    
+    padding-block: pxIntoUnit(13);
+    padding-inline: pxIntoUnit(20);
     color: var(--carousel-card-text);
     white-space: nowrap;
     width: 100%;
@@ -19,6 +22,15 @@
     cursor: pointer;
 
     & > p {
-        @include fontDefault(18);
+        @include fontDefault(20, 500);
+    }
+
+    & > p:first-of-type {
+        @include fontMarc(28);
+    }
+
+    & > img {
+        align-self: center;
+        clip-path: inset(0 0 0 0 round pxIntoUnit(12));
     }
 }

@@ -66,7 +66,7 @@
     }
 
     &:not(.slideBtnDisabled):active {
-        transform: scale(0.9);
+        transform: scale(0.65);
     }
 
 
@@ -81,5 +81,6 @@
     &.slideBtnDisabled {
         opacity: 0.8;
         filter: blur(5px);
+        cursor: not-allowed;
     }
 }

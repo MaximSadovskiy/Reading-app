@@ -3,15 +3,17 @@ export interface BookInterface {
     title: string;
     author: string;
     year: string;
-    rating: number;
-    genres: Genre | Genre[];
+    genres: Genre[];
     description: string;
-    quotes: string[] | string;
-    // temporary optional 
-    thumbnail?: Buffer;
+    quotes: string[]; 
+    rating: number;
+    ratingMarks: number[];
+    // url для карточки в контейнере
+    thumbnail: string;
+    // url для страницы этой книги
+    picture: string;
     files: {
         book: Buffer | string; // temp
-        img: Buffer | string; // temp
     } 
 }
 
