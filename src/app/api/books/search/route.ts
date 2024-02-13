@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { retrieveBooksWithoutFiles, retrieveBooks } from '@/booksStorage/usage/storage';
-import { BooksForSearch } from '@/booksStorage/usage/storage';
+import { booksInstance as books } from '@/booksStorage/usage/storage';
+import type { BooksForSearch } from '@/booksStorage/usage/storage';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
         const query = searchParams.get('query')?.toLowerCase() as string;
 
         // formatting data for response
-        const initBooks = retrieveBooksWithoutFiles();
+        const initBooks = books.retrieveBooksWithoutFiles();
         let responseBooks: BooksForSearch = [];
 
         let filteredBooks = [];

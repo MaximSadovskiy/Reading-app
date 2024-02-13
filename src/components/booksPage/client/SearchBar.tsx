@@ -5,7 +5,7 @@ import useModal from "@/hooks/useModal";
 import debounce from "@/utils/debounceDecorator";
 import { BooksForSearch } from "@/booksStorage/usage/storage";
 import styles from '@/styles/modules/booksPage/searchBar.module.scss';
-import Backdrop from "@/lib/features/backdrop/Backdrop";
+import Backdrop from "@/components/shared/Backdrop";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowSvg, SearchSvg } from "@/components/shared/Svg";

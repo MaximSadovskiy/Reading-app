@@ -6,7 +6,7 @@ const AccountEnter = () => {
 
     return (
         <div aria-labelledby="account-info">
-            <Link href='/' className={styles.link} >
+            <Link href='/register' className={styles.link} >
                 <Image src='/account-enter.svg' alt='' role='presentation' width={35} height={35} />
                 <p id="account-info">Аккаунт</p>
             </Link>
