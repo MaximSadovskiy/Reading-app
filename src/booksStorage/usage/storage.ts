@@ -6,29 +6,46 @@ export type BooksWithoutFiles = Omit<BookInterface, 'files' | 'ratingMarks'>[];
 export type BooksForSearch = Pick<BookInterface, 'id' | 'title' | 'author' | 'rating'>[];
 export type CarouselBooks = Pick<BookInterface, 'id' | 'title' | 'author' | 'rating' | 'thumbnail'>[];
 
-export const retrieveBooks = () => books;
-export const retrieveBooksWithoutFiles = (): BooksWithoutFiles => {
-    const booksWithoutFiles = books.map(book => {
-        const { id, title, author, year, description, quotes, rating, genres, thumbnail, picture } = book;
-
-        return {
-            id,
-            title,
-            author,
-            year,
-            description,
-            quotes,
-            genres,
-            rating,
-            thumbnail,
-            picture
-        };
-    });
-
-    return booksWithoutFiles;
-};
 
 // MAIN STORAGE
+class BooksClass {
+    books: BookInterface[];
+
+    constructor() {
+        this.books = books;
+    }
+
+    // methods
+    retrieveBooks() {
+        return this.books;
+    }
+
+    retrieveBooksWithoutFiles() {
+        const booksWithoutFiles: BooksWithoutFiles = books.map(book => {
+            const { id, title, author, year, description, quotes, rating, genres, thumbnail, picture } = book;
+
+            return {
+                id,
+                title,
+                author,
+                year,
+                description,
+                quotes,
+                genres,
+                rating,
+                thumbnail,
+                picture
+            };
+        });
+
+        return booksWithoutFiles;
+    }
+}
+
+
+export const booksInstance = new BooksClass();  
+
+
 const books: BookInterface[] = [
     {
         id: '0',
