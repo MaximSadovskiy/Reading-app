@@ -1,9 +1,10 @@
 @use 'utils' as *;
 
 .main {
+    @include colorTransition;
+    
     min-height: 100vh;
     background-color: var(--main-bg);
-    transition: background-color 300ms ease-in-out;
 
     display: grid;
     grid-template-columns: 22vw 1fr 22vw;
@@ -14,8 +15,6 @@
 };
 
 .textSection {
-    @include colorTransition;
-
     grid-area: text;
     margin-top: pxIntoUnit(20);
     color: var(--main-text);

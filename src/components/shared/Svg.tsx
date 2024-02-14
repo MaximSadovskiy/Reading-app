@@ -34,13 +34,51 @@ export const SlideArrowSvg = ({ width = 50, height = 50, direction = "left"}: {
 }) => {
 
     return (
-        <svg width={`${width}px`} height={`${height}px`} data-direction={direction} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width={`${width}px`} height={`${height}px`} 
+
+        data-direction={direction} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 
             <g id="SVGRepo_bgCarrier" strokeWidth="0"/>
 
             <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"/>
 
             <g id="SVGRepo_iconCarrier"> <path d="M4 12L10 6M4 12L10 18M4 12H14.5M20 12H17.5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/> </g>
+
+        </svg>
+    )
+};
+
+
+export const CheckmarkSvg = ({ width, height }: { width: number, height: number}) => {
+
+    return (
+        <svg width={`${width}`} height={`${height}`} 
+
+        version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" enableBackground="new 0 0 32 32" xmlSpace="preserve"
+
+        fill="#ffc9a3" stroke="#ffc9a3">
+
+        <g id="SVGRepo_bgCarrier" strokeWidth="0"/>
+
+        <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" stroke="#CCCCCC" strokeWidth="0.064"/>
+
+        <g id="SVGRepo_iconCarrier"> <polyline fill="none" stroke="#ffc9a3" strokeWidth="3.2" strokeMiterlimit="10" points="28,8 16,20 11,15 "/> <polygon points="26,14.2 26,26 6,26 6,6 25.8,6 27.8,4 4,4 4,28 28,28 28,12.2 "/> </g>
+
+        </svg>
+    )
+};
+
+
+export const CrossSvg = ({ width, height }: { width: number, height: number }) => {
+
+    return (
+        <svg width={`${width}px`} height={`${height}px`} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+        <g id="SVGRepo_bgCarrier" strokeWidth="0"/>
+
+        <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"/>
+
+        <g id="SVGRepo_iconCarrier"> <path d="M19 5L4.99998 19M5.00001 5L19 19" /* stroke={color} */ strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/> </g>
 
         </svg>
     )

@@ -1,0 +1,33 @@
+@use 'utils' as *;
+
+
+.main {
+    @include colFlex(center);
+    @include colorTransition;
+    
+    margin-top: pxIntoUnit(50);
+    margin-bottom: pxIntoUnit(150);
+    min-height: 70vh;
+    background-color: var(--main-bg);
+};
+
+.title {
+    @include fontMarc(55);
+    margin-bottom: pxIntoUnit(20);
+}
+
+.linkToLogin {
+    @include fontDefault(17, 600);
+    @include linkWithUnderline;
+
+    color: var(--main-text);
+    margin-bottom: pxIntoUnit(50);
+
+    &::before {
+        background-color: var(--form-link-underline);
+    }
+}
+
+.form {
+    @include colFlex(center);
+}

@@ -1,4 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import styles from '@/styles/modules/formUI/formUI.module.scss';
+import { CheckmarkSvg, CrossSvg } from "../shared/Svg";
+// animations
+import { LazyMotion, domMax, m, AnimatePresence, LayoutGroup, useAnimate, domAnimation, useMotionValue, useTransform, AnimationSequence } from "framer-motion";
+import { listItemVariants } from "@/animation/variants/formUI/formVariants"; 
+
 
 interface FormFieldProps {
     labelText: string;
@@ -11,10 +17,10 @@ export const FormFieldWrapper = ({ labelText, isError, errorText, children }: Fo
 
     
     return (
-        <div>
+        <div className={styles.formFieldWrapper}>
             <label>{labelText}</label>
             {children}
-            {isError && (<span>{errorText}</span>)}
+            {isError && (<p role="alert" className={styles.error}>{errorText}</p>)}
         </div>
     )
 };
@@ -22,11 +28,14 @@ export const FormFieldWrapper = ({ labelText, isError, errorText, children }: Fo
 
 // custom select
 
-export type GenresToSelect = 'Антиутопия' | 'Биография' | 'Роман' | 'Фантастика' | 'Фэнтези' | 'Детектив' | 'Триллер' | 'Антиутопия' | 'Классика';
+export type GenresToSelect = 'Антиутопия' | 'Биография' | 'Роман' | 'Фантастика' | 'Фэнтези' | 'Детектив' | 'Триллер' | 'Классика';
 
 interface SelectProps {
     options: Array<GenresToSelect>;
     onChange: (selectedOptions: GenresToSelect[]) => void;
+    isError: boolean;
+    errorText?: string;
+    isInvalid: boolean;
 }
 
 interface OptionWithName extends HTMLDivElement {
@@ -35,21 +44,27 @@ interface OptionWithName extends HTMLDivElement {
     }
 }
 
-export const Select = ({ options, onChange }: SelectProps) => {
+export const Select = ({ options, onChange, isError, errorText, isInvalid }: SelectProps) => {
     const [selectedOptions, setSelectedOptions] = useState<GenresToSelect[]>([]);
+
+    // эффект чтобы передать актуальное состояние в hook-form
+    useEffect(() => {
+        onChange(selectedOptions);
+    }, [selectedOptions]);
 
     // event handlers
     const deleteOptionFromPanel = (e: React.MouseEvent) => {
-        const target = e.currentTarget.closest('.selected-option') as OptionWithName;
+        const target = e.currentTarget.closest('[data-option-type="panelOption"]') as OptionWithName;
         const optionName = target.dataset.name;
 
         setSelectedOptions(selectedOptions.filter(option => option !== optionName));
-        // connect to react-hook-form state
-        onChange(selectedOptions);
+
+        target.blur();
     };
 
     const toggleSelectionFromList = (e: React.MouseEvent) => {
-        const target = e.currentTarget.closest('.option') as OptionWithName;
+
+        const target = e.currentTarget.closest('[data-option-type="listOption"]') as OptionWithName;
         
         const optionName = target.dataset.name;
 
@@ -59,14 +74,34 @@ export const Select = ({ options, onChange }: SelectProps) => {
         else {
             setSelectedOptions([...selectedOptions, optionName]);
         }
+
+        target.blur();
     };  
     
     // options inside panel of selection
-    const renderingSelectedOptions = selectedOptions.map(selectedOption => <OptionInsideSelectPanel
-        key={`select-${selectedOption}`} 
-        value={selectedOption}
-        onClick={deleteOptionFromPanel} 
-    />);
+    const renderingSelectedOptions = selectedOptions.map(option => (
+        <m.li className={styles.panelOptionWrapper}
+            key={`select-${option}`}
+            variants={listItemVariants}
+            initial='initial'
+            animate='animate'
+            exit='exit'
+
+            layout
+            transition={{
+                layout: {
+                    duration: 0.75
+                }
+            }}
+        >
+            <div className={styles.panelOption} data-name={option} data-option-type='panelOption'>
+                <button type="button" onClick={deleteOptionFromPanel}>
+                    <CrossSvg width={30} height={30} />
+                </button>
+                <span>{option}</span>
+            </div>
+        </m.li>
+    ));
     
     const renderingOptionList = options.map(option => (
     <OptionInsideList 
@@ -77,39 +112,126 @@ export const Select = ({ options, onChange }: SelectProps) => {
     />));
 
     return (
-        <div>
-            <label>Выберите ваши любимые жанры литературы</label>
-            <div>
-                {renderingSelectedOptions}
-            </div>
-            <ul>
-                {renderingOptionList}
-            </ul>
+        <div className={styles.select}>
+            <label>Выберите ваши любимые жанры литературы:</label>
+            {/* SELECTION PANEL */}
+            <LazyMotion features={domMax}>
+                <LayoutGroup>
+                    <m.ul
+                        className={`${styles.selectionPanel} ${selectedOptions.length === 0 ? styles.panelEmpty : ''}`}
+                        data-invalid={isInvalid}
+
+                        layout
+                        transition={{
+                            duration: 0.75
+                        }}
+                    >
+                        <AnimatePresence mode="popLayout">
+                            {selectedOptions.length > 0 ? renderingSelectedOptions 
+                            : 
+                            (<m.span className={styles.placeholder}
+                                variants={listItemVariants}
+                                initial='initial'
+                                animate='animate'
+                                exit='exit'
+                            >
+                                *здесь будут отображаться выбранные жанры*
+                            </m.span>)}
+                        </AnimatePresence>
+                    </m.ul>
+                    {/* ERROR */}
+                    {isError && (
+                    <m.p layout className={styles.error}
+                        variants={listItemVariants}
+                        initial='initial'
+                        animate='animate'
+                        exit='exit'
+                    >
+                        {errorText}
+                    </m.p>)}
+                    {/* LIST OF OPTIONS */}
+                    <m.ul className={styles.listOfOptions}
+                        layout
+                        transition={{
+                            duration: 0.75
+                        }}
+                    >
+                        {renderingOptionList}
+                    </m.ul>
+                </LayoutGroup>
+            </LazyMotion>
         </div>
     )
 };
 
 
-type ClickHandler = (e: React.MouseEvent) => void
-// option components helpers
-const OptionInsideSelectPanel = ({ value, onClick }: { value: GenresToSelect, onClick: ClickHandler }) => {
+type ClickHandler = (e: React.MouseEvent) => void;
+
+// option inside List
+interface OptionListProps { 
+    value: GenresToSelect; 
+    isSelected: boolean;
+    onClick: ClickHandler;
+}
+
+const OptionInsideList = ({ value, isSelected, onClick }: OptionListProps) => {
     return (
-        <li>
-            <div className="selected-option" data-name={value}>
-                <button type="button" onClick={onClick}></button>
+        <li className={`${styles.listOptionWrapper} ${isSelected ? styles.wrapperSelected : ''}`}>
+            <button 
+                type="button" 
+                onClick={onClick}
+                className={`${styles.listOption} ${isSelected ? styles.selected : ''}`}
+                data-name={value}
+                data-option-type='listOption'
+            >
+                {isSelected && (
+                    <div className={styles.checkSvgWrapper}>
+                        <CheckmarkSvg width={30} height={30} />
+                    </div>
+                )}
                 <span>{value}</span>
-            </div>
+            </button>
         </li>
     )
 };
 
-const OptionInsideList = ({ value, isSelected, onClick }: { value: GenresToSelect, isSelected: boolean, onClick: ClickHandler }) => {
+
+// Submit button
+export const SubmitBtn = () => {
+
+    const [scope, animate] = useAnimate();
+    const scaleForegroundX = useMotionValue(0);
+    const color = useTransform(scaleForegroundX, [0, 0.5, 1], ['#000', '#b15800', '#fac28d']);
+
+    const handleMouseEnter = () => {
+        animate(scaleForegroundX, 1, { duration: 0.5 });
+    };
+
+    const handleMouseLeave = () => {
+        animate(scaleForegroundX, 0, { duration: 0.4 });
+    };
+
     return (
-        <li>
-            <div className={`option ${isSelected ? 'selected' : ''}`} data-name={value}>
-                <button type="button" onClick={onClick}></button>
-                <span>{value}</span>
-            </div>
-        </li>
+        <LazyMotion features={domAnimation}>
+            <m.button 
+                ref={scope} 
+                type="submit" 
+                className={styles.submitBtn}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+            >
+                <m.div 
+                    data-name="foreGround"
+                    style={{
+                        scaleX: scaleForegroundX
+                    }}
+                ></m.div>
+                <m.span
+                    style={{
+                        color
+                    }}
+                >Отправить</m.span>
+            </m.button>
+        </LazyMotion>
     )
 };

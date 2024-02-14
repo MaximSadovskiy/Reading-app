@@ -30,11 +30,13 @@ input {
     --color-darkbrown: hsl(0, 36%, 10%);
     --color-darkbrown-blur: hsla(0, 29%, 10%, 0.822);
     --color-lightbrown: hsl(0, 38%, 19%);
+    --color-lightbrown-blur: hsla(0, 38%, 19%, 0.63);
     --color-lightbrown-hover: hsl(0, 30%, 24%);
     --color-orange: hsl(25, 100%, 82%);
     --color-gray: hsl(0, 1%, 83%);
     --color-white: hsl(0, 0%, 100%); 
     --color-red: hsl(0, 89%, 31%);
+    --color-bright-red: hsl(0, 100%, 39%);
 }
 
 body {
@@ -143,6 +145,33 @@ body {
     --carousel-slideBtn-bg: var(--color-lightbrown);
     --carousel-slideBtn-hover: var(--color-lightbrown-hover);
     --carousel-slideBtn-color: var(--color-light-bisque);
+
+
+    // forms
+    --form-input-border: var(--color-lightbrown);
+    --form-input-border-hover: var(--color-orange);
+    --form-input-border-invalid: var(--color-bright-red);
+    --placeholder-color: var(--color-darkbrown-blur);
+    --form-link-underline: var(--color-darkbrown);
+
+    --error-color: var(--color-bright-red);
+
+    --panel-option-btn-bg: var(--color-white);
+    --panel-option-btn-bg-hover: var(--color-red);
+    --panel-svg-color: var(--color-darkbrown);
+    --panel-svg-hover: var(--color-white);
+
+    --list-option-bg: var(--color-white);
+    --list-option-text: var(--color-darkbrown);
+    --list-option-bg-hover: var(--color-lightbrown);
+    --list-option-text-hover: var(--color-white);
+
+    --submit-btn-bg: var(--color-light-bisque);
+    --submit-btn-border: var(--color-lightbrown);
+    --submit-btn-text: var(--color-darkbrown);
+    --submit-btn-text-hover: var(--color-light-bisque);
+    --foreground-bg: var(--color-lightbrown);
+
 
     // darkTheme colors
     &[data-dark='true'] {
