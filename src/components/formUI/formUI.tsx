@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import styles from '@/styles/modules/formUI/formUI.module.scss';
 import { CheckmarkSvg, CrossSvg } from "../shared/Svg";
 // animations
-import { LazyMotion, domMax, m, AnimatePresence, LayoutGroup, useAnimate, domAnimation, useMotionValue, useTransform, AnimationSequence } from "framer-motion";
+import { LazyMotion, domMax, m, AnimatePresence, LayoutGroup, useAnimate, domAnimation, useMotionValue, useTransform } from "framer-motion";
 import { listItemVariants } from "@/animation/variants/formUI/formVariants"; 
 
 
