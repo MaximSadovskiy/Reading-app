@@ -6,19 +6,24 @@ const password = z.string().min(6, { message: 'Пароль должен сод�
 
 export const genreLiterals = ['Антиутопия', 'Биография', 'Роман', 'Фантастика', 'Фэнтези', 'Детектив', 'Триллер', 'Классика'] as const;
 
-export const RegisterSchema = z.object({
+// base schema
+export const BaseSchema = z.object({
     username,
     email,
     password,
     confirmPassword: password,
+});
+
+// REGISTER
+export const RegisterSchema = BaseSchema.extend({
     favouriteGenres: z.array(z.enum(genreLiterals)).min(3, { message: 'Выберите по меньшей мере 3 любимых жанра' }),
-}).refine((value) => value.password === value.confirmPassword, {
+}).refine(values => values.password === values.confirmPassword, {
     message: 'Пароль не совпадает с уже введённым',
     path: ['confirmPassword'],
 });
 
-export const LoginSchema = z.object({
-    username,
-    email,
-    password,
+// LOGIN
+export const LoginSchema = BaseSchema.refine(values => values.password === values.confirmPassword, {
+    message: 'Пароль не совпадает с уже введённым',
+    path: ['confirmPassword'],
 });
