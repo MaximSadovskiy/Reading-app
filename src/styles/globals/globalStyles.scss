@@ -37,6 +37,9 @@ input {
     --color-white: hsl(0, 0%, 100%); 
     --color-red: hsl(0, 89%, 31%);
     --color-bright-red: hsl(0, 100%, 39%);
+    --color-light-red: hsl(0, 87%, 85%);
+    --color-green: hsl(130, 73%, 32%);
+    --color-light-green: hsl(138, 100%, 78%);
 }
 
 body {
@@ -171,6 +174,15 @@ body {
     --submit-btn-text: var(--color-darkbrown);
     --submit-btn-text-hover: var(--color-light-bisque);
     --foreground-bg: var(--color-lightbrown);
+
+    --pending-color: var(--color-lightbrown);
+    --pending-bg: var(--color-light-bisque);
+    --error-text: var(--color-red);
+    --error-bg: var(--color-light-red);
+    --error-border: var(--color-red);
+    --success-text: var(--color-green);
+    --success-bg: var(--color-light-green);
+    --success-border: var(--color-green);
 
 
     // darkTheme colors

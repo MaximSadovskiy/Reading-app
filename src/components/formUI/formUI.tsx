@@ -1,9 +1,27 @@
 import { useState, useEffect } from "react";
 import styles from '@/styles/modules/formUI/formUI.module.scss';
-import { CheckmarkSvg, CrossSvg } from "../shared/Svg";
+import { CheckmarkSvg, CrossSvg, WarningSvg } from "../shared/Svg";
 // animations
 import { LazyMotion, domMax, m, AnimatePresence, LayoutGroup, useAnimate, domAnimation, useMotionValue, useTransform } from "framer-motion";
 import { listItemVariants } from "@/animation/variants/formUI/formVariants"; 
+import Link from "next/link";
+
+
+
+export const LoginTitle = ({ text }: { text: string }) => {
+
+    return (
+        <h2 className={styles.title}>{text}</h2>
+    )
+};
+
+
+export const LoginLink = ({ text, href }: { text: string, href: string}) => {
+
+    return (
+        <Link className={styles.linkToLogin} href={href}>{text}</Link>
+    )
+};
 
 
 interface FormFieldProps {
@@ -24,7 +42,6 @@ export const FormFieldWrapper = ({ labelText, isError, errorText, children }: Fo
         </div>
     )
 };
-
 
 // custom select
 
@@ -197,7 +214,7 @@ const OptionInsideList = ({ value, isSelected, onClick }: OptionListProps) => {
 
 
 // Submit button
-export const SubmitBtn = () => {
+export const SubmitBtn = ({ isDisabled }:  { isDisabled: boolean }) => {
 
     const [scope, animate] = useAnimate();
     const scaleForegroundX = useMotionValue(0);
@@ -211,6 +228,10 @@ export const SubmitBtn = () => {
         animate(scaleForegroundX, 0, { duration: 0.4 });
     };
 
+    const handleMouseUp = () => {
+        animate(scaleForegroundX, 0, { duration: 0.4 });
+    };
+
     return (
         <LazyMotion features={domAnimation}>
             <m.button 
@@ -219,6 +240,8 @@ export const SubmitBtn = () => {
                 className={styles.submitBtn}
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
+                onMouseUp={handleMouseUp}
+                disabled={isDisabled}
             >
                 <m.div 
                     data-name="foreGround"
@@ -233,5 +256,44 @@ export const SubmitBtn = () => {
                 >Отправить</m.span>
             </m.button>
         </LazyMotion>
+    )
+};
+
+
+type SubmitStatusType = 'pending' | 'error' | 'success';
+
+export const SubmitStatus = ({ status, message }: { status: SubmitStatusType, message?: string }) => {
+
+    if (status === 'pending' && !message) {
+        const pendingMessage = 'Данные отправляются...';
+
+        return (
+            <div className={`${styles.submitStatus} ${styles.pending}`}>
+                {pendingMessage}
+            </div>
+        )
+    }
+
+    const colorValue = status === 'success' ? 'hsl(130, 73%, 32%)' : 'hsl(0, 89%, 31%)';
+    const statusClassName = status === 'success' ? 'success-status' : 'error-status'
+
+    return (
+        <div
+            className={`${styles.submitStatus} ${styles[statusClassName]}`}
+            style={{
+                position: 'relative',
+            }}
+        >
+            {/* Success svg */}
+           {status === 'success' && (
+                <CheckmarkSvg width={60} height={60} color={colorValue} />
+            )}
+            {/* Error svg */}
+           {status === 'error' && (
+                <WarningSvg width={60} height={60} color={colorValue} />
+           )}
+            {/* Message to user */}
+            {message}
+        </div>
     )
 };

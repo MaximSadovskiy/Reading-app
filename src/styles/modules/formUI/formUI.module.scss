@@ -1,5 +1,22 @@
 @use 'utils' as *;
 
+.title {
+    @include fontMarc(55);
+    margin-bottom: pxIntoUnit(20);
+}
+
+.linkToLogin {
+    @include fontDefault(17, 600);
+    @include linkWithUnderline;
+
+    color: var(--main-text);
+    margin-bottom: pxIntoUnit(50);
+
+    &::before {
+        background-color: var(--form-link-underline);
+    }
+}
+
 /* Form Field */
 .formFieldWrapper {
     @include colFlex(center);   
@@ -260,7 +277,7 @@ $submitBtnHeight: getSubmitBtnEdge(50, 15);
     background-color: var(--submit-btn-bg);
     border: pxIntoUnit(3) solid var(--submit-btn-border);
     border-radius: pxIntoUnit(10);
-    margin-top: pxIntoUnit(30);
+    margin-block: pxIntoUnit(30);
     padding: pxIntoUnit($submitBtnPadding, em);
     position: relative;
     
@@ -283,4 +300,39 @@ $submitBtnHeight: getSubmitBtnEdge(50, 15);
         position: relative;
         z-index: 10;
     }
+
+    /* disabled state */
+    &[disabled=true] {
+        cursor: not-allowed;
+        opacity: 0.5
+    }
 };
+
+
+.submitStatus {
+    @include fontDefault(20, 600);
+    @include flex(center, center, pxIntoUnit(15));
+
+    min-height: pxIntoUnit(80);
+    padding-inline: pxIntoUnit(20);
+    border: pxIntoUnit(3) solid;
+    border-radius: pxIntoUnit(12);
+
+    &.pending {
+        color: var(--pending-color);
+        border-color: var(--pending-color);
+        background-color: var(--pending-bg);
+    }
+
+    &.error-status {
+        color: var(--error-text);
+        border-color: var(--error-border);
+        background-color: var(--error-bg);
+    }
+
+    &.success-status {
+        color: var(--success-text);
+        border-color: var(--success-border);
+        background-color: var(--success-bg);
+    }
+}

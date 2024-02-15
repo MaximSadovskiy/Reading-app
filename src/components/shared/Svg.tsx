@@ -49,20 +49,20 @@ export const SlideArrowSvg = ({ width = 50, height = 50, direction = "left"}: {
 };
 
 
-export const CheckmarkSvg = ({ width, height }: { width: number, height: number}) => {
+export const CheckmarkSvg = ({ width, height, color = '#ffc9a3' }: { width: number, height: number, color?: string }) => {
 
     return (
         <svg width={`${width}`} height={`${height}`} 
 
         version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 0 32 32" enableBackground="new 0 0 32 32" xmlSpace="preserve"
 
-        fill="#ffc9a3" stroke="#ffc9a3">
+        fill={color} stroke={color}>
 
         <g id="SVGRepo_bgCarrier" strokeWidth="0"/>
 
         <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round" stroke="#CCCCCC" strokeWidth="0.064"/>
 
-        <g id="SVGRepo_iconCarrier"> <polyline fill="none" stroke="#ffc9a3" strokeWidth="3.2" strokeMiterlimit="10" points="28,8 16,20 11,15 "/> <polygon points="26,14.2 26,26 6,26 6,6 25.8,6 27.8,4 4,4 4,28 28,28 28,12.2 "/> </g>
+        <g id="SVGRepo_iconCarrier"> <polyline fill="none" stroke={color} strokeWidth="3.2" strokeMiterlimit="10" points="28,8 16,20 11,15 "/> <polygon points="26,14.2 26,26 6,26 6,6 25.8,6 27.8,4 4,4 4,28 28,28 28,12.2 "/> </g>
 
         </svg>
     )
@@ -80,6 +80,45 @@ export const CrossSvg = ({ width, height }: { width: number, height: number }) =
 
         <g id="SVGRepo_iconCarrier"> <path d="M19 5L4.99998 19M5.00001 5L19 19" /* stroke={color} */ strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/> </g>
 
+        </svg>
+    )
+};
+
+
+export const WarningSvg = ({ width, height, color }: { width: number, height: number, color: string }) => {
+
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlSpace="preserve"
+            width={`${width}px`}
+            height={`${height}px`}
+            style={{
+                fillRule: "evenodd",
+                clipRule: "evenodd",
+                strokeLinejoin: "round",
+                strokeMiterlimit: 2,
+                fill: color
+            }}
+        >
+            <path
+            d="M-640-64H640v800H-640z"
+            style={{
+                fill: "none",
+            }}
+            />
+            <path
+            d="M32.427 7.987c2.183.124 4 1.165 5.096 3.281l17.936 36.208c1.739 3.66-.954 8.585-5.373 8.656H13.967c-4.022-.064-7.322-4.631-5.352-8.696l18.271-36.207c.342-.65.498-.838.793-1.179 1.186-1.375 2.483-2.111 4.748-2.063Zm-.295 3.997a2.034 2.034 0 0 0-1.659 1.017C24.161 24.98 18.076 37.082 12.172 49.268c-.546 1.225.391 2.797 1.762 2.863 12.06.195 24.125.195 36.185 0 1.325-.064 2.321-1.584 1.769-2.85-5.793-12.184-11.765-24.286-17.966-36.267-.366-.651-.903-1.042-1.79-1.03Z"
+            style={{
+                fillRule: "nonzero",
+            }}
+            />
+            <path
+            d="M33.631 40.581h-3.348l-.368-16.449h4.1l-.384 16.449Zm-3.828 5.03c0-.609.197-1.113.592-1.514.396-.4.935-.601 1.618-.601.684 0 1.223.201 1.618.601.395.401.593.905.593 1.514 0 .587-.193 1.078-.577 1.473-.385.395-.929.593-1.634.593-.705 0-1.249-.198-1.634-.593-.384-.395-.576-.886-.576-1.473Z"
+            style={{
+                fillRule: "nonzero",
+            }}
+            />
         </svg>
     )
 };
