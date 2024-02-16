@@ -1,7 +1,7 @@
 @use 'utils' as *;
 
 .nav {
-    width: clamp(pxIntoUnit(350), 30vw, pxIntoUnit(450));
+    width: clamp(pxIntoUnit(350), 35vw, pxIntoUnit(650));
     margin-left: auto;
     flex-grow: 1 1 auto;;
 };
@@ -13,6 +13,7 @@
 
 .link {
     @include linkWithUnderline;
+    white-space: nowrap;
 };
 
 

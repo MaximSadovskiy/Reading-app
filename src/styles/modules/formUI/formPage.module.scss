@@ -4,12 +4,33 @@
     @include colFlex(center);
     @include colorTransition;
     
-    margin-top: pxIntoUnit(50);
-    margin-bottom: pxIntoUnit(150);
+    padding-top: pxIntoUnit(50);
+    padding-bottom: pxIntoUnit(150);
     min-height: 70vh;
     background-color: var(--main-bg);
-};
 
-.form {
-    @include colFlex(center);
-}
+    & > {
+        h2 {
+            @include fontMarc(55);
+
+            color: var(--form-title-color);
+            margin-bottom: pxIntoUnit(20);
+        }
+        
+        a {
+            @include fontDefault(17, 600);
+            @include linkWithUnderline;
+        
+            color: var(--form-link-color);
+            margin-bottom: pxIntoUnit(50);
+        
+            &::before {
+                background-color: var(--form-link-underline);
+            }
+        }
+    }
+
+    & > form {
+        @include colFlex(center);
+    }
+};

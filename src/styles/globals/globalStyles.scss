@@ -151,14 +151,18 @@ body {
 
 
     // forms
+    --form-title-color: var(--color-lightbrown);
+    --form-link-color: var(--color-lightbrown);
     --form-input-border: var(--color-lightbrown);
     --form-input-border-hover: var(--color-orange);
     --form-input-border-invalid: var(--color-bright-red);
     --placeholder-color: var(--color-darkbrown-blur);
-    --form-link-underline: var(--color-darkbrown);
+    --form-link-underline: var(--color-lightbrown);
 
     --error-color: var(--color-bright-red);
 
+    --panel-option-text: var(--color-darkbrown);
+    --panel-option-bg: var(--color-light-bisque);
     --panel-option-btn-bg: var(--color-white);
     --panel-option-btn-bg-hover: var(--color-red);
     --panel-svg-color: var(--color-darkbrown);
@@ -166,8 +170,11 @@ body {
 
     --list-option-bg: var(--color-white);
     --list-option-text: var(--color-darkbrown);
-    --list-option-bg-hover: var(--color-lightbrown);
-    --list-option-text-hover: var(--color-white);
+    --list-option-bg-hover: var(--color-light-bisque);
+    --list-option-border-hover: var(--color-orange);
+    --list-option-bg-selected: var(--color-lightbrown);
+    --list-option-border-selected: var(--color-orange);
+    --list-option-text-selected: var(--color-white);
 
     --submit-btn-bg: var(--color-light-bisque);
     --submit-btn-border: var(--color-lightbrown);
@@ -224,6 +231,21 @@ body {
         --carousel-slideBtn-bg: var(--color-light-bisque);
         --carousel-slideBtn-hover: var(--color-white);
         --carousel-slideBtn-color: var(--color-darkbrown);
+
+        // form
+        --form-title-color: var(--color-bisque);
+        --form-link-color: var(--color-orange);
+        --form-link-underline: var(--color-orange);
+        --form-input-border: var(--color-orange);
+        --form-input-border-hover: var(--color-orange);
+        --panel-option-text: var(--color-white);
+        --panel-option-bg: var(--color-lightbrown-hover);
+        --placeholder-color: var(--color-white);
+        --list-option-bg-hover: var(--color-bisque);
+        --list-option-border-hover: var(--color-darkbrown);
+        --list-option-bg-selected: var(--color-lightbrown);
+        --list-option-border-selected: var(--color-orange);
+        --list-option-text-selected: var(--color-white);
     };
 };
 

@@ -1,22 +1,5 @@
 @use 'utils' as *;
 
-.title {
-    @include fontMarc(55);
-    margin-bottom: pxIntoUnit(20);
-}
-
-.linkToLogin {
-    @include fontDefault(17, 600);
-    @include linkWithUnderline;
-
-    color: var(--main-text);
-    margin-bottom: pxIntoUnit(50);
-
-    &::before {
-        background-color: var(--form-link-underline);
-    }
-}
-
 /* Form Field */
 .formFieldWrapper {
     @include colFlex(center);   
@@ -86,7 +69,8 @@ $panelPadding: pxIntoUnit(25);
 
     // label
     & > label {
-        font-size: pxIntoUnit(20);
+        color: var(--main-text);
+        font-size: pxIntoUnit(22);
         font-weight: 600;
         line-height: 1.5;
     }
@@ -117,7 +101,7 @@ $panelPadding: pxIntoUnit(25);
         margin-block: pxIntoUnit(20);
 
         & > .placeholder {
-            @include fontDefault(18, 400);
+            @include fontDefault(19, 500);
             justify-self: center;
             color: var(--placeholder-color);
         }
@@ -149,6 +133,8 @@ $panelPadding: pxIntoUnit(25);
 .panelOption {
     @include flex(flex-start, center, pxIntoUnit(8));
 
+    color: var(--panel-option-text);
+    background-color: var(--panel-option-bg);
     border: pxIntoUnit(2) solid var(--form-input-border);
     border-radius: pxIntoUnit(10);
     width: $panelOptionWidth;
@@ -194,8 +180,12 @@ $listOptionHeight: pxIntoUnit(50);
     cursor: pointer;
     flex-grow: 0;
 
-    &:hover, &.wrapperSelected {
-        border-color: var(--form-input-border-hover);
+    &:hover {
+        border-color: var(--list-option-border-hover);
+    }
+
+    &.wrapperSelected {
+        border-color: var(--list-option-border-selected);
     }
 }
 
@@ -215,6 +205,11 @@ $listOptionHeight: pxIntoUnit(50);
     padding-left: 30%;
     position: relative;
 
+    &:hover {
+        background-color: var(--list-option-bg-hover);
+        border-color: var(--list-option-border-hover);
+    }
+
     // checkmark svg
     $checkmarkHeight: pxIntoUnit(30);
     & .checkSvgWrapper {
@@ -226,8 +221,8 @@ $listOptionHeight: pxIntoUnit(50);
     
     /* selected state */
     &.selected {
-        background-color: var(--list-option-bg-hover);
-        color: var(--list-option-text-hover);
+        background-color: var(--list-option-bg-selected);
+        color: var(--list-option-text-selected);
 
         & .checkSvgWrapper {
             animation: slideIn 0.5s forwards linear;
@@ -252,7 +247,6 @@ $listOptionHeight: pxIntoUnit(50);
     @include fontDefault(20, 600);
     
     color: var(--error-color);
-    text-decoration: pxIntoUnit(2) underline wavy var(--error-color);
 }
 
 
