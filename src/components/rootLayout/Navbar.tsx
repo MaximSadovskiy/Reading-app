@@ -38,6 +38,13 @@ const Navbar = () => {
                     >О нас
                     </Link>
                 </li>
+                <li>
+                    <Link 
+                        href='/my_library' 
+                        className={`${styles.link} ${currentPath === '/my_library' ? styles.active : ''}`}
+                    >Моя Библиотека
+                    </Link>
+                </li>
             </ul>
         </nav>
     )

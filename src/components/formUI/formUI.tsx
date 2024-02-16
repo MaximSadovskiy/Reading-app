@@ -4,24 +4,6 @@ import { CheckmarkSvg, CrossSvg, WarningSvg } from "../shared/Svg";
 // animations
 import { LazyMotion, domMax, m, AnimatePresence, LayoutGroup, useAnimate, domAnimation, useMotionValue, useTransform } from "framer-motion";
 import { listItemVariants } from "@/animation/variants/formUI/formVariants"; 
-import Link from "next/link";
-
-
-
-export const LoginTitle = ({ text }: { text: string }) => {
-
-    return (
-        <h2 className={styles.title}>{text}</h2>
-    )
-};
-
-
-export const LoginLink = ({ text, href }: { text: string, href: string}) => {
-
-    return (
-        <Link className={styles.linkToLogin} href={href}>{text}</Link>
-    )
-};
 
 
 interface FormFieldProps {
