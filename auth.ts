@@ -23,18 +23,33 @@ export const {
 	signIn,
 	signOut,
 } = NextAuth({
+	pages: {
+		signIn: "/auth/login",
+	},
+	events: {
+		// oAuth users automatically verified emails
+		async linkAccount({ user }) {
+			await db.user.update({
+				where: {
+					id: user.id,
+				},
+				data: { emailVerified: new Date() }
+			})
+		},
+	},
 	callbacks: {
-		// 			SIGN IN
-		/* async signIn({ user }) {
-			const existingUser = await getUserById(user.id as string);
+		async signIn({ user, account }) {
+			// allow OAuth without email verification
+			if (account?.provider !== 'credentials') return true;
 			
-			// temp
-			if (!existingUser || !existingUser.emailVerified) {
-				return false;
-			}
+			const existingUser = await getUserById(user.id as string);
+			// block users that do not verified email yet
+			if (!existingUser?.emailVerified) return false;
+
+			// TODO: add 2FA check
 
 			return true;
-		}, */
+		},
 		async session({ session, token }) {
 			// token.sub === user.id
 			if (session.user && token.sub) {
@@ -56,7 +71,7 @@ export const {
 			if (!existingUser) return token;
 
 			token.role = existingUser.role;
-			
+
 			return token;
 		},
 	},

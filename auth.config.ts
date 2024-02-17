@@ -1,7 +1,6 @@
 import type { NextAuthConfig } from "next-auth"
 import Credentials from "next-auth/providers/credentials";
-import VK from "next-auth/providers/vk";
-import Yandex from "next-auth/providers/yandex";
+import Google from "next-auth/providers/google";
 import { LoginSchema } from "@/schemas/zod/loginSchemas";
 import { getUserByEmail } from "@/lib/db_helpers";
 import bcrypt from "bcryptjs";
@@ -9,10 +8,9 @@ import bcrypt from "bcryptjs";
 
 export default {
 	providers: [
-		VK,
-		Yandex({
-			clientId: process.env.YANDEX_CLIENT_ID,
-			clientSecret: process.env.YANDEX_CLIENT_SECRET,
+		Google({
+			clientId: process.env.GOOGLE_CLIENT_ID,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
 		}),
 		Credentials({
 			async authorize(credentials) {
