@@ -15,6 +15,8 @@ import { registerAction } from "@/server_actions/actions";
 import { useRouter } from "next/navigation";
 import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from "react-toastify";
+import { SuccessMessages } from "@/components/formUI/formUI";
+
 
 
 interface ClickableImage extends HTMLImageElement {
@@ -54,6 +56,22 @@ export const RegisterFormWrapper = () => {
 
     const router = useRouter();
 
+    const setSuccess = () => {
+        setIsSuccess({
+            status: true,
+            message: SuccessMessages['REGISTER'],
+        });
+        // success
+        // TOAST, then redirect to login page
+        toast(SuccessMessages['REGISTER'], {
+            theme: 'colored',
+            type: 'success',
+            onClose: () => {
+                router.push('/auth/login');
+            }
+        });
+    };
+
 	// submit handler
 	const onSubmit = async (data: z.infer<typeof RegisterSchema>) => {
 		// reset
@@ -75,7 +93,7 @@ export const RegisterFormWrapper = () => {
 			});
 
             if (result.error.type === 'email') {
-                toast('Переход на страницу Входа...', {
+                toast('Адрес уже существует, переход на страницу Входа...', {
                     type: 'error',
                     theme: 'colored',
                     onClose: () => router.push('/auth/login'),
@@ -84,19 +102,7 @@ export const RegisterFormWrapper = () => {
 		} 
         
         else if (result.success) {
-			setIsSuccess({
-				status: true,
-				message: result.success,
-			});
-            // success
-            // TOAST, then redirect to login page
-            toast('Регистрация прошла успешно!', {
-                theme: 'colored',
-                type: 'success',
-                onClose: () => {
-                    router.push('/auth/login');
-                }
-            });
+			setSuccess();
 		}
 	};
 
@@ -123,8 +129,13 @@ export const RegisterFormWrapper = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
             <ToastContainer 
                 position="top-right"
-                autoClose={1300}
+                autoClose={2000}
             />
+            {/* <GoogleSubmit 
+                onError={setError}
+                onSuccess={setSuccess}
+            /> 
+            <Divider /> */}
             <FormFieldWrapper
                 labelText="Имя пользователя"
                 isError={errors.username ? true : false}

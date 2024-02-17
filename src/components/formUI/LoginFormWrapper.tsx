@@ -16,6 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { SuccessMessages } from "@/components/formUI/formUI";
 
 
 interface ClickableImage extends HTMLImageElement {
@@ -49,8 +50,38 @@ export const LoginFormWrapper = () => {
 		message: "",
 	});
 
+	const router = useRouter();
+
 	const timerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
 	const LOCAL_STORAGE_TOKEN = 'JUST_AUTHORIZED';
+
+	// Helpers for setting error / success
+	const setError = (message: string) => {
+		setIsError({
+			status: true,
+			message,
+		});
+		toast(message, {
+			type: 'error',
+			theme: 'colored'
+		});
+	};
+
+	const setSuccess = (message: string) => {
+		setIsSuccess({
+			status: true,
+			message,
+		});
+		toast(message, {
+			theme: 'colored',
+			type: 'success',
+			onClose: () => {
+				localStorage.removeItem(LOCAL_STORAGE_TOKEN);
+				localStorage.removeItem('message');
+				router.push(DEFAULT_LOGIN_REDIRECT);
+			},
+		});
+	};
 
 	const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
 		// reset
@@ -64,43 +95,29 @@ export const LoginFormWrapper = () => {
 		});
 
 		const result = await loginAction(data);
-		timerRef.current = setTimeout(() => localStorage.setItem(LOCAL_STORAGE_TOKEN, 'true'), 0);
 
+		timerRef.current = setTimeout(() => {
+			localStorage.setItem(LOCAL_STORAGE_TOKEN, 'true');
+			if (result.success) {
+				localStorage.setItem('message', result.success);
+			}
+		}, 0);
+			
 		if (result?.error) {
-			// reset timer
+			// terminate timer
 			timerRef.current = null;
-
-			setIsError({
-				status: true,
-				message: result.error,
-			});
-
-			toast("Данные введены некорректно", {
-				type: 'error',
-				theme: 'colored',
-			});
+			// set errors
+			setError(result.error);
 		}
 	};
-
-	const router = useRouter();
 
 	// authorize TOAST event
 	useEffect(() => {
 		const isJustAuthorized = localStorage.getItem(LOCAL_STORAGE_TOKEN);
+		const message = localStorage.getItem('message');
 
-		if (isJustAuthorized) {
-			setIsSuccess({
-				status: true,
-				message: 'Вы успешно вошли в аккаунт!'
-			});
-			toast('Вход в аккаунт успешно выполнен!', {
-				type: 'success',
-				theme: 'colored',
-				onClose: () => {
-					router.push(DEFAULT_LOGIN_REDIRECT);
-					localStorage.removeItem(LOCAL_STORAGE_TOKEN);
-				}
-			});
+		if (isJustAuthorized ) {
+			setSuccess(message ?? SuccessMessages['LOGIN']);
 		}
 	}, []);
 
@@ -125,8 +142,10 @@ export const LoginFormWrapper = () => {
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<ToastContainer 
 				position='top-right'
-				autoClose={1300}
+				autoClose={2000}
 			/>
+			{/* <GoogleSubmit onSuccess={setSuccess} onError={setError} />
+			<Divider /> */}
 			<FormFieldWrapper
 				labelText="Имя пользователя"
 				isError={errors.username ? true : false}

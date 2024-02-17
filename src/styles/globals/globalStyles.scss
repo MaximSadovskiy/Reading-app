@@ -191,6 +191,11 @@ body {
     --success-bg: var(--color-light-green);
     --success-border: var(--color-green);
 
+    --provider-icon-bg: var(--color-white);
+    --provider-icon-bg-hover: var(--color-light-bisque);
+    --provider-icon-border: var(--color-orange); 
+    --divider-text: var(--color-darkbrown);
+    --divider-lines-color: var(--color-orange);
 
     // darkTheme colors
     &[data-dark='true'] {
@@ -246,6 +251,8 @@ body {
         --list-option-bg-selected: var(--color-lightbrown);
         --list-option-border-selected: var(--color-orange);
         --list-option-text-selected: var(--color-white);
+        --divider-text: var(--color-bisque);
+        --divider-lines-color: var(--color-orange);
     };
 };
 

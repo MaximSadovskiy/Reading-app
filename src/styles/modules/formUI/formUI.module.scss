@@ -1,5 +1,70 @@
 @use 'utils' as *;
 
+
+// PROVIDERS: Google, etc...
+.provider {
+    @include colFlex(center, center, pxIntoUnit(10));
+
+    & > p {
+        @include fontDefault(20, 500);
+        color: var(--main-text);
+    }
+}
+
+.providerBtn {
+    @include colorTransition;
+
+    width: pxIntoUnit(100);
+    height: pxIntoUnit(80);
+    border-radius: pxIntoUnit(12);
+
+    background-color: var(--provider-icon-bg);
+    border: pxIntoUnit(3) solid var(--provider-icon-border);
+
+    &:hover {
+        background-color: var(--provider-icon-bg-hover);
+    }
+
+    & > svg {
+        width: pxIntoUnit(40);
+        height: pxIntoUnit(40);
+    }
+}
+
+.divider {
+    margin-block: pxIntoUnit(40);
+    min-width: 80%;
+
+    & > span {
+        @include fontDefault(22, 600);
+
+        display: inline-flex;
+        min-width: 100%;
+        justify-content: stretch;
+        align-items: center;
+        gap: pxIntoUnit(15);
+        color: var(--divider-text);
+
+        &::before {
+            content: '';
+            display: inline-block;
+            width: 100%;
+            height: pxIntoUnit(2);
+            border-radius: pxIntoUnit(5);
+            background-color: var(--divider-lines-color);
+        }
+
+        &::after {
+            content: '';
+            display: inline-block;
+            height: pxIntoUnit(2);
+            width: 100%;
+            border-radius: pxIntoUnit(7);
+            background-color: var(--divider-lines-color);
+        }
+    }
+}
+
 /* Form Field */
 .formFieldWrapper {
     @include colFlex(center);   
