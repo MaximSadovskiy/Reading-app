@@ -395,3 +395,64 @@ $submitBtnHeight: getSubmitBtnEdge(50, 15);
         background-color: var(--success-bg);
     }
 }
+
+
+// Verification
+.verificationWrapper {
+    @include colFlex(center, center);
+
+    height: 100%;
+    width: 100%;
+    border: pxIntoUnit(3) solid var(--verification-wrapper-border);
+    border-radius: pxIntoUnit(30);
+    padding: pxIntoUnit(20);
+
+    & > label {
+        @include fontDefault(26, 600);
+        color: var(--main-text);
+
+        &[data-status='error'] {
+            color: var(--error-text);
+        }
+
+        &[data-status='success'] {
+            color: var(--success-text);
+        }
+
+        @include breakpointDown(500) {
+            font-size: pxIntoUnit(24);
+        }
+    }
+
+    // spinner
+    & > span {
+        width: 100%;
+        height: 100%;
+
+
+        @include breakpointDown(500) {
+            width: 100%;
+            height: pxIntoUnit(150);
+        }
+    }
+}
+
+
+// Forgot Password
+.forgotPassword {
+    @include fontDefault(20);
+    @include linkWithUnderline(500, var(--form-link-underline));
+    @include flex;
+
+    width: clamp(pxIntoUnit(250), 40vw, pxIntoUnit(350));
+    margin-bottom: pxIntoUnit(30);
+
+    @include breakpointDown(500) {
+        justify-content: center;
+    }
+
+    & > a {
+        text-align: left;
+        color: var(--main-link);
+    }
+}

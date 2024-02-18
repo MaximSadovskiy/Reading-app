@@ -1,0 +1,20 @@
+@use 'utils' as *;
+
+.main {
+    @include colorTransition;
+    @include colFlex(center);
+    
+    background-color: var(--main-bg);
+    min-height: 87vh;
+
+    & > form {
+
+        margin-top: clamp(pxIntoUnit(130), 30%, pxIntoUnit(200));
+        height: 30vh;
+        width: clamp(pxIntoUnit(450), 35vw, pxIntoUnit(600));
+
+        @include breakpointDown(500) {
+            width: clamp(pxIntoUnit(250), 80vw, pxIntoUnit(340));
+        }
+    }
+}

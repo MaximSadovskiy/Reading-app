@@ -6,15 +6,17 @@
     
     padding-top: pxIntoUnit(50);
     padding-bottom: pxIntoUnit(150);
-    min-height: 70vh;
+    min-height: calc(100vh - pxIntoUnit(100));
     background-color: var(--main-bg);
 
     & > {
         h2 {
             @include fontMarc(55);
 
+            text-align: center;
+            max-width: pxIntoUnit(800);
             color: var(--form-title-color);
-            margin-bottom: pxIntoUnit(20);
+            margin-bottom: pxIntoUnit(30);
         }
         
         a {
@@ -32,5 +34,13 @@
 
     & > form {
         @include colFlex(center);
+
+        & p, label, a {
+            text-align: center;
+        }
+    }
+
+    & p, label, a {
+        text-align: center;
     }
 };

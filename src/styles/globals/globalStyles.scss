@@ -37,7 +37,7 @@ input {
     --color-white: hsl(0, 0%, 100%); 
     --color-red: hsl(0, 89%, 31%);
     --color-bright-red: hsl(0, 100%, 39%);
-    --color-light-red: hsl(0, 87%, 85%);
+    --color-light-red: hsl(0, 100%, 94%);
     --color-green: hsl(130, 73%, 32%);
     --color-light-green: hsl(138, 100%, 78%);
 }
@@ -197,6 +197,8 @@ body {
     --divider-text: var(--color-darkbrown);
     --divider-lines-color: var(--color-orange);
 
+    --verification-wrapper-border: var(--color-lightbrown);
+
     // darkTheme colors
     &[data-dark='true'] {
         --underline: var(--color-orange);
@@ -253,6 +255,7 @@ body {
         --list-option-text-selected: var(--color-white);
         --divider-text: var(--color-bisque);
         --divider-lines-color: var(--color-orange);
+        --verification-wrapper-border: var(--color-orange);
     };
 };
 

@@ -91,7 +91,7 @@
 };
 
 // COMPONENTS
-@mixin linkWithUnderline($fontWeight: 500) {
+@mixin linkWithUnderline($fontWeight: 500, $underlineColor: var(--link-underline)) {
     @include fontClamp(20, 2.3, 24);
     @include transition(transform);
 
@@ -113,7 +113,7 @@
         position: absolute;
         bottom: pxIntoUnit(-10);
         left: 0;
-        background-color: var(--link-underline);
+        background-color: $underlineColor;
         border-radius: pxIntoUnit(5);
         transform: scale(0);
     };
