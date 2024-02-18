@@ -4,20 +4,22 @@ import { LoginSchema } from "@/schemas/zod/loginSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { loginAction } from "@/server_actions/actions";
 import {
 	FormFieldWrapper,
 	SubmitBtn,
 	SubmitStatus,
+	ForgotPassword
 } from "@/components/formUI/formUI";
 // notification
 import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-import { SuccessMessages } from "@/components/formUI/formUI";
 
+
+type ResultStatus = 'init' | 'error' | 'success';
 
 interface ClickableImage extends HTMLImageElement {
 	dataset: {
@@ -25,7 +27,7 @@ interface ClickableImage extends HTMLImageElement {
 	};
 }
 
-export const LoginFormWrapper = () => {
+export const LoginForm = () => {
 	const {
 		register,
 		handleSubmit,
@@ -40,86 +42,58 @@ export const LoginFormWrapper = () => {
 		},
 	});
 
-	// status for submit
-	const [isError, setIsError] = useState({
-		status: false,
-		message: "",
-	});
-	const [isSuccess, setIsSuccess] = useState({
-		status: false,
-		message: "",
+	// result of action
+	const [result, setResult] = useState<{
+		status: ResultStatus,
+		message: string;
+	}>({
+		status: 'init',
+		message: '',
 	});
 
 	const router = useRouter();
 
-	const timerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
-	const LOCAL_STORAGE_TOKEN = 'JUST_AUTHORIZED';
-
-	// Helpers for setting error / success
-	const setError = (message: string) => {
-		setIsError({
-			status: true,
-			message,
-		});
-		toast(message, {
-			type: 'error',
-			theme: 'colored'
-		});
-	};
-
-	const setSuccess = (message: string) => {
-		setIsSuccess({
-			status: true,
-			message,
-		});
-		toast(message, {
-			theme: 'colored',
-			type: 'success',
-			onClose: () => {
-				localStorage.removeItem(LOCAL_STORAGE_TOKEN);
-				localStorage.removeItem('message');
-				router.push(DEFAULT_LOGIN_REDIRECT);
-			},
-		});
-	};
-
 	const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
 		// reset
-		setIsError({
-			status: false,
-			message: "",
-		});
-		setIsSuccess({
-			status: false,
+		setResult({
+			status: 'init',
 			message: '',
 		});
 
-		const result = await loginAction(data);
+        const result = await loginAction(data);
 
-		timerRef.current = setTimeout(() => {
-			localStorage.setItem(LOCAL_STORAGE_TOKEN, 'true');
-			if (result.success) {
-				localStorage.setItem('message', result.success);
-			}
-		}, 0);
-			
-		if (result?.error) {
-			// terminate timer
-			timerRef.current = null;
-			// set errors
-			setError(result.error);
+		if (result.success) {
+			setResult({
+				status: 'success',
+				message: result.success,
+			});
+		}
+		else {
+			setResult({
+				status: 'error',
+				message: result.error as string,
+			});
 		}
 	};
 
 	// authorize TOAST event
 	useEffect(() => {
-		const isJustAuthorized = localStorage.getItem(LOCAL_STORAGE_TOKEN);
-		const message = localStorage.getItem('message');
-
-		if (isJustAuthorized ) {
-			setSuccess(message ?? SuccessMessages['LOGIN']);
+		if (result.status === 'success') {
+			toast(result.message, {
+				theme: 'colored',
+				type: 'success',
+				onClose: () => {
+					router.push(DEFAULT_LOGIN_REDIRECT);
+				},
+			});
 		}
-	}, []);
+		else if (result.status === 'error') {
+			toast(result.message, {
+				theme: 'colored',
+				type: 'error',
+			});
+		}
+	}, [result]);
 
 	// hiding / showing passwords
 	const [isShowPassword, setIsShowPassword] = useState({
@@ -194,6 +168,7 @@ export const LoginFormWrapper = () => {
 					/>
 				</div>
 			</FormFieldWrapper>
+			<ForgotPassword />
 			<FormFieldWrapper
 				labelText="Подтвердите пароль"
 				isError={errors.confirmPassword ? true : false}
@@ -223,14 +198,19 @@ export const LoginFormWrapper = () => {
 				</div>
 			</FormFieldWrapper>
 			<SubmitBtn isDisabled={isSubmitting} />
-			{isSubmitting && <SubmitStatus status="pending" />}
-			{isError.status && (
-				<SubmitStatus status="error" message={isError.message} />
+			{isSubmitting && (
+				<SubmitStatus status="pending" />
 			)}
-			{isSuccess.status && (
+			{result.status === 'error' && (
+				<SubmitStatus 
+                    status="error" 
+                    message={result.message} 
+                />
+			)}
+			{result.status === 'success' && (
                 <SubmitStatus
                     status="success"
-                    message={isSuccess.message}
+                    message={result.message}
                 />
             )}
 		</form>

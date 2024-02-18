@@ -10,12 +10,12 @@ import {
 	SubmitBtn,
 	SubmitStatus,
 } from "@/components/formUI/formUI";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { registerAction } from "@/server_actions/actions";
 import { useRouter } from "next/navigation";
 import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from "react-toastify";
-import { SuccessMessages } from "@/components/formUI/formUI";
+import { ErrorMessages, SuccessMessages } from '@/interfaces/formMessages';
 
 
 
@@ -25,8 +25,14 @@ interface ClickableImage extends HTMLImageElement {
 	};
 }
 
+type ResultType = {
+    status: 'init' | 'error' | 'success';
+    message: string | ErrorMessages | SuccessMessages;
+}
 
-export const RegisterFormWrapper = () => {
+
+
+export const RegisterForm = () => {
 
     const {
 		register,
@@ -44,19 +50,15 @@ export const RegisterFormWrapper = () => {
 		},
 	});
 
-	// status for submit
-	const [isError, setIsError] = useState({
-		status: false,
-		message: "",
-	});
-	const [isSuccess, setIsSuccess] = useState({
-		status: false,
-		message: "",
+	// result of action
+	const [result, setResult] = useState<ResultType>({
+		status: 'init',
+		message: '',
 	});
 
     const router = useRouter();
 
-    const setSuccess = () => {
+   /*  const setSuccess = () => {
         setIsSuccess({
             status: true,
             message: SuccessMessages['REGISTER'],
@@ -70,41 +72,49 @@ export const RegisterFormWrapper = () => {
                 router.push('/auth/login');
             }
         });
-    };
+    }; */
 
 	// submit handler
 	const onSubmit = async (data: z.infer<typeof RegisterSchema>) => {
 		// reset
-		setIsError({
-			status: false,
-			message: "",
-		});
-		setIsSuccess({
-			status: false,
-			message: "",
-		});
+		setResult({
+            status: 'init',
+            message: '',
+        });
 
 		const result = await registerAction(data);
 
-		if (result.error) {
-			setIsError({
-				status: true,
+		if (result.success) {
+			setResult({
+				status: 'success',
+				message: result.success,
+			});
+		}
+		else if (result.error) {
+			setResult({
+				status: 'error',
 				message: result.error.message,
 			});
-
-            if (result.error.type === 'email') {
-                toast('Адрес уже существует, переход на страницу Входа...', {
-                    type: 'error',
-                    theme: 'colored',
-                    onClose: () => router.push('/auth/login'),
-                });
-            }
-		} 
-        
-        else if (result.success) {
-			setSuccess();
 		}
 	};
+
+    useEffect(() => {
+        if (result.status === 'success') {
+            toast(result.message, {
+                theme: 'colored',
+                type: 'success',
+                onClose: () => {
+                    router.push('/auth/login');
+                },
+            });
+        }
+        else if (result.status === 'error') {
+            toast(result.message, {
+                theme: 'colored',
+                type: 'error',
+            });
+        }
+    }, [result]);
 
 	const selectOptions = [...genreLiterals];
 
@@ -232,14 +242,19 @@ export const RegisterFormWrapper = () => {
                 )}
             />
             <SubmitBtn isDisabled={isSubmitting} />
-            {isSubmitting && <SubmitStatus status="pending" />}
-            {isError.status && (
-                <SubmitStatus status="error" message={isError.message} />
-            )}
-            {isSuccess.status && (
+            {isSubmitting && (
+				<SubmitStatus status="pending" />
+			)}
+			{result.status === 'error' && (
+				<SubmitStatus 
+                    status="error" 
+                    message={result.message} 
+                />
+			)}
+			{result.status === 'success' && (
                 <SubmitStatus
                     status="success"
-                    message={isSuccess.message}
+                    message={result.message}
                 />
             )}
         </form>
