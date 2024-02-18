@@ -3,7 +3,7 @@
  * They do not require authentication
  * @type {string[]}
  */
-export const publicRoutes = ['/', '/books', '/about'];
+export const publicRoutes = ['/', '/books', '/about', '/auth/new-verification'];
 
 
 /**
@@ -11,7 +11,7 @@ export const publicRoutes = ['/', '/books', '/about'];
  * These routes will redirect to my_library page ('/my_library')
  * @type {string[]}
  */
-export const authRoutes = ['/auth/login', '/auth/register'];
+export const authRoutes = ['/auth/login', '/auth/register', '/auth/reset', '/auth/new-password'];
 
 /**
  * The prefix for API authentication routes

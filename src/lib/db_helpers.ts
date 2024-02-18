@@ -45,11 +45,37 @@ export const getVerificationTokenByEmail = async (email: string) => {
 
 export const getVerificationTokenByToken = async (token: string) => {
     try {
+
         const verificationToken = await db.verificationToken.findUnique({
             where: { token },
         });
 
         return verificationToken;
+    } catch {
+        return null;
+    }
+};
+
+// Password reset (forgot) token
+export const getPasswordResetTokenByToken = async (token: string) => {
+    try {
+        const passwordResetToken = await db.passwordResetToken.findUnique({
+            where: { token },
+        });
+
+        return passwordResetToken;
+    } catch {
+        return null;
+    }
+};
+
+export const getPasswordResetTokenByEmail = async (email: string) => {
+    try {
+        const passwordResetToken = await db.passwordResetToken.findFirst({
+            where: { email },
+        });
+
+        return passwordResetToken;
     } catch {
         return null;
     }

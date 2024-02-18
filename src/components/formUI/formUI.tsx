@@ -17,21 +17,21 @@ import { listItemVariants } from "@/animation/variants/formUI/formVariants";
 import { FcGoogle } from "react-icons/fc";
 import { signIn } from "next-auth/react";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
-
+import { VerificationState } from "./NewVerificationForm";
+import Link from "next/link";
 
 export enum SuccessMessages {
-    REGISTER = 'Регистрация завершена успешно, Вам отправлено подтверждение на указанный адрес электронной почты',
-    LOGIN = 'Вы успешно вошли в аккаунт!',
+	REGISTER = "Регистрация завершена успешно, Вам отправлено подтверждение на указанный адрес электронной почты",
+	LOGIN = "Вы успешно вошли в аккаунт!",
 }
 
 // GOOGLE provider submit
 export const GoogleSubmit = () => {
-
-    const handleProviderSubmit = () => {
-        signIn('google', {
-            callbackUrl: DEFAULT_LOGIN_REDIRECT,
-        });
-    };
+	const handleProviderSubmit = () => {
+		signIn("google", {
+			callbackUrl: DEFAULT_LOGIN_REDIRECT,
+		});
+	};
 
 	return (
 		<div className={styles.provider}>
@@ -55,6 +55,8 @@ export const Divider = () => {
 		</div>
 	);
 };
+
+// Form Field
 
 interface FormFieldProps {
 	labelText: string;
@@ -369,22 +371,83 @@ export const SubmitStatus = ({
 		status === "success" ? "success-status" : "error-status";
 
 	return (
-		<div
-			className={`${styles.submitStatus} ${styles[statusClassName]}`}
-			style={{
-				position: "relative",
-			}}
-		>
-			{/* Success svg */}
-			{status === "success" && (
-				<CheckmarkSvg width={60} height={60} color={colorValue} />
-			)}
-			{/* Error svg */}
-			{status === "error" && (
-				<WarningSvg width={60} height={60} color={colorValue} />
-			)}
-			{/* Message to user */}
-			{message}
-		</div>
+		<LazyMotion features={domAnimation}>
+			<AnimatePresence>
+				<m.div
+					className={`${styles.submitStatus} ${styles[statusClassName]}`}
+					style={{
+						position: "relative",
+					}}
+					variants={listItemVariants}
+					initial="initial"
+					animate="animate"
+					exit="exit"
+				>
+					{/* Success svg */}
+					{status === "success" && (
+						<CheckmarkSvg
+							width={60}
+							height={60}
+							color={colorValue}
+						/>
+					)}
+					{/* Error svg */}
+					{status === "error" && (
+						<WarningSvg 
+							width={60} 
+							height={60} 
+							color={colorValue} 
+						/>
+					)}
+					{/* Message to user */}
+					{message}
+				</m.div>
+			</AnimatePresence>
+		</LazyMotion>
 	);
+};
+
+// Verification form
+type VerificationContainerProps = {
+	children: React.ReactNode;
+	messageText: string;
+	status: VerificationState;
+};
+
+export const VerificationContainer = ({
+	status,
+	messageText,
+	children,
+}: VerificationContainerProps) => {
+	return (
+		<LazyMotion features={domAnimation}>
+			<AnimatePresence>
+				<m.div 
+					className={styles.verificationWrapper}
+					variants={listItemVariants}
+					initial="initial"
+					animate="animate"
+					exit="exit"
+				>
+					<label
+						data-status={status}
+					>
+						{messageText}
+					</label>
+					{children}
+				</m.div>
+			</AnimatePresence>
+		</LazyMotion>
+	);
+};
+
+
+// Forgot Password
+export const ForgotPassword = () => {
+
+	return (
+		<div className={styles.forgotPassword}>
+			<Link href='/auth/reset'>Забыли пароль?</Link>
+		</div>
+	)
 };

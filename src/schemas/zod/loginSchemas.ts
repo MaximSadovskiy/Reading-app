@@ -30,3 +30,19 @@ export const LoginSchema = BaseSchema
         message: 'Пароль не совпадает с уже введённым',
         path: ['confirmPassword'],
     });
+
+
+// Forgot password
+export const ResetSchema = z.object({
+    email,
+});
+
+// NewPassword
+export const NewPasswordSchema = z.object({
+    password,
+    confirmPassword: password,
+})
+    .refine(values => values.password === values.confirmPassword, {
+        message: 'Ошибка: пароли не совпадают',
+        path: ['confirmPassword'],
+    });
