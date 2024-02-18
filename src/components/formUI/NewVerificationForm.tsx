@@ -97,18 +97,13 @@ export const NewVerificationForm = () => {
 			.then((data) => {
 				// if success
 				if (data.success) {
-
 					setStatus({
 						type: "success",
 						message: data.success,
 					});
-					
-					// redirect to login after success;
-					router.push('/auth/login');
 				}
 				// if error
 				else if (data.error) {
-
 					setStatus({
 						type: "error",
 						message: data.error,
@@ -122,6 +117,14 @@ export const NewVerificationForm = () => {
 	useEffect(() => {
 		handleSubmit();
 	}, [handleSubmit]);
+
+
+	// redirect to login after success
+	useEffect(() => {
+		if (status.type === 'success') {
+			router.push('/auth/login');
+		}
+	}, [status]);
 
 	// spinner props
 	const spinnerSize = isMobile ? SPINNER_SIZES.mobile : SPINNER_SIZES.desktop;

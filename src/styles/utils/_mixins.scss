@@ -39,7 +39,7 @@
 };
 
 @mixin colorTransformTransition($colorDur: 150ms, $transformDur: 150ms, $ease: ease-in-out) {
-    transition: background-color $colorDur $ease, color $colorDur $ease, transform $transformDur $ease;
+    transition: background-color $colorDur $ease, color $colorDur $ease, border-color $colorDur ease-in-out, transform $transformDur $ease;
 }
 
 @mixin multipleTransition($properties, $duration: 150ms, $ease: ease-in-out) {

@@ -57,23 +57,7 @@ export const RegisterForm = () => {
 	});
 
     const router = useRouter();
-
-   /*  const setSuccess = () => {
-        setIsSuccess({
-            status: true,
-            message: SuccessMessages['REGISTER'],
-        });
-        // success
-        // TOAST, then redirect to login page
-        toast(SuccessMessages['REGISTER'], {
-            theme: 'colored',
-            type: 'success',
-            onClose: () => {
-                router.push('/auth/login');
-            }
-        });
-    }; */
-
+    
 	// submit handler
 	const onSubmit = async (data: z.infer<typeof RegisterSchema>) => {
 		// reset

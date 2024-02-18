@@ -258,7 +258,7 @@ $listOptionHeight: pxIntoUnit(50);
 // button
 .listOption {
     @include fontDefault(19, 600);
-    @include colorTransformTransition(200ms);
+    @include colorTransformTransition(300ms, 200ms);
     @include flex(flex-start, center, pxIntoUnit(10));
 
     width: 100%;

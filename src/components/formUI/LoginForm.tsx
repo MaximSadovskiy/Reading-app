@@ -43,7 +43,7 @@ export const LoginForm = () => {
 	});
 
 	// result of action
-	const [result, setResult] = useState<{
+	const [resultState, setResultState] = useState<{
 		status: ResultStatus,
 		message: string;
 	}>({
@@ -55,31 +55,36 @@ export const LoginForm = () => {
 
 	const onSubmit = async (data: z.infer<typeof LoginSchema>) => {
 		// reset
-		setResult({
+		setResultState({
 			status: 'init',
 			message: '',
 		});
 
-        const result = await loginAction(data);
+        loginAction(data)
+			.then(response => {
+				if (resultState.status !== 'init') return;
 
-		if (result.success) {
-			setResult({
-				status: 'success',
-				message: result.success,
-			});
-		}
-		else {
-			setResult({
-				status: 'error',
-				message: result.error as string,
-			});
-		}
+				else if (response.success) {
+					console.log('setting success');
+					setResultState({
+						status: 'success',
+						message: response.success,
+					});
+				}
+				else {
+					setResultState({
+						status: 'error',
+						message: response.error as string,
+					});
+				}
+			})
+			.catch(err => console.log('error on client: ', err));
 	};
 
 	// authorize TOAST event
 	useEffect(() => {
-		if (result.status === 'success') {
-			toast(result.message, {
+		if (resultState.status === 'success') {
+			toast(resultState.message, {
 				theme: 'colored',
 				type: 'success',
 				onClose: () => {
@@ -87,13 +92,13 @@ export const LoginForm = () => {
 				},
 			});
 		}
-		else if (result.status === 'error') {
-			toast(result.message, {
+		else if (resultState.status === 'error') {
+			toast(resultState.message, {
 				theme: 'colored',
 				type: 'error',
 			});
 		}
-	}, [result]);
+	}, [resultState]);
 
 	// hiding / showing passwords
 	const [isShowPassword, setIsShowPassword] = useState({
@@ -201,16 +206,16 @@ export const LoginForm = () => {
 			{isSubmitting && (
 				<SubmitStatus status="pending" />
 			)}
-			{result.status === 'error' && (
+			{resultState.status === 'error' && (
 				<SubmitStatus 
                     status="error" 
-                    message={result.message} 
+                    message={resultState.message} 
                 />
 			)}
-			{result.status === 'success' && (
+			{resultState.status === 'success' && (
                 <SubmitStatus
                     status="success"
-                    message={result.message}
+                    message={resultState.message}
                 />
             )}
 		</form>

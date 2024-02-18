@@ -19,6 +19,12 @@ import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { useSearchParams } from "next/navigation";
 
 
+interface ClickableImage extends HTMLImageElement {
+	dataset: {
+		name: "password" | "confirmPassword";
+	};
+}
+
 type ResultStatus = 'init' | 'error' | 'success';
 
 export const NewPasswordForm = () => {
@@ -91,6 +97,23 @@ export const NewPasswordForm = () => {
 		}
 	}, [result]);
 
+	// hiding / showing passwords
+	const [isShowPassword, setIsShowPassword] = useState({
+		password: false,
+		confirmPassword: false,
+	});
+
+	const handleHideShowPassword = (e: React.MouseEvent) => {
+		const target = e.currentTarget.closest("img") as ClickableImage;
+
+		const name = target.dataset.name;
+
+		setIsShowPassword({
+			...isShowPassword,
+			[name]: !isShowPassword[name],
+		});
+	};
+
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
@@ -99,27 +122,61 @@ export const NewPasswordForm = () => {
 				autoClose={2000}
 			/>
 			<FormFieldWrapper
-				labelText=""
-				isError={errors.password ? true : false}
-				errorText={errors.password?.message}
-			>
-				<input
-					{...register("password")}
-					data-invalid={errors.password ? true : false}
-					placeholder="******"
-				/>
-			</FormFieldWrapper>
-			<FormFieldWrapper
-				labelText=""
-				isError={errors.confirmPassword ? true : false}
-				errorText={errors.confirmPassword?.message}
-			>
-				<input
-					{...register("confirmPassword")}
-					data-invalid={errors.confirmPassword ? true : false}
-					placeholder="******"
-				/>
-			</FormFieldWrapper>
+                labelText="Пароль"
+                isError={errors.password ? true : false}
+                errorText={errors.password?.message}
+            >
+                <div>
+                    <input
+                        {...register("password")}
+                        type={isShowPassword.password ? "text" : "password"}
+                        data-invalid={errors.password ? true : false}
+                        placeholder="*********"
+                    />
+                    <img
+                        title="показать/скрыть пароль"
+                        width={30}
+                        height={30}
+                        src={
+                            isShowPassword.password
+                                ? "/eye-show.svg"
+                                : "/eye-closed.svg"
+                        }
+                        data-name="password"
+                        onClick={handleHideShowPassword}
+                    />
+                </div>
+            </FormFieldWrapper>
+            <FormFieldWrapper
+                labelText="Подтвердите пароль"
+                isError={errors.confirmPassword ? true : false}
+                errorText={errors.confirmPassword?.message}
+            >
+                <div>
+                    <input
+                        {...register("confirmPassword")}
+                        type={
+                            isShowPassword.confirmPassword
+                                ? "text"
+                                : "password"
+                        }
+                        data-invalid={errors.confirmPassword ? true : false}
+                        placeholder="*********"
+                    />
+                    <img
+                        title="показать/скрыть пароль"
+                        width={30}
+                        height={30}
+                        src={
+                            isShowPassword.confirmPassword
+                                ? "/eye-show.svg"
+                                : "/eye-closed.svg"
+                        }
+                        onClick={handleHideShowPassword}
+                        data-name="confirmPassword"
+                    />
+                </div>
+            </FormFieldWrapper>
 			<SubmitBtn isDisabled={isSubmitting} />
 			{isSubmitting && (
 				<SubmitStatus status="pending" />

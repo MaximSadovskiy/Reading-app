@@ -2,7 +2,7 @@
 import { z } from 'zod';
 import { RegisterSchema, LoginSchema, ResetSchema, NewPasswordSchema } from '@/schemas/zod/loginSchemas';
 import db from "@/lib/db";
-import { getPasswordResetTokenByToken, getUserByEmail, getVerificationTokenByEmail, getVerificationTokenByToken } from '@/lib/db_helpers';
+import { getPasswordResetTokenByToken, getUserByEmail, getVerificationTokenByToken } from '@/lib/db_helpers';
 import bcrypt from "bcryptjs";
 import { signIn } from '$/auth';
 import { AuthError } from 'next-auth';
@@ -96,12 +96,14 @@ export const loginAction = async (data: z.infer<typeof LoginSchema>) => {
     }
 
     try {
-        await signIn("credentials", {
+        await signIn('credentials', {
             username,
             email,
             password,
             confirmPassword,
+            redirect: false,
         });
+
 
         return { success: SuccessMessages.LOGIN };
     } catch (error) {
