@@ -4,7 +4,7 @@ import { RegisterSchema, LoginSchema, ResetSchema, NewPasswordSchema } from '@/s
 import db from "@/lib/db";
 import { getPasswordResetTokenByToken, getTwoFactorConfirmationByUserID, getTwoFactorTokenByEmail, getUserByEmail, getVerificationTokenByToken } from '@/lib/db_helpers';
 import bcrypt from "bcryptjs";
-import { signIn } from '$/auth';
+import { signIn, signOut } from '$/auth';
 import { AuthError } from 'next-auth';
 import { 
     generateVerificationToken, 
@@ -143,9 +143,6 @@ export const loginAction = async (data: z.infer<typeof LoginSchema>) => {
                 });
             }
 
-            // log
-            console.log('creating two-factor confirm: ');
-
             await db.twoFactorConfirmation.create({
                 data: {
                     userId: existingUser.id,
@@ -160,10 +157,7 @@ export const loginAction = async (data: z.infer<typeof LoginSchema>) => {
                 twoFactorToken.email,
                 twoFactorToken.token,
             );
-                
-            // log
-            console.log('token sended');
-
+            
             // Промежуточный успех: token sended
             return { success: {
                 type: LoginSuccessTypes.TWO_FACTOR,
@@ -173,8 +167,6 @@ export const loginAction = async (data: z.infer<typeof LoginSchema>) => {
     }
 
     try {
-        // log
-        console.log('Logging IN user');
 
         await signIn('credentials', {
             username,
@@ -184,10 +176,6 @@ export const loginAction = async (data: z.infer<typeof LoginSchema>) => {
             redirect: false,
         });
 
-
-        //log
-        console.log('sending FINAL success status');
-        
         // COMPLETE SUCCESS ON LOGING IN USER
         return { success: {
             type: LoginSuccessTypes.LOGIN_SUCCESS,

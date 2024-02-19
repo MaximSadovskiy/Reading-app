@@ -1,18 +1,15 @@
-import { auth, signOut } from "$/auth";
+'use client' // temp
 
-const MyLibraryPage = async () => {
-    const session = await auth();
+import styles from "@/styles/modules/(protected)/myLibraryPage/myLibraryPage.module.scss";
+import { logOutAction } from "@/server_actions/general_actions";
+
+const MyLibraryPage = () => {
+
 
     return (
-        <div>
-            {JSON.stringify(session)}
-            <form action={async () => {
-                'use server'
-                await signOut();
-            }}>
-                <button type="submit">Sign Out</button>
-            </form>
-        </div>
+        <main className={styles.main}>
+            <button onClick={() => logOutAction()}>Sign Out</button>
+        </main>
     )
 }
 
