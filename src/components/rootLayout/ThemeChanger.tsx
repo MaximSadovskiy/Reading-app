@@ -6,7 +6,8 @@ import React, { useState, useEffect, useRef, forwardRef } from 'react';
 // framer
 import { m, LazyMotion, domAnimation, AnimatePresence } from 'framer-motion';
 import { listVariants, itemVariants } from "@/animation/variants/themeToggler/themeTogglerVariants";
-import { SetThemeType, ThemeType } from "@/hooks/useTheme";
+import { getPreferedTheme } from "@/hooks/useTheme";
+import type { SetThemeType, ThemeType } from "@/hooks/useTheme";
 
 // types & helpers
 type CustomThemeType = ThemeType | 'system';
@@ -54,15 +55,8 @@ const ThemeChanger = () => {
     const systemThemeRef = useRef<ThemeType | null>(null);
 
     useEffect(() => {
-        // helper
-        const themeCondition = '(prefers-color-scheme: dark)';
-        const getPreferredTheme: () => ThemeType = () => {
-            const prefersDark = window.matchMedia(themeCondition).matches;
-            return prefersDark ? 'dark' : 'light';
-        };
-
         // getting system theme
-        const systemTheme = getPreferredTheme();
+        const systemTheme = getPreferedTheme(window);
         systemThemeRef.current = systemTheme;
     }, []);
 
@@ -82,7 +76,14 @@ const ThemeChanger = () => {
             <LazyMotion features={domAnimation} strict>
                 <AnimatePresence>
                     {isOpen && (
-                        <PopupThemeList setTheme={setTheme} systemTheme={systemThemeRef.current} setSvgPath={setSvgPath} closeList={() => setIsOpen(false)} svgPath={svgPath} ref={listRef} />
+                        <PopupThemeList 
+                            setTheme={setTheme} 
+                            systemTheme={systemThemeRef.current} 
+                            setSvgPath={setSvgPath} 
+                            closeList={() => setIsOpen(false)} 
+                            svgPath={svgPath} 
+                            ref={listRef} 
+                        />
                     )}
                 </AnimatePresence>
             </LazyMotion>

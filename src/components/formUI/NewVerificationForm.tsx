@@ -4,10 +4,11 @@ import { CSSProperties, useCallback, useEffect, useState } from "react";
 import { VerificationContainer } from "./formUI";
 import { ClimbingBoxLoader } from "react-spinners";
 import { useGlobalContext } from "@/hooks/useContext";
-import { newVerificationAction } from "@/server_actions/actions";
+import { newVerificationAction } from "@/server_actions/form_actions";
 import { useRouter } from "next/navigation";
+import { useOrientation } from "@/hooks/useOrientation";
 
-const MOBILE_QUERY = "(max-width: 500px)";
+/* const MOBILE_QUERY = "(max-width: 500px)"; */
 const SPINNER_SIZES = {
 	mobile: 25,
 	desktop: 40,
@@ -40,42 +41,8 @@ type StatusState = {
 export const NewVerificationForm = () => {
 	const searchParams = useSearchParams();
 	const token = searchParams.get("token");
-
-	// responsible size of spinner
-	const [isMobile, setIsMobile] = useState(
-		() => {
-			if (typeof window !== 'undefined') {
-				return window.matchMedia(MOBILE_QUERY).matches;
-			}
-			else {
-				return false;
-			}
-		}
-	);
-	
 	const { theme } = useGlobalContext();
-
-	// mobile orientation setting
-	useEffect(() => {
-		const checkMobileQuery = () => {
-			const windowWidth = document.documentElement.clientWidth;
-			if (windowWidth < 500 && !isMobile) {
-				setIsMobile(true);
-			} else {
-				if (!isMobile) setIsMobile(false);
-			}
-		};
-
-		window
-			.matchMedia(MOBILE_QUERY)
-			.addEventListener("change", checkMobileQuery);
-
-		return () => {
-			window
-				.matchMedia(MOBILE_QUERY)
-				.removeEventListener("change", checkMobileQuery);
-		};
-	}, []);
+	const isMobile = useOrientation(window, document, 500);
 
 	// status of verification
 	const [status, setStatus] = useState<StatusState>({

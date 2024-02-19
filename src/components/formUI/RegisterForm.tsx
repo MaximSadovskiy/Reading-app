@@ -11,7 +11,7 @@ import {
 	SubmitStatus,
 } from "@/components/formUI/formUI";
 import { useEffect, useState } from "react";
-import { registerAction } from "@/server_actions/actions";
+import { registerAction } from "@/server_actions/form_actions";
 import { useRouter } from "next/navigation";
 import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from "react-toastify";

@@ -4,7 +4,6 @@ import { GlobalContext } from '@/hooks/useContext';
 // hooks
 import useTheme from '@/hooks/useTheme';
 
-
 // types
 interface GlobalContextProps {
     children: React.ReactNode;
@@ -12,7 +11,7 @@ interface GlobalContextProps {
 
 
 const ContextWrapper = (props: GlobalContextProps) => {
-    const [theme, setTheme] = useTheme();
+    const [theme, setTheme] = useTheme(window);
 
     return (
         <GlobalContext.Provider value={{

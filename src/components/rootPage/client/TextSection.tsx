@@ -49,7 +49,6 @@ const TextSection = ({ textData }: TextSectionProps) => {
 
     // manipulating state with scroll
     useMotionValueEvent(scrollY, 'change', (latestValue) => {
-        console.log(`changes, latestValue: ${latestValue}`);
         if (latestValue > 100 && !animationState.firstH3) {
             setAnimationState({
                 ...animationState,
