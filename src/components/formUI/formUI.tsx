@@ -296,7 +296,12 @@ const OptionInsideList = ({ value, isSelected, onClick }: OptionListProps) => {
 };
 
 // Submit button
-export const SubmitBtn = ({ isDisabled }: { isDisabled: boolean }) => {
+type SubmitBtnProps = {
+ 	isDisabled: boolean;
+	isTwoFactor: boolean;
+}
+
+export const SubmitBtn = ({ isDisabled, isTwoFactor }: SubmitBtnProps) => {
 	const [scope, animate] = useAnimate();
 	const scaleForegroundX = useMotionValue(0);
 	const color = useTransform(
@@ -339,7 +344,7 @@ export const SubmitBtn = ({ isDisabled }: { isDisabled: boolean }) => {
 						color,
 					}}
 				>
-					Отправить
+					{isTwoFactor ? 'Подтвердить' : 'Отправить'}
 				</m.span>
 			</m.button>
 		</LazyMotion>

@@ -16,15 +16,17 @@ enum UserRole {
 }
 
 model User {
-    id              String    @id @default(cuid())
-    username        String?
-    email           String?   @unique
-    password        String?
-    role            UserRole  @default(USER)
-    emailVerified   DateTime?
-    image           String?
-    favouriteGenres String[]
-    accounts        Account[]
+    id                    String                 @id @default(cuid())
+    username              String?
+    email                 String?                @unique
+    password              String?
+    role                  UserRole               @default(USER)
+    emailVerified         DateTime?
+    image                 String?
+    favouriteGenres       String[]
+    accounts              Account[]
+    isTwoFactorEnabled    Boolean                @default(false)
+    twoFactorConfirmation TwoFactorConfirmation?
 }
 
 model Account {
@@ -62,4 +64,20 @@ model PasswordResetToken {
     expires DateTime
 
     @@unique([email, token])
+}
+
+// Two-Factor authentication
+model TwoFactorToken {
+    id      String   @id @default(cuid())
+    email   String
+    token   String   @unique
+    expires DateTime
+
+    @@unique([email, token])
+}
+
+model TwoFactorConfirmation {
+    id     String   @id @default(cuid())
+    userId String   @unique
+    user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

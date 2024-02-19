@@ -1,6 +1,6 @@
 'use client';
 
-import { CarouselBooks } from "@/booksStorage/usage/storage";
+import { CarouselBooks } from "@/booksStorage/usage/books";
 import BookCard from "../client/SingleBookCard";
 import SlideBtn from "../client/SlideBtn";
 import styles from '@/styles/modules/booksPage/bookCarousel.module.scss';
@@ -8,6 +8,7 @@ import styles from '@/styles/modules/booksPage/bookCarousel.module.scss';
 import { useAnimate, useMotionValue, useMotionValueEvent, m, LazyMotion, domAnimation } from "framer-motion";
 import { getScrollDistanceOnBreakpoint, getCurrentVisibleDistance, getMaxScrollDistance, getPerspectiveOriginCenter } from "@/utils/carouselUtils";
 import { useState, useRef, useEffect } from "react";
+
 
 // types
 type Title = 'Популярные книги' | 'Новое';
@@ -19,6 +20,7 @@ interface CarouselProps {
 // server component
 const BookCarousel = ({ title, books }: CarouselProps) => {
 
+    
     /* Perspective for animations */
     const perspectiveOriginValue = useMotionValue<string>('150px');
 
@@ -32,14 +34,12 @@ const BookCarousel = ({ title, books }: CarouselProps) => {
     /* effect for setting initial value */
     useEffect(() => {
 
-        console.log(`Effect: perspective changed to: ${perspectiveOriginValue.get()}`);
-
         const windowWidth = document.documentElement.clientWidth;
         const initialPerspectiveValue = getPerspectiveOriginCenter(windowWidth, currentScrollValue.get(), cardWidthRef.current, gapWidthRef.current);
 
         perspectiveOriginValue.set(initialPerspectiveValue);
+    
     }, []);
-
 
     const renderBooks = books.map(book => (
         <BookCard key={book.id} 

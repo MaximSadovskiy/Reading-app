@@ -2,16 +2,23 @@
 import { z } from 'zod';
 import { RegisterSchema, LoginSchema, ResetSchema, NewPasswordSchema } from '@/schemas/zod/loginSchemas';
 import db from "@/lib/db";
-import { getPasswordResetTokenByToken, getUserByEmail, getVerificationTokenByToken } from '@/lib/db_helpers';
+import { getPasswordResetTokenByToken, getTwoFactorConfirmationByUserID, getTwoFactorTokenByEmail, getUserByEmail, getVerificationTokenByToken } from '@/lib/db_helpers';
 import bcrypt from "bcryptjs";
 import { signIn } from '$/auth';
 import { AuthError } from 'next-auth';
-import { generateVerificationToken, generatePasswordResetToken } from '@/lib/tokens';
-import { sendVerificationEmail, sendPasswordResetToken } from '@/lib/mail';
-import { ErrorMessages, SuccessMessages } from '@/interfaces/formMessages';
+import { 
+    generateVerificationToken, 
+    generatePasswordResetToken, 
+    generateTwoFactorToken 
+} from '@/lib/tokens';
+import { sendVerificationEmail, 
+    sendPasswordResetToken, 
+    sendTwoFactorTokenEmail 
+} from '@/lib/mail';
+import { ErrorMessages, SuccessMessages, LoginSuccessTypes } from '@/interfaces/formMessages';
 
 
-
+// REGISTER
 export const registerAction = async (data: z.infer<typeof RegisterSchema>) => {
 
     // validation
@@ -59,10 +66,11 @@ export const registerAction = async (data: z.infer<typeof RegisterSchema>) => {
         verificationToken.token,
     );
 
-    return { success: SuccessMessages.REGISTER };
+    return { success: SuccessMessages.REGISTER_SUCCESS };
 };
 
 
+// LOGIN
 export const loginAction = async (data: z.infer<typeof LoginSchema>) => {
 
     // validation
@@ -73,7 +81,7 @@ export const loginAction = async (data: z.infer<typeof LoginSchema>) => {
         return { error: ErrorMessages.INVALID_DATA };
     }
 
-    const { username, email, password, confirmPassword } = validatedFields.data;
+    const { username, email, password, confirmPassword, code } = validatedFields.data;
 
     // new: Check if Email Verified
     const existingUser = await getUserByEmail(email);
@@ -92,10 +100,82 @@ export const loginAction = async (data: z.infer<typeof LoginSchema>) => {
             verificationToken.token,
         );
         // send message
-        return { error: ErrorMessages.EMAIL_DOESNT_VERIFIED };
+        return { success: { 
+            type: LoginSuccessTypes.EMAIL_SENT,
+            message: SuccessMessages.EMAIL_SENT,
+        } };
+    }
+
+    // Two-Factor verification
+    if (existingUser.isTwoFactorEnabled && existingUser.email) {
+        // user gets token on email and enter it through client
+        if (code) {
+            const twoFactorToken = await getTwoFactorTokenByEmail(existingUser.email);
+            // code was not found by email
+            if (!twoFactorToken) {
+                return { error: ErrorMessages.TOKEN_WASNT_FOUND_BY_EMAIL }
+            }
+
+            // token !== user entered code
+            if (twoFactorToken.token !== code) {
+                return { error: ErrorMessages.TOKEN_INVALID }
+            }
+
+            // token expired
+            const hasExpired = new Date(twoFactorToken.expires) < new Date();
+            if (hasExpired) {
+                return { error: ErrorMessages.TOKEN_EXPIRED }
+            }
+
+            // SUCCESS
+            // remove token + add confirmation to user
+            await db.twoFactorToken.delete({
+                where: { id: twoFactorToken.id },
+            });
+
+            // delete confirmation if somehow exists
+            const existingConfirmation = await getTwoFactorConfirmationByUserID(
+                existingUser.id,
+            );
+            if (existingConfirmation) {
+                await db.twoFactorConfirmation.delete({
+                    where: { id: existingConfirmation.id },
+                });
+            }
+
+            // log
+            console.log('creating two-factor confirm: ');
+
+            await db.twoFactorConfirmation.create({
+                data: {
+                    userId: existingUser.id,
+                }
+            });
+        }
+
+        // firstly, token created (bounded with user email) & sended to user
+        else {
+            const twoFactorToken = await generateTwoFactorToken(email);
+            await sendTwoFactorTokenEmail(
+                twoFactorToken.email,
+                twoFactorToken.token,
+            );
+                
+            // log
+            console.log('token sended');
+
+            // Промежуточный успех: token sended
+            return { success: {
+                type: LoginSuccessTypes.TWO_FACTOR,
+                message: SuccessMessages.TWO_FACTOR,
+            } };
+        }
     }
 
     try {
+        // log
+        console.log('Logging IN user');
+
         await signIn('credentials', {
             username,
             email,
@@ -105,7 +185,14 @@ export const loginAction = async (data: z.infer<typeof LoginSchema>) => {
         });
 
 
-        return { success: SuccessMessages.LOGIN };
+        //log
+        console.log('sending FINAL success status');
+        
+        // COMPLETE SUCCESS ON LOGING IN USER
+        return { success: {
+            type: LoginSuccessTypes.LOGIN_SUCCESS,
+            message: SuccessMessages.LOGIN_SUCCESS,
+        } };
     } catch (error) {
 
         if (error instanceof AuthError) {
@@ -164,7 +251,7 @@ export const newVerificationAction = async (token: string) => {
     // EMAIL VERIFIED SUCCESS
     await db.user.update({
         where: { id: existingUser.id },
-        data: { 
+        data: {
             emailVerified: new Date(),
             // 4:36:00
             // если пользователь захочет изменить email после регистрации
@@ -182,7 +269,7 @@ export const newVerificationAction = async (token: string) => {
 };
 
 
-// Forgot / reset Password
+// RESET (FORGOT) PASSWORD
 export const forgotPasswordAction = async (values: z.infer<typeof ResetSchema>) => {
 
     // validation
@@ -203,7 +290,7 @@ export const forgotPasswordAction = async (values: z.infer<typeof ResetSchema>) 
 
     // generate & send token
     const passwordResetToken = await generatePasswordResetToken(email);
-    
+
     await sendPasswordResetToken(
         passwordResetToken.email,
         passwordResetToken.token,
@@ -213,7 +300,7 @@ export const forgotPasswordAction = async (values: z.infer<typeof ResetSchema>) 
 };
 
 
-// New Password
+// NEW PASSWORD
 export const newPasswordAction = async (values: z.infer<typeof NewPasswordSchema>, token?: string) => {
     // если нет токена
     if (!token) {
@@ -245,7 +332,7 @@ export const newPasswordAction = async (values: z.infer<typeof NewPasswordSchema
 
     const { password } = validatedFields.data;
     const hashedPassword = await bcrypt.hash(password, 10);
-    
+
     await db.user.update({
         where: { id: existingUser.id },
         data: {

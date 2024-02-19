@@ -1,7 +1,10 @@
 export interface BookInterface {
     id: string;
     title: string;
+    // для визуального отображения
     author: string;
+    // для поиска
+    authorForSearch: string;
     year: string;
     genres: Genre[];
     description: string;
@@ -19,4 +22,5 @@ export interface BookInterface {
 
 
 // Жанры книг
-type Genre = 'исторический роман' | 'психологический роман';
+// должны совпадать с /loginSchemas/genreLiterals
+type Genre = 'Антиутопия' | 'Биография' | 'Роман' | 'Фантастика' | 'Фэнтези' | 'Детектив' | 'Триллер' | 'Классика';

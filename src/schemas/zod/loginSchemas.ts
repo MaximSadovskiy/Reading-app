@@ -15,9 +15,10 @@ export const BaseSchema = z.object({
 });
 
 // REGISTER
-export const RegisterSchema = BaseSchema.extend({
-    favouriteGenres: z.array(z.enum(genreLiterals)).min(3, { message: 'Выберите по меньшей мере 3 любимых жанра' }),
-})
+export const RegisterSchema = BaseSchema
+    .extend({
+        favouriteGenres: z.array(z.enum(genreLiterals)).min(3, { message: 'Выберите по меньшей мере 3 любимых жанра' }),
+    })
     .refine(values => values.password === values.confirmPassword, {
         message: 'Пароль не совпадает с уже введённым',
         path: ['confirmPassword'],
@@ -26,6 +27,9 @@ export const RegisterSchema = BaseSchema.extend({
 
 // LOGIN
 export const LoginSchema = BaseSchema
+    .extend({
+        code: z.string().optional(),
+    })
     .refine(values => values.password === values.confirmPassword, {
         message: 'Пароль не совпадает с уже введённым',
         path: ['confirmPassword'],

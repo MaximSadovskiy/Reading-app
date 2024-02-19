@@ -323,13 +323,14 @@ $listOptionHeight: pxIntoUnit(50);
     @return $remValue;
 }
 
-$submitBtnPadding: 15;
-$submitBtnWidth: getSubmitBtnEdge(150, 15);
-$submitBtnHeight: getSubmitBtnEdge(50, 15);
+$submitBtnPadding: 20;
+$submitBtnWidth: getSubmitBtnEdge(150, $submitBtnPadding);
+$submitBtnHeight: getSubmitBtnEdge(50, $submitBtnPadding);
 
 .submitBtn {
     @include colorTransformTransition;
     @include fontDefault(22, 600);
+    @include flex(center, center);
 
     width: $submitBtnWidth;
     height: $submitBtnHeight;

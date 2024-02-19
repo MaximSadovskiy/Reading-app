@@ -17,9 +17,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
+import { LoginSuccessTypes } from "@/interfaces/formMessages";
 
 
-type ResultStatus = 'init' | 'error' | 'success';
+// two-factor --> changes in UI
+type ResultStatus = 'init' | 'error' | 'email_sent' | 'two_factor' | 'final_success';
 
 interface ClickableImage extends HTMLImageElement {
 	dataset: {
@@ -32,6 +34,7 @@ export const LoginForm = () => {
 		register,
 		handleSubmit,
 		formState: { errors, isSubmitting },
+		reset,
 	} = useForm<z.infer<typeof LoginSchema>>({
 		resolver: zodResolver(LoginSchema),
 		defaultValues: {
@@ -62,14 +65,27 @@ export const LoginForm = () => {
 
         loginAction(data)
 			.then(response => {
-				if (resultState.status !== 'init') return;
 
-				else if (response.success) {
-					console.log('setting success');
-					setResultState({
-						status: 'success',
-						message: response.success,
-					});
+				if (response.success) {
+					// two-factor enabled --> UI changed a bit
+					if (response.success.type === LoginSuccessTypes.TWO_FACTOR) {
+						setResultState({
+							status: 'two_factor',
+							message: response.success.message,
+						});
+					}
+					else if (response.success.type === LoginSuccessTypes.EMAIL_SENT) {
+						setResultState({
+							status: 'email_sent',
+							message: response.success.message,
+						});
+					}
+					else {
+						setResultState({
+							status: 'final_success',
+							message: response.success.message,
+						});
+					}
 				}
 				else {
 					setResultState({
@@ -78,12 +94,30 @@ export const LoginForm = () => {
 					});
 				}
 			})
-			.catch(err => console.log('error on client: ', err));
+			.catch(() => setResultState({
+				status: 'error',
+				message: 'Что-то пошло не так...'
+			}));
 	};
 
 	// authorize TOAST event
 	useEffect(() => {
-		if (resultState.status === 'success') {
+		if (resultState.status === 'two_factor') {
+			toast(resultState.message, {
+				theme: 'colored',
+				type: 'success',
+			});
+		}
+		else if (resultState.status === 'email_sent') {
+			toast(resultState.message, {
+				theme: 'colored',
+				type: 'success',
+			});
+		}
+		else if (resultState.status === 'final_success') {
+			// reset form
+			reset();
+			// notify and redirect
 			toast(resultState.message, {
 				theme: 'colored',
 				type: 'success',
@@ -125,84 +159,106 @@ export const LoginForm = () => {
 			/>
 			{/* <GoogleSubmit onSuccess={setSuccess} onError={setError} />
 			<Divider /> */}
-			<FormFieldWrapper
-				labelText="Имя пользователя"
-				isError={errors.username ? true : false}
-				errorText={errors.username?.message}
-			>
-				<input
-					{...register("username")}
-					placeholder="Иван_001"
-					data-invalid={errors.username ? true : false}
-				/>
-			</FormFieldWrapper>
-			<FormFieldWrapper
-				labelText="Электронная почта"
-				isError={errors.email ? true : false}
-				errorText={errors.email?.message}
-			>
-				<input
-					{...register("email")}
-					data-invalid={errors.email ? true : false}
-					placeholder="ivan.ivanov@email.com"
-				/>
-			</FormFieldWrapper>
-			<FormFieldWrapper
-				labelText="Пароль"
-				isError={errors.password ? true : false}
-				errorText={errors.password?.message}
-			>
-				<div>
-					<input
-						{...register("password")}
-						type={isShowPassword.password ? "text" : "password"}
-						data-invalid={errors.password ? true : false}
-						placeholder="*********"
-					/>
-					<img
-						title="показать/скрыть пароль"
-						width={30}
-						height={30}
-						src={
-							isShowPassword.password
-								? "/eye-show.svg"
-								: "/eye-closed.svg"
-						}
-						data-name="password"
-						onClick={handleHideShowPassword}
-					/>
-				</div>
-			</FormFieldWrapper>
-			<ForgotPassword />
-			<FormFieldWrapper
-				labelText="Подтвердите пароль"
-				isError={errors.confirmPassword ? true : false}
-				errorText={errors.confirmPassword?.message}
-			>
-				<div>
-					<input
-						{...register("confirmPassword")}
-						type={
-							isShowPassword.confirmPassword ? "text" : "password"
-						}
-						data-invalid={errors.confirmPassword ? true : false}
-						placeholder="*********"
-					/>
-					<img
-						title="показать/скрыть пароль"
-						width={30}
-						height={30}
-						src={
-							isShowPassword.confirmPassword
-								? "/eye-show.svg"
-								: "/eye-closed.svg"
-						}
-						onClick={handleHideShowPassword}
-						data-name="confirmPassword"
-					/>
-				</div>
-			</FormFieldWrapper>
-			<SubmitBtn isDisabled={isSubmitting} />
+			{resultState.status === 'two_factor' && (
+				<FormFieldWrapper
+					labelText="Введите 6-ти значный код, который был отправлен на Ваш email"
+					isError={errors.code ? true : false}
+					errorText={errors.code?.message}
+				>
+					<div>
+						<input
+							{...register("code")}
+							data-invalid={errors.code ? true : false}
+							placeholder="123456"
+						/>
+					</div>
+				</FormFieldWrapper>
+			)}
+			{resultState.status !== 'two_factor' && (
+				<>
+					<FormFieldWrapper
+						labelText="Имя пользователя"
+						isError={errors.username ? true : false}
+						errorText={errors.username?.message}
+					>
+						<input
+							{...register("username")}
+							placeholder="Иван_001"
+							data-invalid={errors.username ? true : false}
+						/>
+					</FormFieldWrapper>
+					<FormFieldWrapper
+						labelText="Электронная почта"
+						isError={errors.email ? true : false}
+						errorText={errors.email?.message}
+					>
+						<input
+							{...register("email")}
+							data-invalid={errors.email ? true : false}
+							placeholder="ivan.ivanov@email.com"
+						/>
+					</FormFieldWrapper>
+					<FormFieldWrapper
+						labelText="Пароль"
+						isError={errors.password ? true : false}
+						errorText={errors.password?.message}
+					>
+						<div>
+							<input
+								{...register("password")}
+								type={isShowPassword.password ? "text" : "password"}
+								data-invalid={errors.password ? true : false}
+								placeholder="*********"
+							/>
+							<img
+								title="показать/скрыть пароль"
+								width={30}
+								height={30}
+								src={
+									isShowPassword.password
+										? "/eye-show.svg"
+										: "/eye-closed.svg"
+								}
+								data-name="password"
+								onClick={handleHideShowPassword}
+							/>
+						</div>
+					</FormFieldWrapper>
+					<ForgotPassword />
+					<FormFieldWrapper
+						labelText="Подтвердите пароль"
+						isError={errors.confirmPassword ? true : false}
+						errorText={errors.confirmPassword?.message}
+					>
+						<div>
+							<input
+								{...register("confirmPassword")}
+								type={
+									isShowPassword.confirmPassword ? "text" : "password"
+								}
+								data-invalid={errors.confirmPassword ? true : false}
+								placeholder="*********"
+							/>
+							<img
+								title="показать/скрыть пароль"
+								width={30}
+								height={30}
+								src={
+									isShowPassword.confirmPassword
+										? "/eye-show.svg"
+										: "/eye-closed.svg"
+								}
+								onClick={handleHideShowPassword}
+								data-name="confirmPassword"
+							/>
+						</div>
+					</FormFieldWrapper>
+				</>
+			)}
+			<SubmitBtn 
+				isDisabled={isSubmitting} 
+				isTwoFactor={resultState.status === 'two_factor' ? true : false} 
+			/>
 			{isSubmitting && (
 				<SubmitStatus status="pending" />
 			)}
@@ -212,7 +268,7 @@ export const LoginForm = () => {
                     message={resultState.message} 
                 />
 			)}
-			{resultState.status === 'success' && (
+			{resultState.status === 'final_success' && (
                 <SubmitStatus
                     status="success"
                     message={resultState.message}

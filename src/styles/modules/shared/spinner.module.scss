@@ -1,0 +1,10 @@
+@use 'utils' as *;
+
+
+.main {
+    @include flex(center, center);
+    @include colorTransition;
+
+    min-height: 100vh;
+    background-color: var(--main-bg);
+}

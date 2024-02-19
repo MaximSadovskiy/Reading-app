@@ -1,29 +1,32 @@
-import styles from '@/styles/modules/booksPage/booksPage.module.scss';
-// types
-
+import styles from "@/styles/modules/booksPage/booksPage.module.scss";
+import { booksInstance } from "@/booksStorage/usage/books";
 //components
-import SearchBar from '@/components/booksPage/client/SearchBar';
-import { Suspense, lazy } from 'react';
-
-// FETCHING helpers
-const BASE_URL = 'http://localhost:3000/api/books/';
+import SearchBar from "@/components/booksPage/client/SearchBar";
+import { Suspense, lazy } from "react";
+import { Spinner } from "@/components/shared/spinner";
 
 // lazy loading
-const BookCarousel = lazy(() => import('@/components/booksPage/server/bookCarousel'));
+const BookCarousel = lazy(
+	() => import("@/components/booksPage/server/bookCarousel")
+);
 
 export default async function BooksPage() {
 
-    // fetching
-    const url = `${BASE_URL}` + 'popular';
-    const response = await fetch(url);
-    const popularBooks = await response.json();
+	const popularBooks = booksInstance.retrieveBooksWithoutFiles().map(book => {
+        const { id, title, author, rating, thumbnail } = book;
 
-    return (
-        <main className={styles.main}>
-            <SearchBar />
-            <Suspense fallback={<p>Loading...</p>}>
-                <BookCarousel title='Популярные книги' books={popularBooks} />
-            </Suspense>
-        </main>
-    )
+        return { id, title, author, rating, thumbnail };
+    });
+
+	return (
+		<main className={styles.main}>
+			<SearchBar />
+			<Suspense fallback={<Spinner sizing='medium' />}>
+				<BookCarousel
+					title="Популярные книги"
+					books={popularBooks} 
+				/>
+			</Suspense>
+		</main>
+	);
 }
