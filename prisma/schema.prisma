@@ -27,6 +27,39 @@ model User {
     accounts              Account[]
     isTwoFactorEnabled    Boolean                @default(false)
     twoFactorConfirmation TwoFactorConfirmation?
+
+    @@map("users")
+}
+
+model Book {
+    id             Int      @id @default(autoincrement())
+    title          String
+    author         Author   @relation(fields: [authorId], references: [id])
+    authorId       Int      
+    genres         String[]
+    year           String
+    description    String
+    quotes         String[]
+    rating         Float
+    // все оценки данные пользователями
+    ratingMarks    Float[]
+    // была ли книга оценена пользователем (1 time action)
+    hasRatedByUser Boolean  @default(false)
+    // rating marks mb
+    thumbnail      String
+    picture        String?
+    file           Bytes
+
+    @@map("books")
+}
+
+model Author {
+    id      Int     @id @default(autoincrement())
+    name    String
+    books   Book[]
+    picture String?
+
+    @@map("authors")
 }
 
 model Account {
@@ -77,7 +110,7 @@ model TwoFactorToken {
 }
 
 model TwoFactorConfirmation {
-    id     String   @id @default(cuid())
-    userId String   @unique
-    user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id     String @id @default(cuid())
+    userId String @unique
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
