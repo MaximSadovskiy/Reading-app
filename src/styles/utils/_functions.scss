@@ -8,3 +8,8 @@
     $paddingCount: $cardCount + 1;
     @return pxIntoUnit(($cardCount * $cardWidth) + ($paddingWidth * $paddingCount) + ($borderWidth * 2));
 }
+
+@function calcXOffsetToPositionLargerElement($listWidth, $innerContainerWidth) {
+    $halfSpaceDifference: ($listWidth - $innerContainerWidth) / 2;
+    @return pxIntoUnit($halfSpaceDifference);
+}

@@ -49,7 +49,7 @@ const animateCloseProps: AnimateProps = {
 
 export const itemVariants: Variants = {
     initial: {
-        x: 180
+        x: 250
     },
     animate: {
         x: 0,
@@ -60,7 +60,7 @@ export const itemVariants: Variants = {
         }
     },
     exit: {
-        x: 180,
+        x: 250,
         transition: {
             type: 'spring',
             duration: 0.5,

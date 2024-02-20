@@ -1,6 +1,16 @@
 @use 'utils' as *;
 
-.link {
+.outerContainer {
+    margin-right: pxIntoUnit(80);
+}
+
+$accInnerContainerWidth: 100;
+.innerContainer {
+    position: relative;
+    width: pxIntoUnit($accInnerContainerWidth);
+}
+
+.openBtn {
     @include flex(center, center, pxIntoUnit(10), column);
     @include transition(background-color);
 
@@ -8,6 +18,8 @@
     border: pxIntoUnit(2) solid var(--acc-wrapper-border);
     border-radius: pxIntoUnit(15);
     padding: pxIntoUnit(10);
+    cursor: pointer;
+    position: relative;
 
     &:hover, &:focus {
         background-color: var(--acc-bg-hover);
@@ -18,4 +30,79 @@
 
         color: var(--acc-text);
     }
+
+
+    // arrow rotating
+    ::before {
+        @include transition(transform);
+
+        content: url('/arrow.svg');
+        position: absolute;
+        top: 50%;
+        right: 3px;
+        transform: translateY(-50%);
+        transform-origin: 80% 30%;
+    }
+
+    &[data-open='true'] ::before {
+        transform: rotate(90deg);
+    }
 };
+
+
+$accListWidth: 225;
+.popupList {
+    @include flex(flex-start, center, pxIntoUnit(3), column);
+    $leftOffset: calcXOffsetToPositionLargerElement($accListWidth, $accInnerContainerWidth);
+
+    list-style: none;
+    position: absolute;
+    top: pxIntoUnit(95);
+    left: -#{$leftOffset};
+    width: pxIntoUnit($accListWidth);
+    z-index: 10;
+    background-color: var(--theme-list-bg);
+    border-radius: pxIntoUnit(15);
+    border: pxIntoUnit(2) solid var(--theme-list-border);
+    overflow-x: hidden;
+}
+
+.popupListItem {
+    width: 100%;
+    z-index: 0;
+
+    &:first-of-type {
+        @include roundCorners(top, pxIntoUnit(15));
+    }
+
+    &:last-of-type {
+        @include roundCorners(bottom, pxIntoUnit(15));
+    }
+
+    & > a, button {
+        @include padding(pxIntoUnit(10), pxIntoUnit(10));
+        @include flex(flex-start, center, 20);
+        @include transition(background-color);
+        @include fontDefault(18);
+        
+        text-align: left;
+        padding-left: pxIntoUnit(18);
+        width: 100%;
+        height: 100%;
+        background-color: var(--theme-btn-bg);
+        display: inline-block;
+        color: var(--theme-li-color);
+
+        &:hover {
+            background-color: var(--theme-btn-bg-hover);
+        }
+
+        &[data-first] {
+            @include roundCorners(top, pxIntoUnit(15));
+        }
+    }
+
+    & > button[data-last] {
+        @include roundCorners(bottom, pxIntoUnit(15));
+    }
+}
