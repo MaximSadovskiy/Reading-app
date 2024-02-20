@@ -25,7 +25,7 @@
     flex: $grow $shrink $basis;
 }
 
-// transition, animation
+// transition
 @mixin colorTransition($duration: 300ms) {
     transition: background-color $duration ease-in-out, color $duration ease-in-out, border-color $duration ease-in-out;
 };
@@ -48,6 +48,41 @@
         $transitions: append($transitions, $prop $duration $ease, comma);
     }
     transition: $transitions;
+}
+
+// Delay on animated childs
+@mixin animationDelayOnChildren($elementCountNumber: 3, $initDelayNumber: 1, $increasingOfDelayNumber: 0.5) {
+    @for $i from 1 through $elementCountNumber {
+        &:nth-child(#{$i}) {
+            $animationDelay: $initDelayNumber + ($increasingOfDelayNumber * ($i - 1));
+            $animationDelaySeconds: #{$animationDelay}s;
+            animation-delay: $animationDelaySeconds;
+        }
+    }
+}
+
+// animations
+@mixin animationSlideInBlur ($duration: 1s, $timingFunction: linear, $direction: X, $translateValueNumber: -400) {
+    $translateValuePx: pxIntoUnit($translateValueNumber);
+
+    animation: slideInWithBlur $duration $timingFunction forwards;
+    @keyframes slideInWithBlur {
+        from {
+            opacity: 0;
+            filter: blur(10px);
+            @if ($direction == X) {
+                transform: translateX($translateValuePx);
+            }
+            @else {
+                transform: translateY($translateValuePx); 
+            }
+        }
+        to {
+            opacity: 1;
+            filter: blur(0px);
+            transform: translateX(0px),
+        }   
+    }
 }
 
 // padding, margin
@@ -91,7 +126,7 @@
 };
 
 // COMPONENTS
-@mixin linkWithUnderline($fontWeight: 500, $underlineColor: var(--link-underline)) {
+@mixin linkWithUnderline($fontWeight: 500, $underlineColor: var(--link-underline), $isScaleNeeded: true) {
     @include fontClamp(20, 2.3, 24);
     @include transition(transform);
 
@@ -100,7 +135,12 @@
     position: relative;
 
     &:hover {
-        transform: scale(1.1);
+        @if ($isScaleNeeded) {
+            transform: scale(1.1);
+        }
+        @else {
+
+        }
     };
 
     &::before {
@@ -138,6 +178,23 @@
 @mixin customScrollBar($thumbColor, $trackColor, $width: thin) {
     scrollbar-width: $width;
     scrollbar-color: $thumbColor $trackColor;
+}
+
+@mixin customListMarker ($widthNumber: 10, $heightNumber: 10, $colorVariableString: --main-listmarker) {
+    display: list-item;
+    position: relative;
+
+    &::before {
+        content: '';
+        display: block;
+        width: pxIntoUnit($widthNumber);
+        height: pxIntoUnit($heightNumber);
+        border-radius: 50%;
+        background-color: var(#{$colorVariableString});
+        position: absolute;
+        left: -20px;
+        top: calc(50% - (pxIntoUnit($heightNumber) / 2));
+    }
 }
 
 /* breakpont */

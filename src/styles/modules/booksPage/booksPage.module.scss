@@ -1,9 +1,54 @@
 @use 'utils' as *;
 
 .main {
-    @include colFlex(center);
+    @include colFlex(center, flex-start, pxIntoUnit(100));
     @include colorTransition;
 
     background-color: var(--main-bg);
     min-height: 200vh;
+
+    padding-bottom: pxIntoUnit(200);
+
+
+    & > div:first-child {
+        align-self: flex-start;
+    }
+}
+
+
+.subTitle {
+    @include fontDefault(24, 600);
+    @include animationSlideInBlur(1s, linear, X, -200);
+
+    color: var(--main-text-highlight);
+    padding-left: pxIntoUnit(85);
+    padding-top: pxIntoUnit(50);
+    margin-bottom: pxIntoUnit(30);
+}
+
+
+.list {
+    @include colFlex(flex-start, flex-start, pxIntoUnit(14));
+    
+    padding-left: pxIntoUnit(50);
+    list-style: none;
+    
+    & > li {
+        @include fontDefault(20);
+        @include customListMarker;
+        @include animationSlideInBlur;
+        @include animationDelayOnChildren(3, 1, 0.5);
+
+        transform: translateX(-500px);
+        opacity: 0;
+        color: var(--main-text);
+
+        & > a {
+            @include linkWithUnderline(600, var(--link-underline));
+
+            display: inline-block;
+            margin-inline: pxIntoUnit(20);
+            color: var(--main-link);
+        }
+    }
 }
