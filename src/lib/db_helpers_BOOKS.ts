@@ -84,3 +84,27 @@ export const searchBooksByAuthor =  async (query: string) => {
 
     return booksByAuthor;
 };
+
+// SINGLE BOOK PAGE
+export const getBookById = async (id: string) => {
+    const numberId = parseInt(id);
+    const book = await db.book.findUnique({
+        where: { id: numberId },
+        include: {
+            author: {
+                select: {
+                    name: true,
+                }
+            }
+        }
+    });
+
+    if (!book) return null;
+
+    const formattedBook = {
+        ...book,
+        authorName: book?.author.name,
+    }; 
+
+    return formattedBook;
+};

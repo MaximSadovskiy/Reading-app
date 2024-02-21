@@ -68,7 +68,6 @@
     font-weight: 700;
     
     &::before {
-        background-color: var(--underline);
         bottom: pxIntoUnit(0);
     }
 }

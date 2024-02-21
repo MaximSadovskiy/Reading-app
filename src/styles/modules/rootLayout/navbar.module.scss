@@ -12,7 +12,7 @@
 };
 
 .link {
-    @include linkWithUnderline;
+    @include linkWithUnderline(500, var(--link-header-underline));
     white-space: nowrap;
 };
 

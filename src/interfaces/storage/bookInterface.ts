@@ -1,5 +1,6 @@
 export interface BookInterface {
     title: string;
+    authorName: string;
     year: string;
     genres: GenreLiterals[];
     description: string;

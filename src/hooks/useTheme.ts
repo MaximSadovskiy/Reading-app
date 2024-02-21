@@ -10,29 +10,9 @@ export const getPreferedTheme = (window: Window): ThemeType => {
     return isPreferDark ? 'dark' : 'light';
 };
 
-const getThemeFromLocalStorage = (window: Window): ThemeType | null => {
-    const { localStorage } = window;
-    const themeFromStorage = localStorage.getItem('theme') as ThemeType;
-
-    return themeFromStorage ?? null;
-};
-
-const postThemeToLocalStorage = (window: Window, theme: ThemeType) => {
-    const { localStorage } = window;
-    localStorage.setItem('theme', theme);
-};
-
-const getInitialTheme = (window: Window) => {
-    return getThemeFromLocalStorage(window) ?? getPreferedTheme(window);
-};
-
 // hook
-const useTheme = (window: Window) => {
-    const [theme, setTheme] = useState<ThemeType>(getInitialTheme(window));
-
-    useEffect(() => {
-        postThemeToLocalStorage(window, theme);
-    }, [theme]);
+const useTheme = () => {
+    const [theme, setTheme] = useState<ThemeType>('dark');
 
     return [theme, setTheme] as const;
 };

@@ -11,7 +11,7 @@ interface GlobalContextProps {
 
 
 const ContextWrapper = (props: GlobalContextProps) => {
-    const [theme, setTheme] = useTheme(window);
+    const [theme, setTheme] = useTheme();
 
     return (
         <GlobalContext.Provider value={{

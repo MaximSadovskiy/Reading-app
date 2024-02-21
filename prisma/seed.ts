@@ -56,7 +56,5 @@ async function getFilesFromPaths(books: BookInterface[]) {
             file: await readFile(book.file)
         }))
     );
-    console.log('buffers: ', booksWithFiles);
-
     return booksWithFiles;
 };
