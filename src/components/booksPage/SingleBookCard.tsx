@@ -1,20 +1,23 @@
 'use client';
 
 import { memo } from "react";
-import { CarouselBooks } from "@/booksStorage/usage/storage";
 import Link from "next/link";
 import styles from '@/styles/modules/booksPage/singleBookCard.module.scss';
 import { m, LazyMotion, domAnimation, useMotionValue, useAnimate } from "framer-motion";
 import type { AnimationSequence, MotionValue } from "framer-motion";
 import { getCenterOfCard, getPerspectiveOriginCenter } from "@/utils/carouselUtils";
 import Image from "next/image";
+// type ob Book
+import { CarouselBooks } from "@/server_actions/books_actions";
+import { getAuthorDisplayName } from "@/utils/getAuthorDisplayName";
+
 
 
 type PlainMouseHandler = (e: MouseEvent) => void;
 type ReactMouseHandler = (e: React.MouseEvent<HTMLLIElement>) => void;
 
 interface BookCardProps {
-    book: CarouselBooks[0];
+    book: CarouselBooks[number];
     perspectiveOriginValue: MotionValue<string>;
     currentScrollValue: MotionValue<number>;
     cardWidth: number;
@@ -23,7 +26,8 @@ interface BookCardProps {
 }
 
 const BookCard = memo(({ book, perspectiveOriginValue, currentScrollValue, cardWidth, gapWidth, timerRef }: BookCardProps) => {
-    const { id, title, author, rating, thumbnail } = book;
+    const { id, title, authorName, rating, thumbnail } = book;
+    const authorDisplayName = getAuthorDisplayName(authorName, true);
 
     const [scope, animate] = useAnimate();
 
@@ -136,7 +140,7 @@ const BookCard = memo(({ book, perspectiveOriginValue, currentScrollValue, cardW
                 <Link href={`/books/${id}`} className={styles.link}>
                     <Image src={thumbnail} alt={`иллюстрация из книги "${title}"`} width={180} height={215} />
                     <p>"{title}"</p>
-                    <p>{author}</p>
+                    <p>{authorDisplayName}</p>
                     <p>{rating}</p>
                 </Link>
             </m.li>

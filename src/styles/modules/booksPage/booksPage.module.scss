@@ -8,6 +8,7 @@
     min-height: 200vh;
 
     padding-bottom: pxIntoUnit(200);
+    padding-inline: pxIntoUnit(80);
 
 
     & > div:first-child {
@@ -28,7 +29,7 @@
 
 
 .list {
-    @include colFlex(flex-start, flex-start, pxIntoUnit(14));
+    @include colFlex(flex-start, flex-start, pxIntoUnit(25));
     
     padding-left: pxIntoUnit(50);
     list-style: none;
@@ -39,6 +40,7 @@
         @include animationSlideInBlur;
         @include animationDelayOnChildren(3, 1, 0.5);
 
+        line-height: 1.5;
         transform: translateX(-500px);
         opacity: 0;
         color: var(--main-text);

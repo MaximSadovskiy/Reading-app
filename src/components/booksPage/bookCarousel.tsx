@@ -1,26 +1,25 @@
 'use client';
 
-import { CarouselBooks } from "@/booksStorage/usage/books";
-import BookCard from "../client/SingleBookCard";
-import SlideBtn from "../client/SlideBtn";
+import BookCard from "./SingleBookCard";
+import SlideBtn from "./SlideBtn";
 import styles from '@/styles/modules/booksPage/bookCarousel.module.scss';
 // animation
 import { useAnimate, useMotionValue, useMotionValueEvent, m, LazyMotion, domAnimation } from "framer-motion";
 import { getScrollDistanceOnBreakpoint, getCurrentVisibleDistance, getMaxScrollDistance, getPerspectiveOriginCenter } from "@/utils/carouselUtils";
 import { useState, useRef, useEffect } from "react";
-
+// type ob Book
+import type { CarouselBooks } from "@/server_actions/books_actions";
 
 // types
-type Title = 'Популярные книги' | 'Новое';
 interface CarouselProps {
-    title: Title;
+    title: string;
     books: CarouselBooks;
+    genreDescription: string;
 }
 
 // server component
-const BookCarousel = ({ title, books }: CarouselProps) => {
+const BookCarousel = ({ title, books, genreDescription }: CarouselProps) => {
 
-    
     /* Perspective for animations */
     const perspectiveOriginValue = useMotionValue<string>('150px');
 
@@ -168,16 +167,20 @@ const BookCarousel = ({ title, books }: CarouselProps) => {
 
 
     return (
-        <section className={styles.popularSection}>
-            <h2 className={styles.popularTitle}>{title}</h2>
-
-            {/* prev slide button controller */}
-            <SlideBtn direction="left" handleClick={handlePrevClick} isDisabled={isPrevBtnDisabled} />
-
+        <section className={styles.carouselSection}>
+            <h2 className={styles.carouselTitle}>{title}</h2>
+            <p className={styles.carouselGenreDescription}>{genreDescription}</p>
+            {/* Buttons */}
+            <div className={styles.carouselBtnContainer}>
+                    {/* prev slide button controller */}
+                    <SlideBtn direction="left" handleClick={handlePrevClick} isDisabled={isPrevBtnDisabled} />
+                    {/* next slide button controller */}
+                    <SlideBtn direction="right" handleClick={handleNextClick} isDisabled={isNextBtnDisabled} />
+                </div>
             {/* main animated list */}
-            <div className={styles.popularContainer}>
+            <div className={styles.carouselContainer}>
                 <LazyMotion features={domAnimation}>
-                    <m.ul className={styles.popularList}
+                    <m.ul className={styles.carouselList}
 
                         ref={scope}
                         style={{
@@ -190,8 +193,6 @@ const BookCarousel = ({ title, books }: CarouselProps) => {
                 </LazyMotion>
             </div>
 
-            {/* next slide button controller */}
-            <SlideBtn direction="right" handleClick={handleNextClick} isDisabled={isNextBtnDisabled} />
 
         </section>
     )
