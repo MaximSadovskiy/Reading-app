@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { booksInstance as books } from '@/booksStorage/usage/books';
-import type { BooksForSearch } from '@/booksStorage/usage/books';
+import { searchBooksByTitle, searchBooksByAuthor } from '@/lib/db_helpers_BOOKS';
+import { getAuthorDisplayName } from '@/utils/getAuthorDisplayName';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,42 +12,39 @@ export async function GET(request: NextRequest) {
         // working on query
         const mode = searchParams.get('mode') as 'title' | 'author';
         const query = searchParams.get('query')?.trim().toLowerCase() as string;
-
-        // formatting data for response
-        const initBooks = books.retrieveBooksWithoutFiles();
-        let responseBooks: BooksForSearch = [];
-
-        let filteredBooks = [];
-        // title search
+        
         if (mode === 'title') {
-            filteredBooks = initBooks.filter(book => {
-                const lowercasedBookTitle = book.title.toLowerCase();
-
-                return lowercasedBookTitle.includes(query);
-            });
-        }
-
-        // author search
-        else {
-            filteredBooks = initBooks.filter(book => {
-                const lowercasedAuthorName = book.authorForSearch;
-
-                return lowercasedAuthorName.includes(query);
-            });
-        }
-
-        responseBooks = filteredBooks.map(book => {
-            const { id, title, author, rating } = book;
-
-            return {
-                id,
-                title,
-                author,
-                rating
+            const booksByTitle = await searchBooksByTitle(query);
+            console.log('no books found', booksByTitle);
+            if (!booksByTitle || booksByTitle.length === 0) {
+                console.log('no books found');
+                return NextResponse.json({ error: 'no books were found' });
             }
-        });
+            const formattedBooks = booksByTitle.map(book => {
+                const { id, title, author, rating } = book;
+                const authorName = getAuthorDisplayName(author.name, false);
+                
+                return { id, title, rating, authorName };
+            });
+            
+            
 
-        return NextResponse.json(responseBooks);
+            return NextResponse.json({ success: formattedBooks });
+        }
+        else {
+            const authorOfBooks = await searchBooksByAuthor(query);
+            if (!authorOfBooks) {
+                return NextResponse.json({ error: 'no books were found' });
+            }
+            const formattedBooks = authorOfBooks.books.map(book => {
+                const { id, title, rating } = book;
+                const authorName = getAuthorDisplayName(authorOfBooks.name, false)
+                
+                return { id, title, rating, authorName };
+            });
+
+            return NextResponse.json({ success: formattedBooks });
+        }
     } catch (err) {
 
     }

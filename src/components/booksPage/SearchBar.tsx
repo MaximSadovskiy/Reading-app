@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect, SetStateAction, Suspense } from "react";
 import useModal from "@/hooks/useModal";
 import debounce from "@/utils/debounceDecorator";
-import { BooksForSearch } from "@/booksStorage/usage/storage";
 import styles from '@/styles/modules/booksPage/searchBar.module.scss';
 import Backdrop from "@/components/shared/Backdrop";
 import Image from "next/image";
@@ -11,14 +10,23 @@ import Link from "next/link";
 import { ArrowSvg, SearchSvg } from "@/components/shared/Svg";
 // анимации
 import { m, LazyMotion, domAnimation, AnimatePresence } from "framer-motion";
-import { listVariants, itemVariants } from "@/animation/variants/themeToggler/themeTogglerVariants";
+import { listVariants, itemVariants } from "@/animation/variants/popupLists/popupListClipped";
 import getModalBlurVariants from "@/animation/variants/modalBlurVariants";
 import upDownVariants from "@/animation/variants/upDownVariants";
 // modal
-import closeIfOutsideClick from "@/utils/clickOutsideCloseFunction";
+import { closeIfOutsideClick } from "@/utils/clickOutsideCloseFunction";
 
 
 const baseApiUrl = 'http://localhost:3000/api/books/search';
+
+type BooksForSearch = {
+    id: number;
+    title: string;
+    authorName: string;
+    rating: number;
+}[];
+
+type SearchResult = { error: string } | { success: BooksForSearch } | undefined;
 
 // WRAPPER
 
@@ -126,18 +134,21 @@ const SearchModal = ({ isModalOpen, closeModal }: SearchModalProps) => {
                             signal,
                             // caching behaviour
                             next: {
-                                revalidate: 0
+                                // 1 hour
+                                revalidate: 3600,
                             },
-                            cache: 'no-store'
                         });
 
                         // RESULT
-                        const searchedBooks: BooksForSearch = await response.json();
+                        const searchResultObject: SearchResult = await response.json();
+                        if (!searchResultObject || 'error' in searchResultObject) {
+                            setIsLoading(false);
+                            setIsNoResults(true);
+                            return;
+                        }
 
-                        setResults(searchedBooks);
+                        setResults(searchResultObject.success);
                         setIsLoading(false);
-                        if (searchedBooks.length === 0) setIsNoResults(true);
-
                     } catch (err) {
 
                     }
@@ -246,7 +257,7 @@ const SearchResults = (props: SearchResultsProps) => {
     const renderedList = searchResults.map(searchResult => (
         <li key={searchResult.id} className={styles.resultsItem}>
             <Link href={`/books/${searchResult.id}`} className={styles.resultsWrapperUnderP}>
-                <p className={styles.resultsAuthor}>{searchResult.author}</p>
+                <p className={styles.resultsAuthor}>{searchResult.authorName}</p>
                 <p className={styles.resultsDash}>&#8212;</p>
                 <p className={styles.resultsTitle}>"{searchResult.title}"</p>
                 <p className={styles.resultsRating}>{searchResult.rating}</p>
