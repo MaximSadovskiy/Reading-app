@@ -11,11 +11,17 @@ import {
 import { useState, useRef, useEffect, forwardRef, useCallback } from "react";
 import { closeIfOutsideClick } from "@/utils/clickOutsideCloseFunction";
 import { logOutAction } from "@/server_actions/general_actions";
+import { useCurrentUserClient } from "@/hooks/useCurrentUser";
+
 
 const AccountEnter = () => {
 	const [isListOpen, setIsListOpen] = useState(false);
 	const buttonRef = useRef<HTMLButtonElement>(null);
 	const listRef = useRef<HTMLUListElement>(null);
+
+	// current session
+	const user = useCurrentUserClient();
+	const isAuthorized = user != null;
 
 	useEffect(() => {
 		const handleOutsideClick = (e: MouseEvent) => {
@@ -67,6 +73,7 @@ const AccountEnter = () => {
 							<PopupList
 								ref={listRef}
 								closePopupList={closePopupList}
+								isAuthorized={isAuthorized}
 							/>
 						)}
 					</AnimatePresence>
@@ -79,13 +86,14 @@ const AccountEnter = () => {
 export default AccountEnter;
 
 type PopupProps = {
+	isAuthorized: boolean;
 	closePopupList: () => void;
 };
 
 const PopupList = forwardRef(
-	({ closePopupList }: PopupProps, ref: React.Ref<HTMLUListElement>) => {
+	({ isAuthorized, closePopupList }: PopupProps, ref: React.Ref<HTMLUListElement>) => {
 		const handleLogoutClick = async () => {
-			await logOutAction();
+			await logOutAction('/');
 			closePopupList();
 		};
 
@@ -107,55 +115,63 @@ const PopupList = forwardRef(
 					role="listbox"
 					ref={ref}
 				>
-					<m.li
-						className={styles.popupListItem}
-						role="option"
-						variants={itemVariants}
-					>
-						<Link
-							onClick={handleUrlTransition}
-							href="/auth/register"
-							data-first
-						>
-							Регистрация
-						</Link>
-					</m.li>
-					<m.li
-						className={styles.popupListItem}
-						role="option"
-						variants={itemVariants}
-					>
-						<Link onClick={handleUrlTransition} href="/auth/login">
-							Войти
-						</Link>
-					</m.li>
-					<m.li
-						className={styles.popupListItem}
-						role="option"
-						variants={itemVariants}
-					>
-						<Link onClick={handleUrlTransition} href="/my_library">
-							Моя библиотека
-						</Link>
-					</m.li>
-					<m.li
-						className={styles.popupListItem}
-						role="option"
-						variants={itemVariants}
-					>
-						<Link onClick={handleUrlTransition} href="/read">
-							Читальный зал
-						</Link>
-					</m.li>
-					{/* Sign out action */}
-					<m.li
-						className={styles.popupListItem}
-						role="option"
-						variants={itemVariants}
-						data-last
-					>
-						<button onClick={handleLogoutClick}>Выйти</button>
-					</m.li>
+					{isAuthorized == false && (
+						<>
+							<m.li
+								className={styles.popupListItem}
+								role="option"
+								variants={itemVariants}
+							>
+								<Link
+									onClick={handleUrlTransition}
+									href="/auth/register"
+									data-first
+								>
+									Регистрация
+								</Link>
+							</m.li>
+							<m.li
+								className={styles.popupListItem}
+								role="option"
+								variants={itemVariants}
+							>
+								<Link onClick={handleUrlTransition} href="/auth/login">
+									Войти
+								</Link>
+							</m.li>
+						</>
+					)}
+					{isAuthorized == true && (
+						<>
+							<m.li
+								className={styles.popupListItem}
+								role="option"
+								variants={itemVariants}
+							>
+								<Link onClick={handleUrlTransition} href="/my_library">
+									Моя библиотека
+								</Link>
+							</m.li>
+							<m.li
+								className={styles.popupListItem}
+								role="option"
+								variants={itemVariants}
+							>
+								<Link onClick={handleUrlTransition} href="/read">
+									Читальный зал
+								</Link>
+							</m.li>
+							{/* Sign out action */}
+							<m.li
+								className={styles.popupListItem}
+								role="option"
+								variants={itemVariants}
+								data-last
+							>
+								<button onClick={handleLogoutClick}>Выйти</button>
+							</m.li>
+						</>
+					)}
 				</m.ul>
 				<p id="account-info" className="sr-only">
 					Выбор действия связанного с аккаунтом

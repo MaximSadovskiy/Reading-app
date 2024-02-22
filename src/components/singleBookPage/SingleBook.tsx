@@ -3,12 +3,17 @@ import { getAuthorDisplayName } from "@/utils/textFormat/getAuthorDisplayName";
 import { dotsToParagraphs } from "@/utils/textFormat/dotsToParagraphs";
 import type { ReturnGetBookByIdType } from "@/lib/db_helpers_BOOKS";
 import { Poll } from "./client/Poll";
+import { useCurrentUserClient } from "@/hooks/useCurrentUser";
+
+
 
 type SingleBookProps = {
     book: NonNullable<ReturnGetBookByIdType>;
+    user: ReturnType<typeof useCurrentUserClient>;
+    ratingScore: number | null;
 }
 
-export const SingleBookSection = ({ book }: SingleBookProps) => {
+export const SingleBookSection = ({ book, user, ratingScore }: SingleBookProps) => {
 
     const { id, title, author, year, genres, description, quotes, rating } = book;
     const authorName = author.name;
@@ -53,8 +58,11 @@ export const SingleBookSection = ({ book }: SingleBookProps) => {
             </div>
             <div className={styles.rating}>
                 <h3>Рейтинг книги: {rating}</h3>
-                <p>Оценить : </p>
-                <Poll bookId={id} />
+                <Poll 
+                    bookId={id} 
+                    user={user}
+                    ratingScore={ratingScore}  
+                />
             </div>
         </section>
     )

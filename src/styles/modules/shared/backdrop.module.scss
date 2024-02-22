@@ -8,5 +8,5 @@
     right: 0;
     background-color: hsla(0, 0%, 0%, 0.733);
     backdrop-filter: blur(3.5px);
-    z-index: 98;
+    z-index: var(--backdrop-zindex);
 }

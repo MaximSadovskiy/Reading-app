@@ -75,7 +75,7 @@
     transform: translateX(-50%);
 
     height: pxIntoUnit(240);
-    z-index: 99;
+    z-index: var(--modal-zindex);
     background-color: var(--search-modal-bg);
     padding: pxIntoUnit(15);
     border: pxIntoUnit(5) groove var(--search-modal-border);

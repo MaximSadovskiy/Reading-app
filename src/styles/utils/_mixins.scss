@@ -85,6 +85,19 @@
     }
 }
 
+// Cancel / Success Btn hover states
+@mixin successHoverBtn {
+    background-color: var(--gen-btn-bg-success);
+    color: var(--color-white);
+    border-color: var(--color-white);
+}
+
+@mixin cancelHoverBtn {
+    background-color: var(--gen-btn-bg-cancel);
+    color: var(--color-white);
+    border-color: var(--color-white);
+}
+
 // padding, margin
 @mixin padding($inline: pxIntoUnit(15), $block: pxIntoUnit(15)) {
     padding-inline: $inline;
@@ -201,6 +214,31 @@
         top: $topOuterOffsetPx;
     }
 }
+
+// Button
+@mixin defaultBtn($justify: center, $align: center, $paddingInlineNum: 20, $paddingBlockNumber: 15) {
+    @include flex($justify, $align, pxIntoUnit(12));
+    @include padding(pxIntoUnit($paddingInlineNum), pxIntoUnit($paddingBlockNumber));
+    @include colorTransformTransition();
+    @include fontDefault(22, 600);
+
+    cursor: pointer;
+    border-radius: pxIntoUnit(18);
+    background-color: var(--gen-btn-bg);
+    color: var(--gen-btn-color);
+    border: pxIntoUnit(3) solid var(--gen-btn-border);
+
+    &:hover {
+        background-color: var(--gen-btn-bg-hover);
+        border-color: var(--gen-btn-border-hover);
+        color: var(--gen-btn-color-hover);
+        transform: scale(1.1);
+    }
+
+    &:active {
+        transform: scale(0.9);
+    }
+} 
 
 /* breakpont */
 @mixin breakpointUp($minWidth) {

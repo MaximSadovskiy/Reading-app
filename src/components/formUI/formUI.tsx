@@ -298,7 +298,7 @@ const OptionInsideList = ({ value, isSelected, onClick }: OptionListProps) => {
 // Submit button
 type SubmitBtnProps = {
  	isDisabled: boolean;
-	isTwoFactor: boolean;
+	isTwoFactor?: boolean;
 }
 
 export const SubmitBtn = ({ isDisabled, isTwoFactor }: SubmitBtnProps) => {

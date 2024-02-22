@@ -65,7 +65,7 @@ model Rating {
     book        Book   @relation(fields: [bookId], references: [id])
     ratingScore Float
 
-    @@id([userId, bookId])
+    @@id(name: "ratingId", [userId, bookId])
 }
 
 // Library Added Books by User

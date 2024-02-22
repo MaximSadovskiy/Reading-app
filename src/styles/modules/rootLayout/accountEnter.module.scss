@@ -50,7 +50,7 @@ $accInnerContainerWidth: 100;
 };
 
 
-$accListWidth: 225;
+$accListWidth: 185;
 .popupList {
     @include flex(flex-start, center, pxIntoUnit(3), column);
     $leftOffset: calcXOffsetToPositionLargerElement($accListWidth, $accInnerContainerWidth);

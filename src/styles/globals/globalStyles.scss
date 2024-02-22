@@ -46,8 +46,23 @@ body {
     min-height: 100vh;
     overflow-x: hidden;
 
+    /* GENERAL */
+    // z-index
+    --modal-zindex: 99;
+    --backdrop-zindex: 98;
+    // link
     --link-underline: var(--color-darkbrown);
+    // button
+    --gen-btn-bg: var(--color-light-bisque);
+    --gen-btn-bg-hover: var(--color-orange);
+    --gen-btn-border: var(--color-lightbrown);
+    --gen-btn-color: var(--color-lightbrown);
+    --gen-btn-bg-cancel: var(--color-red);
+    --gen-btn-bg-success: var(--color-green);
+    
 
+
+    /* SPECIFIC */
     // header
     --header-height: 125px;
     --header-bg: var(--color-darkbrown);
@@ -211,7 +226,17 @@ body {
 
     // darkTheme colors
     &[data-dark='true'] {
+        
+        /* GENERAL */
+        // link
         --link-underline: var(--color-orange);
+        // button
+        --gen-btn-bg: var(--color-lightbrown);
+        --gen-btn-bg-hover: var(--color-lightbrown-hover);
+        --gen-btn-border: var(--color-white);
+        --gen-btn-border-hover: var(--color-orange);
+        --gen-btn-color: var(--color-white);
+        --gen-btn-color-hover: var(--color-orange);
 
         // rootPage
         --header-border: var(--color-orange);

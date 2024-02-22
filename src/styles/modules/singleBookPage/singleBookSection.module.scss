@@ -13,7 +13,8 @@ $spacingSmall: 15;
     width: clamp(pxIntoUnit(200), 70vw, pxIntoUnit(1000));
     border-inline: pxIntoUnit(3) solid var(--book-section-border);
     box-shadow: 0 0 5px 2px var(--book-section-shadow);
-    min-height: calc(100vh - var(--header-height) + 40vh);
+    min-height: calc(100vh - var(--header-height) + pxIntoUnit(500));
+    padding-bottom: pxIntoUnit(200);
 }
 
 // Title, Author, year
@@ -121,9 +122,5 @@ $spacingSmall: 15;
         align-self: center;
         color: var(--title-text);
         margin-bottom: pxIntoUnit(10);
-    }
-
-    & > p {
-        @include fontDefault(24);
     }
 }

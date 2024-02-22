@@ -3,7 +3,7 @@
  * They do not require authentication
  * @type {string[]}
  */
-export const publicRoutes = ['/', '/books', '/about', '/auth/new-verification'];
+export const publicRoutes = ['/', '/books', '/books/:id', '/about', '/auth/new-verification'];
 
 
 /**
@@ -24,4 +24,4 @@ export const apiAuthPrefix = '/api/auth';
  * @type {string}
  */
 
-export const DEFAULT_LOGIN_REDIRECT = '/my_library';
+export const DEFAULT_LOGIN_REDIRECT = '/';

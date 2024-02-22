@@ -16,6 +16,8 @@ import { sendVerificationEmail,
     sendTwoFactorTokenEmail 
 } from '@/lib/mail';
 import { ErrorMessages, SuccessMessages, LoginSuccessTypes } from '@/interfaces/formMessages';
+import { revalidatePath } from 'next/cache';
+import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 
 
 // REGISTER
@@ -168,19 +170,14 @@ export const loginAction = async (data: z.infer<typeof LoginSchema>) => {
 
     try {
 
+        // COMPLETE SUCCESS ON LOGING IN USER
         await signIn('credentials', {
             username,
             email,
             password,
             confirmPassword,
-            redirect: false,
+            redirectTo: DEFAULT_LOGIN_REDIRECT,
         });
-
-        // COMPLETE SUCCESS ON LOGING IN USER
-        return { success: {
-            type: LoginSuccessTypes.LOGIN_SUCCESS,
-            message: SuccessMessages.LOGIN_SUCCESS,
-        } };
     } catch (error) {
 
         if (error instanceof AuthError) {
