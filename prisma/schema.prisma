@@ -27,31 +27,56 @@ model User {
     accounts              Account[]
     isTwoFactorEnabled    Boolean                @default(false)
     twoFactorConfirmation TwoFactorConfirmation?
+    // книги оцененные пользователем (1 time action)
+    ratedBooks            Rating[]
+    // книги добавленные пользователем в библиотеку
+    libraryBooks          LibraryBook[]
 
     @@map("users")
 }
 
 model Book {
-    id             Int      @id @default(autoincrement())
-    title          String
-    author         Author   @relation(fields: [authorId], references: [id])
-    authorId       Int      
-    genres         String[]
-    year           String
-    description    String
-    quotes         String[]
-    rating         Float
+    id          Int           @id @default(autoincrement())
+    title       String
+    author      Author        @relation(fields: [authorId], references: [id])
+    authorId    Int
+    genres      String[]
+    year        String
+    description String
+    quotes      String[]
+    rating      Float         @default(7.5)
     // все оценки данные пользователями
-    ratingMarks    Float[]
-    // была ли книга оценена пользователем (1 time action)
-    hasRatedByUser Boolean  @default(false)
-    // rating marks mb
-    thumbnail      String
-    picture        String?
-    file           Bytes
+    ratingMarks Float[]
+    thumbnail   String
+    picture     String?
+    file        Bytes
+    Rating      Rating[]
+    LibraryBook LibraryBook[]
 
     @@map("books")
 }
+
+
+// Rating Books by User
+model Rating {
+    userId      String
+    user        User   @relation(fields: [userId], references: [id])
+    bookId      Int
+    book        Book   @relation(fields: [bookId], references: [id])
+    ratingScore Float
+
+    @@id([userId, bookId])
+}
+
+// Library Added Books by User
+model LibraryBook {
+    id     String @id @default(cuid())
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    bookId Int
+    book   Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
+}
+
 
 model Author {
     id      Int     @id @default(autoincrement())

@@ -82,7 +82,11 @@ body {
     --main-text-highlight: var(--color-lightbrown);
     --main-text-highlight-logo: var(--color-darkbrown);
     --main-link: var(--color-darkbrown);
+
+    // listmarker
     --main-listmarker: var(--color-lightbrown);
+    --main-listmarker-inner: var(--color-light-bisque);
+
     --underline: var(--color-lightbrown);
     --main-aside-border: var(--color-lightbrown);
     // бегущий текст 
@@ -202,6 +206,9 @@ body {
 
     --verification-wrapper-border: var(--color-lightbrown);
 
+    // Book Single page
+    --book-section-border: var(--color-lightbrown);
+
     // darkTheme colors
     &[data-dark='true'] {
         --link-underline: var(--color-orange);
@@ -213,7 +220,8 @@ body {
         --main-text-highlight: var(--color-orange);
         --main-text-highlight-logo: var(--color-bisque);
         --main-link: var(--color-orange);
-        --main-listmarker: var(--color-orange);
+        --main-listmarker-bg: var(--color-lightbrown);
+        --main-listmarker-border: var(--color-orange);
         --main-aside-border: var(--color-orange);
         // бегущий текст 
         --running-text1-bg: var(--color-darkbrown);
@@ -259,6 +267,20 @@ body {
         --divider-text: var(--color-bisque);
         --divider-lines-color: var(--color-orange);
         --verification-wrapper-border: var(--color-orange);
+
+        // Book Single page
+        --book-section-border: var(--color-orange);
+        --book-section-shadow: var(--color-light-bisque);
+        --title-text: var(--color-orange);
+        --author-text: var(--color-bisque);
+        --year-text: var(--color-light-bisque);
+
+        --svg-fill-passive: var(--color-lightbrown);
+        --svg-fill-active: var(--color-orange);
+        --svg-stroke-passive: var(--color-orange);
+        --svg-stroke-active: var(--color-lightbrown);
+
+        --rating-description-text: var(--color-orange);
     };
 };
 

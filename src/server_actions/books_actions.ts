@@ -2,6 +2,8 @@
 import db from "@/lib/db";
 import { PromiseValueType } from "@/interfaces/promiseValueTypeUtil";
 import { GenreLiterals } from "@/interfaces/storage/bookInterface";
+import { getUserById } from "@/lib/db_helpers";
+import { getBookById } from "@/lib/db_helpers_BOOKS";
 
 // Popular Books
 type PopularBooksReturnTypePromise = ReturnType<typeof getPopularBooksAction>;
@@ -47,4 +49,40 @@ export const getBookRecomendationsByGenre = async (genre: GenreLiterals, limit: 
 
 
     return recomendationBooks;
+};
+
+// SIGNLE BOOK page
+
+export const rateBookAction = async (ratingScore: number, userId: string, bookId: number) => {
+    const user = await getUserById(userId);
+    if (!user) {
+        return { error: 'Ошибка: пользователь не был найден, попробуйте перезайти в аккаунт' };
+    }
+    const book = await getBookById(bookId);
+    if (!book) {
+        return { error: 'Ошибка: книга не найдена, приносим свои извинения' };
+    }
+
+    // if user already rate book
+    const hasAlreadyRate = await db.rating.findFirst({
+        where: {
+            userId: user.id,
+            bookId: book.id,
+        }
+    });
+
+    if (hasAlreadyRate) {
+        return { error: 'Ошибка: вы не можете оценивать одну книгу более одного раза' }
+    }
+
+    // success case
+    await db.rating.create({
+        data: {
+            ratingScore,
+            userId: user.id,
+            bookId: book.id,
+        }
+    });
+
+    return { success: 'Спасибо, что поделились своим мнением' }
 };

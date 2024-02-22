@@ -9,7 +9,7 @@ import { getCenterOfCard, getPerspectiveOriginCenter } from "@/utils/carouselUti
 import Image from "next/image";
 // type ob Book
 import { CarouselBooks } from "@/server_actions/books_actions";
-import { getAuthorDisplayName } from "@/utils/getAuthorDisplayName";
+import { getAuthorDisplayName } from "@/utils/textFormat/getAuthorDisplayName";
 
 
 

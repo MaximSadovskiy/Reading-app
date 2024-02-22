@@ -1,0 +1,129 @@
+@use 'utils' as *;
+
+$spacingBig: 55;
+$spacingSmall: 15;
+
+.bookSection {
+    @include colFlex(center, flex-start, pxIntoUnit($spacingBig));
+    @include fontDefault(20);
+
+    padding-top: pxIntoUnit(30);
+    padding-inline: pxIntoUnit(30);
+    margin-inline: auto;
+    width: clamp(pxIntoUnit(200), 70vw, pxIntoUnit(1000));
+    border-inline: pxIntoUnit(3) solid var(--book-section-border);
+    box-shadow: 0 0 5px 2px var(--book-section-shadow);
+    min-height: calc(100vh - var(--header-height) + 40vh);
+}
+
+// Title, Author, year
+.generalInfoWrapper {
+    @include colFlex(center, center, pxIntoUnit($spacingSmall));
+    
+    // animation
+    & h2, p {
+        @include animationSlideInBlur(1.3s, linear, X, -600);
+        @include animationDelayOnChildren(3, 0, 0.45);
+
+        // init animations props
+        opacity: 0;
+        filter: blur(10px);
+        transform: translateX(-700);
+    }
+
+    & > .title {
+        @include fontMarc(55);
+        color: var(--title-text);
+    }
+
+    & > .author {
+        @include fontDefault(28, 600);
+        color: var(--author-text);
+    }
+
+    & > .year {
+        @include fontDefault(30, 600);
+        color: var(--year-text);
+    }
+}
+
+// Genres
+.genres {
+    @include colFlex(flex-start, flex-start, pxIntoUnit($spacingSmall));
+
+
+    & > .genresTitle {
+        @include fontDefault(26, 600);
+
+
+        align-self: center;
+        color: var(--title-text);
+    }
+
+    & > ul {
+        @include flex(center, center, pxIntoUnit(35));
+        flex-wrap: wrap;
+        list-style: none;
+    }
+
+    & li {
+        @include customListMarker(18);
+    }
+}
+
+
+// Description
+.description {
+    @include colFlex(flex-start, flex-start, pxIntoUnit($spacingSmall));
+
+    & > h3 {
+        @include fontHeading(3);
+        align-self: center;
+        color: var(--title-text);
+    }
+
+    & > div {
+        @include colFlex(flex-start, center, pxIntoUnit($spacingSmall));
+    }
+
+    & p {
+        line-height: 1.5;
+    }
+}
+
+
+// Quotes / Citates
+.quotes {
+    @include colFlex(flex-start, flex-start, pxIntoUnit($spacingSmall));
+
+    & > h3 {
+        @include fontHeading(3);
+        align-self: center;
+        color: var(--title-text);
+    }
+
+    & > ul {
+        @include colFlex(flex-start, center, pxIntoUnit($spacingSmall));
+        list-style: none;
+    }
+
+    & li {
+        @include fontMarc(28);
+    }
+}
+
+// rating
+.rating {
+    @include colFlex(center, flex-start, pxIntoUnit($spacingSmall));
+
+    & > h3 {
+        @include fontHeading(3);
+        align-self: center;
+        color: var(--title-text);
+        margin-bottom: pxIntoUnit(10);
+    }
+
+    & > p {
+        @include fontDefault(24);
+    }
+}

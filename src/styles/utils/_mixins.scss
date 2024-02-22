@@ -180,20 +180,25 @@
     scrollbar-color: $thumbColor $trackColor;
 }
 
-@mixin customListMarker ($widthNumber: 10, $heightNumber: 10, $colorVariableString: --main-listmarker) {
+@mixin customListMarker ($leftDistance: 35, $widthNumber: 10, $heightNumber: 10, $bgColor: --main-listmarker-bg, $borderColor: --main-listmarker-border) {
     display: list-item;
     position: relative;
 
+    // outer big circle
+    $topOuterOffsetPx: calc(50% - pxIntoUnit($heightNumber / 2));
     &::before {
+
         content: '';
         display: block;
         width: pxIntoUnit($widthNumber);
         height: pxIntoUnit($heightNumber);
         border-radius: 50%;
-        background-color: var(#{$colorVariableString});
+        background-color: var(#{$bgColor});
+        border: 2px solid var(#{$borderColor});
+
         position: absolute;
-        left: -35px;
-        top: calc(50% - (pxIntoUnit($heightNumber) / 2));
+        left: -#{pxIntoUnit($leftDistance)};
+        top: $topOuterOffsetPx;
     }
 }
 

@@ -42,22 +42,10 @@
     margin-bottom: pxIntoUnit(20);
 
     > p {
+        @include customListMarker(10);
+
         position: relative;
         padding-left: pxIntoUnit(15);
-
-        &::before {
-            @include colorTransition;
-
-            content: '';
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            left: -15px;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background-color: var(--main-listmarker);
-        }
     }
 }
 
