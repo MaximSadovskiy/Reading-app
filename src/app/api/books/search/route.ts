@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { searchBooksByTitle, searchBooksByAuthor } from '@/lib/db_helpers_BOOKS';
-import { getAuthorDisplayName } from '@/utils/getAuthorDisplayName';
+import { getAuthorDisplayName } from '@/utils/textFormat/getAuthorDisplayName';
 
 export const dynamic = 'force-dynamic';
 

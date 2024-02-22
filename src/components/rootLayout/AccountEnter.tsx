@@ -8,8 +8,9 @@ import {
 	listVariants,
 	itemVariants,
 } from "@/animation/variants/popupLists/popupListClipped";
-import { useState, useRef, useEffect, forwardRef } from "react";
+import { useState, useRef, useEffect, forwardRef, useCallback } from "react";
 import { closeIfOutsideClick } from "@/utils/clickOutsideCloseFunction";
+import { logOutAction } from "@/server_actions/general_actions";
 
 const AccountEnter = () => {
 	const [isListOpen, setIsListOpen] = useState(false);
@@ -36,6 +37,12 @@ const AccountEnter = () => {
 		setIsListOpen(!isListOpen);
 	};
 
+	const closePopupList = useCallback(() => {
+		if (isListOpen == true) {
+			setIsListOpen(false);
+		}
+	}, [isListOpen]);
+
 	return (
 		<div aria-labelledby="account-label" className={styles.outerContainer}>
 			<div className={styles.innerContainer}>
@@ -43,7 +50,7 @@ const AccountEnter = () => {
 					className={styles.openBtn}
 					onClick={listOpenHandler}
 					data-open={isListOpen}
-                    ref={buttonRef}
+					ref={buttonRef}
 				>
 					<img
 						src="/account-enter.svg"
@@ -56,7 +63,12 @@ const AccountEnter = () => {
 				</button>
 				<LazyMotion features={domAnimation}>
 					<AnimatePresence>
-						{isListOpen && <PopupList ref={listRef} />}
+						{isListOpen && (
+							<PopupList
+								ref={listRef}
+								closePopupList={closePopupList}
+							/>
+						)}
 					</AnimatePresence>
 				</LazyMotion>
 			</div>
@@ -66,64 +78,89 @@ const AccountEnter = () => {
 
 export default AccountEnter;
 
-const PopupList = forwardRef((props, ref: React.Ref<HTMLUListElement>) => {
-	return (
-		<>
-			<m.ul
-				className={styles.popupList}
-				variants={listVariants}
-				exit="exit"
-				initial="initial"
-				animate="animate"
-				id="open-list"
-				aria-live="polite"
-				aria-labelledby="account-info"
-				role="listbox"
-				ref={ref}
-			>
-				<m.li
-					className={styles.popupListItem}
-					role="option"
-					variants={itemVariants}
+type PopupProps = {
+	closePopupList: () => void;
+};
+
+const PopupList = forwardRef(
+	({ closePopupList }: PopupProps, ref: React.Ref<HTMLUListElement>) => {
+		const handleLogoutClick = async () => {
+			await logOutAction();
+			closePopupList();
+		};
+
+		const handleUrlTransition = () => {
+			closePopupList();
+		};
+
+		return (
+			<>
+				<m.ul
+					className={styles.popupList}
+					variants={listVariants}
+					exit="exit"
+					initial="initial"
+					animate="animate"
+					id="open-list"
+					aria-live="polite"
+					aria-labelledby="account-info"
+					role="listbox"
+					ref={ref}
 				>
-					<Link href="/auth/register" data-first>
-						Регистрация
-					</Link>
-				</m.li>
-				<m.li
-					className={styles.popupListItem}
-					role="option"
-					variants={itemVariants}
-				>
-					<Link href="/auth/login">Войти</Link>
-				</m.li>
-				<m.li
-					className={styles.popupListItem}
-					role="option"
-					variants={itemVariants}
-				>
-					<Link href="/my-library">Моя библиотека</Link>
-				</m.li>
-				<m.li
-					className={styles.popupListItem}
-					role="option"
-					variants={itemVariants}
-				>
-					<Link href="/read">Читальный зал</Link>
-				</m.li>
-				{/* Sign out action */}
-				<m.li
-					className={styles.popupListItem}
-					role="option"
-					variants={itemVariants}
-					data-last
-				>
-					<button>Выйти</button>
-				</m.li>
-			</m.ul>
-			<p id="account-info" className="sr-only">
-				Выбор действия связанного с аккаунтом
-			</p>
-		</>
-	);
-});
+					<m.li
+						className={styles.popupListItem}
+						role="option"
+						variants={itemVariants}
+					>
+						<Link
+							onClick={handleUrlTransition}
+							href="/auth/register"
+							data-first
+						>
+							Регистрация
+						</Link>
+					</m.li>
+					<m.li
+						className={styles.popupListItem}
+						role="option"
+						variants={itemVariants}
+					>
+						<Link onClick={handleUrlTransition} href="/auth/login">
+							Войти
+						</Link>
+					</m.li>
+					<m.li
+						className={styles.popupListItem}
+						role="option"
+						variants={itemVariants}
+					>
+						<Link onClick={handleUrlTransition} href="/my_library">
+							Моя библиотека
+						</Link>
+					</m.li>
+					<m.li
+						className={styles.popupListItem}
+						role="option"
+						variants={itemVariants}
+					>
+						<Link onClick={handleUrlTransition} href="/read">
+							Читальный зал
+						</Link>
+					</m.li>
+					{/* Sign out action */}
+					<m.li
+						className={styles.popupListItem}
+						role="option"
+						variants={itemVariants}
+						data-last
+					>
+						<button onClick={handleLogoutClick}>Выйти</button>
+					</m.li>
+				</m.ul>
+				<p id="account-info" className="sr-only">
+					Выбор действия связанного с аккаунтом
+				</p>
+			</>
+		);
+	}
+);
