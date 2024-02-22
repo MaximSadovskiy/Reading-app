@@ -2,7 +2,7 @@ import type { GenreLiterals } from "@/interfaces/storage/bookInterface";
 import { GenreValues } from "@/interfaces/storage/bookInterface";
 import { getUserById } from "./db_helpers";
 import db from "./db";
-
+import type { PromiseValueType } from "@/interfaces/promiseValueTypeUtil";
 
 // Favourite genres
 export const getFavouriteGenres = async (userId: string): Promise<GenreLiterals[] | null> => {
@@ -86,10 +86,12 @@ export const searchBooksByAuthor =  async (query: string) => {
 };
 
 // SINGLE BOOK PAGE
-export const getBookById = async (id: string) => {
-    const numberId = parseInt(id);
+type ReturnGetBookByIdPromise = ReturnType<typeof getBookById>;
+export type ReturnGetBookByIdType = PromiseValueType<ReturnGetBookByIdPromise>;
+
+export const getBookById = async (id: number) => {
     const book = await db.book.findUnique({
-        where: { id: numberId },
+        where: { id },
         include: {
             author: {
                 select: {
@@ -101,10 +103,5 @@ export const getBookById = async (id: string) => {
 
     if (!book) return null;
 
-    const formattedBook = {
-        ...book,
-        authorName: book?.author.name,
-    }; 
-
-    return formattedBook;
-};
+    return book;
+}; 
