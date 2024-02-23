@@ -36,26 +36,23 @@ model User {
 }
 
 model Book {
-    id          Int           @id @default(autoincrement())
-    title       String
-    author      Author        @relation(fields: [authorId], references: [id])
-    authorId    Int
-    genres      String[]
-    year        String
-    description String
-    quotes      String[]
-    rating      Float         @default(7.5)
-    // все оценки данные пользователями
-    ratingMarks Float[]
-    thumbnail   String
-    picture     String?
-    file        Bytes
-    Rating      Rating[]
-    LibraryBook LibraryBook[]
+    id           Int           @id @default(autoincrement())
+    title        String
+    author       Author        @relation(fields: [authorId], references: [id])
+    authorId     Int
+    genres       String[]
+    year         String
+    description  String
+    quotes       String[]
+    rating       Float         @default(7.5)
+    thumbnail    String
+    picture      String?
+    file         Bytes
+    ratingScores Rating[]
+    LibraryBook  LibraryBook[]
 
     @@map("books")
 }
-
 
 // Rating Books by User
 model Rating {
@@ -76,7 +73,6 @@ model LibraryBook {
     bookId Int
     book   Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
 }
-
 
 model Author {
     id      Int     @id @default(autoincrement())

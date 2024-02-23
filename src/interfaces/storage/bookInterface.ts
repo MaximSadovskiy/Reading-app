@@ -4,8 +4,9 @@ export interface BookInterface {
     genres: GenreLiterals[];
     description: string;
     quotes: string[]; 
-    rating: number;
-    ratingMarks: number[];
+    authorName?: string;
+    rating?: number;
+    ratingMarks?: number[];
     // url для карточки в контейнере
     thumbnail: string;
     // url для страницы этой книги

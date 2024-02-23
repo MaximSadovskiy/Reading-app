@@ -170,6 +170,8 @@ export const Poll = ({ bookId, user, ratingScore }: PollProps) => {
 			setIsModalOpen(false);
 		}
 	};
+
+	console.log(user != null);
 	// Click handler when user Rates book
 	const handleRateClick = async (itemIndex: number) => {
 		// if no user authorized --> open modal
@@ -244,7 +246,6 @@ export const Poll = ({ bookId, user, ratingScore }: PollProps) => {
 				theme: "colored",
 			});
 		} else {
-			console.log('unrate toastify');
 			toast(result.success, {
 				type: "success",
 				theme: "colored",

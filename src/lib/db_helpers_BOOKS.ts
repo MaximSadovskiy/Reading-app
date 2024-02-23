@@ -105,3 +105,43 @@ export const getBookById = async (id: number) => {
 
     return book;
 }; 
+
+
+// Update Rating ob book
+export const updateBookRating = async (bookId: number) => {
+    const book = await db.book.findUnique({
+        where: { id: bookId },
+        include: {
+            ratingScores: true,
+        }
+    })
+    if (!book) {
+        return { error: 'no book found' };
+    }
+
+    // all records (separate Rating tables)
+    const allRatingScoresOfBook = book.ratingScores;
+
+    // counting sumValue of all scores
+    const sumValue = allRatingScoresOfBook.reduce<number>((acc, curr) => {
+        return acc + curr.ratingScore;
+    }, 0);
+
+    // getting medium value for rating
+    let newRatingScoreValue = parseFloat((sumValue / allRatingScoresOfBook.length).toFixed(1));
+
+    if (!newRatingScoreValue || typeof newRatingScoreValue !== 'number') {
+        newRatingScoreValue = 7.5;
+    }
+
+    // update Medium Rating value
+    await db.book.update({
+        where: { id: book.id },
+        data: {
+            // 7.5 as a default value
+            rating: newRatingScoreValue,
+        }
+    });
+
+    return { success: 'value updated successfully' }
+};

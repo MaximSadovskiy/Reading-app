@@ -3,7 +3,7 @@ import db from "@/lib/db";
 import { PromiseValueType } from "@/interfaces/promiseValueTypeUtil";
 import { GenreLiterals } from "@/interfaces/storage/bookInterface";
 import { getUserById } from "@/lib/db_helpers";
-import { getBookById } from "@/lib/db_helpers_BOOKS";
+import { getBookById, updateBookRating } from "@/lib/db_helpers_BOOKS";
 import { revalidatePath } from "next/cache";
 
 // Popular Books
@@ -79,6 +79,7 @@ export const rateBookAction = async (ratingScore: number, userId: string, bookId
         return { error: 'Ошибка: вы не можете оценивать одну книгу более одного раза' }
     }
 
+    // create new Rating record
     await db.rating.create({
         data: {
             ratingScore,
@@ -86,6 +87,9 @@ export const rateBookAction = async (ratingScore: number, userId: string, bookId
             bookId: book.id,
         }
     });
+
+    // update Global book rating
+    await updateBookRating(book.id);
 
     revalidatePath('/books');
 
@@ -113,6 +117,9 @@ export const unrateBookAction = async (userId: string, bookId: number) => {
         },
     });
 
+    // update Global book rating
+    await updateBookRating(book.id);
+
     revalidatePath('/books');
 
     return { success: 'Оценка отменена!' }
@@ -125,13 +132,11 @@ export type GetRatingScoreAction = PromiseValueType<GetRatingScorePromise>;
 export const getRatingScoreAction = async (userId: string, bookId: number) => {
     const user = await getUserById(userId);
     if (!user) {
-        console.log('no user exist');
         return { exist: false, value: null };
     }
 
     const book = await getBookById(bookId);
     if (!book) {
-        console.log('no book exits');
         return { exist: false, value: null };
     }
 
@@ -142,7 +147,6 @@ export const getRatingScoreAction = async (userId: string, bookId: number) => {
         } 
     });
     if (!rating) {
-        console.log('no rating mark');
         return { exist: false, value: null };
     }
 

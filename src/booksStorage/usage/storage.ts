@@ -14,8 +14,6 @@ export const authorsData: AuthorInterface[] = [
                     'Никто не может быть свободным, если другие не свободны.',
                     'Нельзя быть счастливым, если ты не спасаешь других.'
                 ],
-                rating: 9.1,
-                ratingMarks: [],
                 thumbnail: '/thumbs/отверженные.jpg',
                 picture: '/thumbs/отверженные.jpg',
                 // TEMP FILE PATH
@@ -32,8 +30,6 @@ export const authorsData: AuthorInterface[] = [
                     'Никто не может быть свободным, если другие не свободны.',
                     'Нельзя быть счастливым, если ты не спасаешь других.'
                 ],
-                rating: 9.3,
-                ratingMarks: [],
                 thumbnail: '/thumbs/отверженные.jpg',
                 picture: '/thumbs/отверженные.jpg',
                 // TEMP FILE PATH
@@ -49,8 +45,6 @@ export const authorsData: AuthorInterface[] = [
                     'Никто не может быть свободным, если другие не свободны.',
                     'Нельзя быть счастливым, если ты не спасаешь других.'
                 ],
-                rating: 8.5,
-                ratingMarks: [],
                 thumbnail: '/thumbs/отверженные.jpg',
                 picture: '/thumbs/отверженные.jpg',
                 // TEMP FILE PATH
@@ -66,8 +60,6 @@ export const authorsData: AuthorInterface[] = [
                     'Никто не может быть свободным, если другие не свободны.',
                     'Нельзя быть счастливым, если ты не спасаешь других.'
                 ],
-                rating: 9.3,
-                ratingMarks: [],
                 thumbnail: '/thumbs/отверженные.jpg',
                 picture: '/thumbs/отверженные.jpg',
                 // TEMP FILE PATH
@@ -83,8 +75,6 @@ export const authorsData: AuthorInterface[] = [
                     'Никто не может быть свободным, если другие не свободны.',
                     'Нельзя быть счастливым, если ты не спасаешь других.'
                 ],
-                rating: 8.5,
-                ratingMarks: [],
                 thumbnail: '/thumbs/отверженные.jpg',
                 picture: '/thumbs/отверженные.jpg',
                 // TEMP FILE PATH
@@ -100,8 +90,6 @@ export const authorsData: AuthorInterface[] = [
                     'Никто не может быть свободным, если другие не свободны.',
                     'Нельзя быть счастливым, если ты не спасаешь других.'
                 ],
-                rating: 9.3,
-                ratingMarks: [],
                 thumbnail: '/thumbs/отверженные.jpg',
                 picture: '/thumbs/отверженные.jpg',
                 // TEMP FILE PATH
@@ -117,8 +105,6 @@ export const authorsData: AuthorInterface[] = [
                     'Никто не может быть свободным, если другие не свободны.',
                     'Нельзя быть счастливым, если ты не спасаешь других.'
                 ],
-                rating: 8.5,
-                ratingMarks: [],
                 thumbnail: '/thumbs/отверженные.jpg',
                 picture: '/thumbs/отверженные.jpg',
                 // TEMP FILE PATH
@@ -139,8 +125,6 @@ export const authorsData: AuthorInterface[] = [
                     'Быть великим - значит, знать, что ты ничего не знаешь.',
                     'Жизнь - это как путешествие, которое продолжается, и ты не знаешь, куда тебя ведут.',
                 ],
-                rating: 7.7,
-                ratingMarks: [],
                 thumbnail: '/thumbs/человекКоторыйСмеётся.jpg',
                 picture: '/thumbs/отверженные.jpg',
                 // TEMP FILE PATH
@@ -161,8 +145,6 @@ export const authorsData: AuthorInterface[] = [
                     "Я не хочу, чтобы они были счастливы, я хочу, чтобы они были мои.",
                     "Я не могу быть без тебя, ты мне нужна, как света, чтобы видеть.",
                 ],
-                rating: 9.1,
-                ratingMarks: [],
                 thumbnail: '/thumbs/человекКоторыйСмеётся.jpg',
                 picture: '/thumbs/отверженные.jpg',
                 // TEMP FILE PATH
