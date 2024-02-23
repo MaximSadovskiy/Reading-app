@@ -26,10 +26,6 @@ async function main() {
             }
         });
     }
-
-    // Initial rating scores (7.5); 
-    // problem with UserId - generate mb
-    /* const allBooksCreated = await prisma.book.findMany(); */
 }
 
 // execution

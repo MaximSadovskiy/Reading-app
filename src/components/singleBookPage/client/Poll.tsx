@@ -170,8 +170,7 @@ export const Poll = ({ bookId, user, ratingScore }: PollProps) => {
 			setIsModalOpen(false);
 		}
 	};
-
-	console.log(user != null);
+	
 	// Click handler when user Rates book
 	const handleRateClick = async (itemIndex: number) => {
 		// if no user authorized --> open modal

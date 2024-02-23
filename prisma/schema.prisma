@@ -57,9 +57,9 @@ model Book {
 // Rating Books by User
 model Rating {
     userId      String
-    user        User   @relation(fields: [userId], references: [id])
+    user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
     bookId      Int
-    book        Book   @relation(fields: [bookId], references: [id])
+    book        Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
     ratingScore Float
 
     @@id(name: "ratingId", [userId, bookId])
@@ -67,11 +67,12 @@ model Rating {
 
 // Library Added Books by User
 model LibraryBook {
-    id     String @id @default(cuid())
     userId String
     user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
     bookId Int
     book   Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
+    
+    @@id(name: "libraryBookId", [userId, bookId])
 }
 
 model Author {

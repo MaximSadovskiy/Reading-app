@@ -5,10 +5,18 @@ import { GenreLiterals } from "@/interfaces/storage/bookInterface";
 import { getUserById } from "@/lib/db_helpers";
 import { getBookById, updateBookRating } from "@/lib/db_helpers_BOOKS";
 import { revalidatePath } from "next/cache";
+import { auth } from "$/auth";
 
 // Popular Books
 type PopularBooksReturnTypePromise = ReturnType<typeof getPopularBooksAction>;
 export type CarouselBooks = PromiseValueType<PopularBooksReturnTypePromise>;
+
+// errors
+enum ErrorMessages {
+    USER_NO_FOUND = 'Ошибка: пользователь не был найден, попробуйте перезайти в аккаунт',
+    USER_UNAUTHORIZED = 'Ошибка: пользователь не авторизован, войдите в аккаунт, чтобы совершить действие',
+    BOOK_NO_FOUND = 'Ошибка: книга не найдена, приносим свои извинения'
+}
 
 export const getPopularBooksAction = async (limit: number) => {
     const books = await db.book.findMany({
@@ -58,11 +66,16 @@ export const getBookRecomendationsByGenre = async (genre: GenreLiterals, limit: 
 export const rateBookAction = async (ratingScore: number, userId: string, bookId: number) => {
     const user = await getUserById(userId);
     if (!user) {
-        return { error: 'Ошибка: пользователь не был найден, попробуйте перезайти в аккаунт' };
+        return { error: ErrorMessages['USER_NO_FOUND'] };
     }
     const book = await getBookById(bookId);
     if (!book) {
-        return { error: 'Ошибка: книга не найдена, приносим свои извинения' };
+        return { error: ErrorMessages['BOOK_NO_FOUND'] };
+    }
+    // check if Authorized (2 time for edge cases)
+    const isAuthorized = await auth();
+    if (!isAuthorized) {
+        return { error: ErrorMessages['USER_UNAUTHORIZED']}
     }
 
     // if user already rate book
@@ -100,11 +113,11 @@ export const rateBookAction = async (ratingScore: number, userId: string, bookId
 export const unrateBookAction = async (userId: string, bookId: number) => {
     const user = await getUserById(userId);
     if (!user) {
-        return { error: 'Ошибка: пользователь не был найден, попробуйте перезайти в аккаунт' };
+        return { error: ErrorMessages['USER_NO_FOUND'] };
     }
     const book = await getBookById(bookId);
     if (!book) {
-        return { error: 'Ошибка: книга не найдена, приносим свои извинения' };
+        return { error: ErrorMessages['BOOK_NO_FOUND'] };
     }
 
     // deleting rating record
@@ -151,4 +164,45 @@ export const getRatingScoreAction = async (userId: string, bookId: number) => {
     }
 
     return { exist: true, value: rating.ratingScore };
+};
+
+
+// Add to Personal Library
+export const addBookToLibraryAction = async (userId: string, bookId: number) => {
+    const user = await getUserById(userId);
+    if (!user) {
+        return { error: ErrorMessages['USER_NO_FOUND'] };
+    }
+    const book = await getBookById(bookId);
+    if (!book) {
+        return { error: ErrorMessages['BOOK_NO_FOUND'] };
+    }
+    // check if Authorized (2 time for edge cases)
+    const isAuthorized = await auth();
+    if (!isAuthorized) {
+        return { error: ErrorMessages['USER_UNAUTHORIZED']}
+    }
+
+    // if already inside user library
+    const isAlreadyInLibrary = await db.libraryBook.findUnique({
+        where: {
+            libraryBookId: {
+                userId,
+                bookId,
+            }
+        }
+    });
+
+    if (isAlreadyInLibrary) {
+        return { error: 'Книга уже есть в вашей библиотеке' }
+    }
+
+    await db.libraryBook.create({
+        data: {
+            userId,
+            bookId,
+        }
+    });
+
+    return { success: 'Книга добавлена в вашу библиотеку!' }
 };

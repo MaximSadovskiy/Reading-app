@@ -3,13 +3,14 @@ import { getAuthorDisplayName } from "@/utils/textFormat/getAuthorDisplayName";
 import { dotsToParagraphs } from "@/utils/textFormat/dotsToParagraphs";
 import type { ReturnGetBookByIdType } from "@/lib/db_helpers_BOOKS";
 import { Poll } from "./client/Poll";
-import { useCurrentUserClient } from "@/hooks/useCurrentUser";
+import type { UserType } from "@/hooks/useCurrentUser";
+import { AddToLibrary } from "./client/AddToLibrary";
 
 
 
 type SingleBookProps = {
     book: NonNullable<ReturnGetBookByIdType>;
-    user: ReturnType<typeof useCurrentUserClient>;
+    user: UserType;
     ratingScore: number | null;
 }
 
@@ -62,6 +63,10 @@ export const SingleBookSection = ({ book, user, ratingScore }: SingleBookProps) 
                     bookId={id} 
                     user={user}
                     ratingScore={ratingScore}  
+                />
+                <AddToLibrary 
+                    bookId={id} 
+                    user={user}
                 />
             </div>
         </section>
