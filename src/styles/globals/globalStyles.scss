@@ -56,10 +56,11 @@ body {
     --gen-btn-bg: var(--color-light-bisque);
     --gen-btn-bg-hover: var(--color-orange);
     --gen-btn-border: var(--color-lightbrown);
+    --gen-btn-border-hover: var(--color-lightbrown-hover);
     --gen-btn-color: var(--color-lightbrown);
+    --gen-btn-color-hover: var(--color-lightbrown-hover);
     --gen-btn-bg-cancel: var(--color-red);
     --gen-btn-bg-success: var(--color-green);
-    
 
 
     /* SPECIFIC */
@@ -99,8 +100,8 @@ body {
     --main-link: var(--color-darkbrown);
 
     // listmarker
-    --main-listmarker: var(--color-lightbrown);
-    --main-listmarker-inner: var(--color-light-bisque);
+    --main-listmarker-bg: var(--color-bisque);
+    --main-listmarker-border: var(--color-lightbrown);
 
     --underline: var(--color-lightbrown);
     --main-aside-border: var(--color-lightbrown);
@@ -223,6 +224,17 @@ body {
 
     // Book Single page
     --book-section-border: var(--color-lightbrown);
+    --svg-fill-passive: var(--color-light-bisque);
+    --svg-fill-active: var(--color-lightbrown-hover);
+    --svg-stroke-passive: var(--color-lightbrown);
+    --svg-stroke-active: var(--color-orange);
+
+    --rating-description-text: var(--color-darkbrown);
+    --library-wrapper-bg: var(--color-white);
+    --library-wrapper-text: var(--color-darkbrown);
+    --library-wrapper-border: var(--color-orange);
+    --library-svg-color-passive: var(--color-lightbrown);
+    --library-svg-color-active: var(--color-lightbrown-hover);
 
     // darkTheme colors
     &[data-dark='true'] {
@@ -309,6 +321,8 @@ body {
         --library-wrapper-bg: var(--color-white);
         --library-wrapper-text: var(--color-darkbrown);
         --library-wrapper-border: var(--color-orange);
+        --library-svg-color-passive: var(--color-white);
+        --library-svg-color-active: var(--color-orange);
     };
 };
 

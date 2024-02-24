@@ -2,6 +2,7 @@
 
 $spacingBig: 55;
 $spacingSmall: 15;
+$primaryAnimationDelay: 1.5s;
 
 .bookSection {
     @include colFlex(center, flex-start, pxIntoUnit($spacingBig));
@@ -23,13 +24,8 @@ $spacingSmall: 15;
     
     // animation
     & h2, p {
-        @include animationSlideInBlur(1.3s, linear, X, -600);
+        @include animationSlideInBlur(1.15s, 600);
         @include animationDelayOnChildren(3, 0, 0.45);
-
-        // init animations props
-        opacity: 0;
-        filter: blur(10px);
-        transform: translateX(-700);
     }
 
     & > .title {
@@ -55,7 +51,8 @@ $spacingSmall: 15;
 
     & > .genresTitle {
         @include fontDefault(26, 600);
-
+        @include animationSlideInBlur(1.15s, -500);
+        animation-delay: $primaryAnimationDelay;
 
         align-self: center;
         color: var(--title-text);
@@ -69,6 +66,8 @@ $spacingSmall: 15;
 
     & li {
         @include customListMarker(18);
+        @include animationTrippleFallFromTop(1.5s, -100);
+        @include animationDelayOnChildren(10, 1.5, 0.2);
     }
 }
 
@@ -79,12 +78,17 @@ $spacingSmall: 15;
 
     & > h3 {
         @include fontHeading(3);
+        @include animationSlideInBlur;
+        animation-delay: $primaryAnimationDelay;
+
         align-self: center;
         color: var(--title-text);
     }
 
     & > div {
         @include colFlex(flex-start, center, pxIntoUnit($spacingSmall));
+        @include animationSlideInBlur;
+        animation-delay: $primaryAnimationDelay;
     }
 
     & p {
@@ -99,6 +103,9 @@ $spacingSmall: 15;
 
     & > h3 {
         @include fontHeading(3);
+        @include animationSlideInBlur;
+        animation-delay: $primaryAnimationDelay;
+
         align-self: center;
         color: var(--title-text);
     }
@@ -110,6 +117,8 @@ $spacingSmall: 15;
 
     & li {
         @include fontMarc(28);
+        @include animationSlideInBlur;
+        @include animationDelayOnChildren(10, 3, 0.6);
     }
 }
 
@@ -120,6 +129,9 @@ $spacingSmall: 15;
 
     & > h3 {
         @include fontHeading(3);
+        @include animationSlideInBlur;
+        animation-delay: $primaryAnimationDelay;
+
         align-self: center;
         color: var(--title-text);
         margin-bottom: pxIntoUnit(10);

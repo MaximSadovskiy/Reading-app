@@ -140,7 +140,7 @@ export const unrateBookAction = async (userId: string, bookId: number) => {
 
 // Get existing rating score of book by user
 type GetRatingScorePromise = ReturnType<typeof getRatingScoreAction>;
-export type GetRatingScoreAction = PromiseValueType<GetRatingScorePromise>; 
+export type GetRatingScore = PromiseValueType<GetRatingScorePromise>; 
 
 export const getRatingScoreAction = async (userId: string, bookId: number) => {
     const user = await getUserById(userId);
@@ -153,11 +153,13 @@ export const getRatingScoreAction = async (userId: string, bookId: number) => {
         return { exist: false, value: null };
     }
 
-    const rating = await db.rating.findFirst({
+    const rating = await db.rating.findUnique({
         where: { 
-            userId: user.id,
-            bookId: book.id,
-        } 
+            ratingId: {
+                userId: user.id,
+                bookId: book.id,
+            }
+        },
     });
     if (!rating) {
         return { exist: false, value: null };
@@ -206,3 +208,63 @@ export const addBookToLibraryAction = async (userId: string, bookId: number) => 
 
     return { success: 'Книга добавлена в вашу библиотеку!' }
 };
+
+
+// delete from library
+export const deleteFromLibraryAction = async (userId: string, bookId: number) => {
+    const user = await getUserById(userId);
+    if (!user) {
+        return { error: ErrorMessages['USER_NO_FOUND'] };
+    }
+    const book = await getBookById(bookId);
+    if (!book) {
+        return { error: ErrorMessages['BOOK_NO_FOUND'] };
+    }
+    // check if Authorized (2 time for edge cases)
+    const isAuthorized = await auth();
+    if (!isAuthorized) {
+        return { error: ErrorMessages['USER_UNAUTHORIZED']}
+    }
+
+    // deleting book
+    await db.libraryBook.delete({
+        where: {
+            libraryBookId: {
+                userId,
+                bookId,
+            }
+        }
+    });
+
+    return { success: 'Книга удалена из вашей библиотеки!' }
+}
+
+// GET existing library book
+type GetLibraryBookPromise = ReturnType<typeof getLibraryBookAction>;
+export type GetLibraryBook = PromiseValueType<GetLibraryBookPromise>;
+
+export const getLibraryBookAction = async (userId: string, bookId: number) => {
+    const user = await getUserById(userId);
+    if (!user) {
+        return { exist: false };
+    }
+
+    const book = await getBookById(bookId);
+    if (!book) {
+        return { exist: false };
+    }
+
+    // find book
+    const libraryBook = await db.libraryBook.findUnique({
+        where: { libraryBookId: {
+            userId,
+            bookId,
+        }}
+    });
+
+    if (libraryBook) {
+        return { exist: true }
+    } else {
+        return { exist: false }
+    }
+};  

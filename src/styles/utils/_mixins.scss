@@ -62,10 +62,13 @@
 }
 
 // animations
-@mixin animationSlideInBlur ($duration: 1s, $timingFunction: linear, $direction: X, $translateValueNumber: -400) {
+@mixin animationSlideInBlur ($duration: 1s, $translateValueNumber: -400, $timingFunction: linear, $direction: X) {
     $translateValuePx: pxIntoUnit($translateValueNumber);
 
+    opacity: 0;
+    filter: blur(10px);
     animation: slideInWithBlur $duration $timingFunction forwards;
+
     @keyframes slideInWithBlur {
         from {
             opacity: 0;
@@ -84,6 +87,73 @@
         }   
     }
 }
+
+@mixin animationTrippleFallFromTop ($duration: 1s, $initTranslateVal: -400, $timingFunction: linear) {
+    $translateValuePx: pxIntoUnit($initTranslateVal);
+
+    opacity: 0;
+    filter: blur(10px);
+    animation: fallFromTop $duration $timingFunction forwards;
+
+    $secondUpPoint: calc($initTranslateVal * 0.3);
+    $thirdUpPoint: calc($initTranslateVal * 0.15);
+    $secondUpPointPx: pxIntoUnit($secondUpPoint);
+    $thirdUpPointPx: pxIntoUnit($thirdUpPoint);
+
+    @keyframes fallFromTop {
+        0% {
+            opacity: 0;
+            transform: translateY($translateValuePx);
+        }
+
+        // visual
+        20% {
+            opacity: 1;
+        }
+
+        25% {
+            transform: translateY(0);
+        }
+
+        // visual
+        44% {
+            filter: blur(0px);
+        }
+
+        50% {
+            transform: translateY($secondUpPointPx);
+        }
+        68% {
+            transform: translateY(0);
+        }
+        85% {
+            transform: translateY($thirdUpPointPx);
+        }
+        100% {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateY(0);
+        }
+    }
+}
+
+@mixin animationPianoBubbleUp ($duration: 1.25s, $bubbleUpValue: -100, $timingFunction: linear) {
+    $bubbleUpValuePx: pxIntoUnit($bubbleUpValue);
+    animation: pianoBubbleUp $duration $timingFunction forwards;
+
+    @keyframes pianoBubbleUp {
+        0% {
+            transform: translateY(0);
+        }
+        38% {
+            transform: translateY($bubbleUpValuePx);
+        }
+        100% {
+            transform: translateY(0);
+        }   
+    }
+}
+
 
 // Cancel / Success Btn hover states
 @mixin successHoverBtn {

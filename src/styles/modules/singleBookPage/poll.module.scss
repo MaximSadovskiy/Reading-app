@@ -25,6 +25,13 @@ $containerWidth: 590;
             display: inline-block;
             cursor: pointer;
         }
+
+        &:hover {
+            > li {
+                @include animationPianoBubbleUp(0.4s, -30);
+                @include animationDelayOnChildren(10, 0, 0.1);
+            }
+        }
     }
 
     // Svgs state

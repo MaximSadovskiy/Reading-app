@@ -49,7 +49,7 @@ model Book {
     picture      String?
     file         Bytes
     ratingScores Rating[]
-    LibraryBook  LibraryBook[]
+    libraryBooks  LibraryBook[]
 
     @@map("books")
 }

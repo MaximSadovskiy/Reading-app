@@ -23,7 +23,7 @@ $containerHeight: pxIntoUnit(100);
         column-gap: pxIntoUnit(5);
         grid-template-rows: pxIntoUnit(100);
         place-content: center;
-        place-items: center;
+        justify-content: left;
         
         line-height: 1.4;
         background-color: inherit;
@@ -31,14 +31,13 @@ $containerHeight: pxIntoUnit(100);
         
         & > p {
             text-align: left;
-            flex-grow: 1.7,
         }
 
         &:hover {
             & svg[data-added=false] {
                 animation: leftRight 0.5s ease-in-out backwards;
-                fill: var(--color-orange);
-                stroke: var(--color-orange);
+                fill: var(--library-svg-color-active);
+                stroke: var(--library-svg-color-active);
     
                 @keyframes leftRight {
                     0% {
@@ -55,10 +54,10 @@ $containerHeight: pxIntoUnit(100);
             
             & svg[data-added=true] {
                 animation: scaleUp 0.5s ease-in-out backwards;
-                fill: var(--color-orange);
-                stroke: var(--color-orange);
+                fill: var(--library-svg-color-active);
+                stroke: var(--library-svg-color-active);
     
-                @keyframes leftRight {
+                @keyframes scaleUp {
                     0% {
                         transform: scale(1);
                     }
@@ -79,7 +78,7 @@ $containerHeight: pxIntoUnit(100);
 
     > svg {
         @include transition(position, 500ms);
-        fill: var(--color-white);
-        stroke: var(--color-white);
+        fill: var(--library-svg-color-passive);
+        stroke: var(--library-svg-color-passive);
     }
 }

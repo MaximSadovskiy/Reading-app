@@ -12,9 +12,10 @@ type SingleBookProps = {
     book: NonNullable<ReturnGetBookByIdType>;
     user: UserType;
     ratingScore: number | null;
+    isLibBookExist: boolean;
 }
 
-export const SingleBookSection = ({ book, user, ratingScore }: SingleBookProps) => {
+export const SingleBookSection = ({ book, user, ratingScore, isLibBookExist }: SingleBookProps) => {
 
     const { id, title, author, year, genres, description, quotes, rating } = book;
     const authorName = author.name;
@@ -67,6 +68,7 @@ export const SingleBookSection = ({ book, user, ratingScore }: SingleBookProps) 
                 <AddToLibrary 
                     bookId={id} 
                     user={user}
+                    isLibBookExist={isLibBookExist}
                 />
             </div>
         </section>
