@@ -2,10 +2,10 @@ import styles from "@/styles/modules/singleBookPage/singleBookSection.module.scs
 import { getAuthorDisplayName } from "@/utils/textFormat/getAuthorDisplayName";
 import { dotsToParagraphs } from "@/utils/textFormat/dotsToParagraphs";
 import type { ReturnGetBookByIdType } from "@/lib/db_helpers_BOOKS";
-import { Poll } from "./client/Poll";
 import type { UserType } from "@/hooks/useCurrentUser";
+import { Poll } from "./client/Poll";
 import { AddToLibrary } from "./client/AddToLibrary";
-
+import { Comments } from "./client/Comments";
 
 
 type SingleBookProps = {
@@ -70,6 +70,7 @@ export const SingleBookSection = ({ book, user, ratingScore, isLibBookExist }: S
                     user={user}
                     isLibBookExist={isLibBookExist}
                 />
+                <Comments />
             </div>
         </section>
     )

@@ -1,0 +1,7 @@
+@use 'utils' as *;
+
+
+.commentsSection {
+    position: absolute;
+    top: pxIntoUnit(500);
+}

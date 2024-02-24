@@ -31,6 +31,8 @@ model User {
     ratedBooks            Rating[]
     // книги добавленные пользователем в библиотеку
     libraryBooks          LibraryBook[]
+    comments              Comment[]
+    likes                 Like[]
 
     @@map("users")
 }
@@ -49,7 +51,9 @@ model Book {
     picture      String?
     file         Bytes
     ratingScores Rating[]
-    libraryBooks  LibraryBook[]
+    libraryBooks LibraryBook[]
+    comments     Comment[]
+    likes        Like[]
 
     @@map("books")
 }
@@ -71,7 +75,7 @@ model LibraryBook {
     user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
     bookId Int
     book   Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
-    
+
     @@id(name: "libraryBookId", [userId, bookId])
 }
 
@@ -84,6 +88,29 @@ model Author {
     @@map("authors")
 }
 
+// Comments & Likes
+model Comment {
+    content  String
+    author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    authorId String
+    book     Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
+    bookId   Int
+    likes    Like[]
+
+    @@id(name: "commendId", [authorId, bookId])
+}
+
+model Like {
+    author   User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    authorId String
+    book     Book    @relation(fields: [bookId], references: [id], onDelete: Cascade)
+    bookId   Int
+    comment  Comment @relation(fields: [authorId, bookId], references: [authorId, bookId], onDelete: Cascade)
+
+    @@id(name: "likeId", [authorId, bookId])
+}
+
+// Authentication
 model Account {
     id                String  @id @default(cuid())
     userId            String
