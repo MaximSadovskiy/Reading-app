@@ -145,3 +145,19 @@ export const updateBookRating = async (bookId: number) => {
 
     return { success: 'value updated successfully' }
 };
+
+// COMMENTS & LIKES
+type GetBookCommentsPromise = ReturnType<typeof getCommentsOfBookById>;
+type GetBookComments = PromiseValueType<GetBookCommentsPromise>;
+export type CommentsType = NonNullable<GetBookComments>['success'];
+
+export const getCommentsOfBookById = async (bookId: number) => {
+    const comments = await db.comment.findMany({
+        where: { bookId }
+    });
+    if (!comments) {
+        return null;
+    }
+
+    return { success: comments }
+} 

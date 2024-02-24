@@ -2,6 +2,15 @@
 
 
 .commentsSection {
+    @include colFlex(center, flex-start, pxIntoUnit(20));
+
+    width: 130%;
     position: absolute;
     top: pxIntoUnit(500);
+
+    // title
+    & > h2 {
+        @include fontHeading(2);
+        color: var(--title-text);
+    }
 }

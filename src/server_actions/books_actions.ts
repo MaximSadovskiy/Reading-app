@@ -15,7 +15,7 @@ export type CarouselBooks = PromiseValueType<PopularBooksReturnTypePromise>;
 enum ErrorMessages {
     USER_NO_FOUND = 'Ошибка: пользователь не был найден, попробуйте перезайти в аккаунт',
     USER_UNAUTHORIZED = 'Ошибка: пользователь не авторизован, войдите в аккаунт, чтобы совершить действие',
-    BOOK_NO_FOUND = 'Ошибка: книга не найдена, приносим свои извинения'
+    BOOK_NO_FOUND = 'Ошибка: книга не найдена, приносим свои извинения',
 }
 
 export const getPopularBooksAction = async (limit: number) => {
@@ -179,11 +179,6 @@ export const addBookToLibraryAction = async (userId: string, bookId: number) => 
     if (!book) {
         return { error: ErrorMessages['BOOK_NO_FOUND'] };
     }
-    // check if Authorized (2 time for edge cases)
-    const isAuthorized = await auth();
-    if (!isAuthorized) {
-        return { error: ErrorMessages['USER_UNAUTHORIZED']}
-    }
 
     // if already inside user library
     const isAlreadyInLibrary = await db.libraryBook.findUnique({
@@ -219,11 +214,6 @@ export const deleteFromLibraryAction = async (userId: string, bookId: number) =>
     const book = await getBookById(bookId);
     if (!book) {
         return { error: ErrorMessages['BOOK_NO_FOUND'] };
-    }
-    // check if Authorized (2 time for edge cases)
-    const isAuthorized = await auth();
-    if (!isAuthorized) {
-        return { error: ErrorMessages['USER_UNAUTHORIZED']}
     }
 
     // deleting book
@@ -268,3 +258,49 @@ export const getLibraryBookAction = async (userId: string, bookId: number) => {
         return { exist: false }
     }
 };  
+
+
+// COMMENTS & LIKES
+export const addCommentAction = async (content: string, userId: string, bookId: number) => {
+    const user = await getUserById(userId);
+    if (!user) {
+        return { error: ErrorMessages['USER_NO_FOUND'] };
+    }
+    const book = await getBookById(bookId);
+    if (!book) {
+        return { error: ErrorMessages['BOOK_NO_FOUND'] };
+    }
+
+    await db.comment.create({
+        data: {
+            content,
+            authorId: userId,
+            bookId,
+        }
+    });
+
+    return { success: 'Комментарий добавлен!' }
+}
+
+
+export const deleteCommentAction = async (userId: string, bookId: number) => {
+    const user = await getUserById(userId);
+    if (!user) {
+        return { error: ErrorMessages['USER_NO_FOUND'] };
+    }
+    const book = await getBookById(bookId);
+    if (!book) {
+        return { error: ErrorMessages['BOOK_NO_FOUND'] };
+    }
+
+    await db.comment.delete({
+        where: {
+            commendId: {
+                authorId: userId,
+                bookId,
+            }
+        }
+    });
+
+    return { success: 'Комментарий успешно удалён!' }
+}

@@ -5,7 +5,8 @@ import type { ReturnGetBookByIdType } from "@/lib/db_helpers_BOOKS";
 import type { UserType } from "@/hooks/useCurrentUser";
 import { Poll } from "./client/Poll";
 import { AddToLibrary } from "./client/AddToLibrary";
-import { Comments } from "./client/Comments";
+import { Comments } from "./Comments";
+import type { CommentsType } from "@/lib/db_helpers_BOOKS";
 
 
 type SingleBookProps = {
@@ -13,9 +14,10 @@ type SingleBookProps = {
     user: UserType;
     ratingScore: number | null;
     isLibBookExist: boolean;
+    comments: CommentsType;
 }
 
-export const SingleBookSection = ({ book, user, ratingScore, isLibBookExist }: SingleBookProps) => {
+export const SingleBookSection = ({ book, user, ratingScore, isLibBookExist, comments }: SingleBookProps) => {
 
     const { id, title, author, year, genres, description, quotes, rating } = book;
     const authorName = author.name;
@@ -70,7 +72,10 @@ export const SingleBookSection = ({ book, user, ratingScore, isLibBookExist }: S
                     user={user}
                     isLibBookExist={isLibBookExist}
                 />
-                <Comments />
+                <Comments 
+                    commentsArray={comments}
+                    bookTitle={title}
+                />
             </div>
         </section>
     )

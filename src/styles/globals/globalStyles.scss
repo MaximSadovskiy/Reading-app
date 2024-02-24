@@ -224,6 +224,8 @@ body {
 
     // Book Single page
     --book-section-border: var(--color-lightbrown);
+    --book-section-shadow: var(--color-lightbrown-hover);
+    --title-text: var(--color-lightbrown);
     --svg-fill-passive: var(--color-light-bisque);
     --svg-fill-active: var(--color-lightbrown-hover);
     --svg-stroke-passive: var(--color-lightbrown);
@@ -235,6 +237,10 @@ body {
     --library-wrapper-border: var(--color-orange);
     --library-svg-color-passive: var(--color-lightbrown);
     --library-svg-color-active: var(--color-lightbrown-hover);
+
+    // comments
+    --comments-textarea-border: var(--color-lightbrown);
+    --comments-textarea-border-hover: var(--color-orange);
 
     // darkTheme colors
     &[data-dark='true'] {
@@ -323,6 +329,10 @@ body {
         --library-wrapper-border: var(--color-orange);
         --library-svg-color-passive: var(--color-white);
         --library-svg-color-active: var(--color-orange);
+
+        // comments
+        --comments-textarea-border: var(--color-lightbrown);
+        --comments-textarea-border-hover: var(--color-orange);
     };
 };
 
