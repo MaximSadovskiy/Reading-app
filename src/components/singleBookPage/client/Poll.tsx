@@ -11,8 +11,6 @@ import {
 	domAnimation,
 	m,
 } from "framer-motion";
-import { useCurrentUserClient } from "@/hooks/useCurrentUser";
-import Backdrop from "@/components/shared/Backdrop";
 import {
 	rateBookAction,
 	unrateBookAction,
@@ -20,7 +18,7 @@ import {
 import { toast } from "react-toastify";
 import { ConfirmModal } from "@/components/shared/ConfirmModal";
 import { useRouter } from "next/navigation";
-
+import type { UserType, UserNoNullType } from "@/hooks/useCurrentUser";
 
 type IsHoveredState = {
 	[ind: number | string]: boolean;
@@ -51,11 +49,9 @@ const emojiSrcOnRate = {
 
 interface PollProps {
 	bookId: number;
-	user: ReturnType<typeof useCurrentUserClient>;
+	user: UserType;
 	ratingScore: number | null;
 }
-
-type UserNoNullable = NonNullable<PollProps["user"]>;
 
 export const Poll = ({ bookId, user, ratingScore }: PollProps) => {
 	// if user already rates book
@@ -241,7 +237,7 @@ export const Poll = ({ bookId, user, ratingScore }: PollProps) => {
 	// cancel rating score
 	const handleUnrateBook = async () => {
 		const result = await unrateBookAction(
-			(user as UserNoNullable).id as string,
+			(user as UserNoNullType).id as string,
 			bookId
 		);
 		if (result.error) {
@@ -291,7 +287,7 @@ export const Poll = ({ bookId, user, ratingScore }: PollProps) => {
 							redirectCallback={redirectCallback}
 						/>
 					)}
-					{hasRatedByUser && (
+					{hasRatedByUser ? (
 						<m.button
 							key="canccelRateBtn"
 							className={styles.rateCancelBtn}
@@ -306,6 +302,9 @@ export const Poll = ({ bookId, user, ratingScore }: PollProps) => {
 						>
 							Отменить оценку?
 						</m.button>
+					) : (
+						// placeholder
+						<div aria-hidden className={styles.rateBtnPlaceholder}></div>
 					)}
 				</AnimatePresence>
 			</LazyMotion>

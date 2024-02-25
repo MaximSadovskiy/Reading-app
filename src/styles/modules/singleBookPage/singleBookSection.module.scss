@@ -12,9 +12,9 @@ $primaryAnimationDelay: 1.5s;
     padding-inline: pxIntoUnit(30);
     margin-inline: auto;
     width: clamp(pxIntoUnit(200), 70vw, pxIntoUnit(1000));
+    min-height: calc(150vh - var(--header-height) + pxIntoUnit(1300));
     border-inline: pxIntoUnit(3) solid var(--book-section-border);
     box-shadow: 0 0 5px 2px var(--book-section-shadow);
-    min-height: calc(150vh - var(--header-height) + pxIntoUnit(500));
     padding-bottom: pxIntoUnit(200);
 }
 

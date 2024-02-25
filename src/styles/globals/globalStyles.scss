@@ -50,6 +50,8 @@ body {
     // z-index
     --modal-zindex: 99;
     --backdrop-zindex: 98;
+    // widths
+    --singlebook-section-width: clamp(pxIntoUnit(200), 70vw, pxIntoUnit(1000));
     // link
     --link-underline: var(--color-darkbrown);
     // button

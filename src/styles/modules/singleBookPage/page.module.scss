@@ -4,7 +4,7 @@
     @include colorTransition;
     @include flex(center, flex-start);
 
-    min-height: calc(150vh - var(--header-height) + pxIntoUnit(200));
+    min-height: calc(150vh - var(--header-height) + pxIntoUnit(1300));
     background-color: var(--main-bg);
     color: var(--main-text);
 

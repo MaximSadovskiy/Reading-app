@@ -153,7 +153,7 @@ export type CommentsType = NonNullable<GetBookComments>['success'];
 
 export const getCommentsOfBookById = async (bookId: number) => {
     const comments = await db.comment.findMany({
-        where: { bookId }
+        where: { bookId },
     });
     if (!comments) {
         return null;
@@ -161,3 +161,33 @@ export const getCommentsOfBookById = async (bookId: number) => {
 
     return { success: comments }
 } 
+
+// find comment By id
+export const getCommentId = async (authorId: string, bookId: number) => {
+    const comment = await db.comment.findUnique({
+        where: { commendId: {
+            authorId,
+            bookId,
+        }},
+    });
+
+    if (!comment) return null;
+    return comment.id;
+};
+
+// is user liked this comment
+export const getIfUserLikedComment = async (authorId: string, bookId: number, commentId: string) => {
+    
+    const like = await db.like.findUnique({
+        where: {
+            likeId: {
+                authorId,
+                bookId,
+                commentId,
+            }
+        }
+    });
+    if (!like) return false;
+
+    return true;
+};

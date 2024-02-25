@@ -275,13 +275,13 @@ export const addCommentAction = async (content: string, userId: string, bookId: 
         data: {
             content,
             authorId: userId,
+            authorName: user.username,
             bookId,
         }
     });
 
     return { success: 'Комментарий добавлен!' }
 }
-
 
 export const deleteCommentAction = async (userId: string, bookId: number) => {
     const user = await getUserById(userId);

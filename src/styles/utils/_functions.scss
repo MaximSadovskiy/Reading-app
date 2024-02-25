@@ -9,7 +9,7 @@
     @return pxIntoUnit(($cardCount * $cardWidth) + ($paddingWidth * $paddingCount) + ($borderWidth * 2));
 }
 
-@function calcXOffsetToPositionLargerElement($outerElement, $innerElement) {
-    $halfSpaceDifference: ($outerElement - $innerElement) / 2;
+@function calcXOffsetToPositionLargerElement($largetElement, $smallerElement) {
+    $halfSpaceDifference: ($largetElement - $smallerElement) / 2;
     @return pxIntoUnit($halfSpaceDifference);
 }
