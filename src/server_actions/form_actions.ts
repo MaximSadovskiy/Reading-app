@@ -1,8 +1,8 @@
 'use server';
 import { z } from 'zod';
 import { RegisterSchema, LoginSchema, ResetSchema, NewPasswordSchema } from '@/schemas/zod/loginSchemas';
-import db from "@/lib/db";
-import { getPasswordResetTokenByToken, getTwoFactorConfirmationByUserID, getTwoFactorTokenByEmail, getUserByEmail, getVerificationTokenByToken } from '@/lib/db_helpers';
+import db from "@/database/db";
+import { getPasswordResetTokenByToken, getTwoFactorConfirmationByUserID, getTwoFactorTokenByEmail, getUserByEmail, getVerificationTokenByToken } from '@/database/db_helpers';
 import bcrypt from "bcryptjs";
 import { signIn, signOut } from '$/auth';
 import { AuthError } from 'next-auth';
@@ -10,11 +10,11 @@ import {
     generateVerificationToken, 
     generatePasswordResetToken, 
     generateTwoFactorToken 
-} from '@/lib/tokens';
+} from '@/database/tokens';
 import { sendVerificationEmail, 
     sendPasswordResetToken, 
     sendTwoFactorTokenEmail 
-} from '@/lib/mail';
+} from '@/database/mail';
 import { ErrorMessages, SuccessMessages, LoginSuccessTypes } from '@/interfaces/formMessages';
 import { revalidatePath } from 'next/cache';
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes';

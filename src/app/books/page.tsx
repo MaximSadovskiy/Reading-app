@@ -2,10 +2,10 @@ import styles from "@/styles/modules/booksPage/booksPage.module.scss";
 //components
 import SearchBar from "@/components/booksPage/SearchBar";
 import { Suspense, lazy } from "react";
-import { Spinner } from "@/components/shared/spinner";
+import { Spinner } from "@/components/shared/Spinner";
 import { CarouselBooks, getBookRecomendationsByGenre, getPopularBooksAction } from "@/server_actions/books_actions";
 import { useCurrentUserServer } from "@/hooks/useCurrentUser";
-import { getFavouriteGenres, getRandomGenres } from "@/lib/db_helpers_BOOKS";
+import { getFavouriteGenres, getRandomGenres } from "@/database/db_helpers_BOOKS";
 import { GenreLiterals } from "@/interfaces/storage/bookInterface";
 import Link from "next/link";
 import { genreDescriptions } from "@/booksStorage/usage/genresDescription";

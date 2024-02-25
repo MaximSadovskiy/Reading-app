@@ -1,14 +1,14 @@
-import { getBookById } from "@/lib/db_helpers_BOOKS";
+import { getBookById } from "@/database/db_helpers_BOOKS";
 import { SingleBookSection } from "@/components/singleBookPage/SingleBook";
 import styles from "@/styles/modules/singleBookPage/page.module.scss";
-import type { ReturnGetBookByIdType } from "@/lib/db_helpers_BOOKS";
-import { getCommentsOfBookById } from "@/lib/db_helpers_BOOKS";
+import type { ReturnGetBookByIdType } from "@/database/db_helpers_BOOKS";
+import { getCommentsOfBookById } from "@/database/db_helpers_BOOKS";
 import { useCurrentUserServer } from "@/hooks/useCurrentUser";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/ReactToastify.css';
 import { getRatingScoreAction, getLibraryBookAction } from "@/server_actions/books_actions";
 import type { GetRatingScore } from "@/server_actions/books_actions";
-import type { CommentsType } from "@/lib/db_helpers_BOOKS";
+import type { CommentsType } from "@/database/db_helpers_BOOKS";
 
 /* 
 export async function generateStaticParams() {

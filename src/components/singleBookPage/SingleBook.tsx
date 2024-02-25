@@ -1,12 +1,12 @@
 import styles from "@/styles/modules/singleBookPage/singleBookSection.module.scss";
 import { getAuthorDisplayName } from "@/utils/textFormat/getAuthorDisplayName";
 import { dotsToParagraphs } from "@/utils/textFormat/dotsToParagraphs";
-import type { ReturnGetBookByIdType } from "@/lib/db_helpers_BOOKS";
+import type { ReturnGetBookByIdType } from "@/database/db_helpers_BOOKS";
 import type { UserType } from "@/hooks/useCurrentUser";
 import { Poll } from "./client/Poll";
 import { AddToLibrary } from "./client/AddToLibrary";
 import { Comments } from "./Comments";
-import type { CommentsType } from "@/lib/db_helpers_BOOKS";
+import type { CommentsType } from "@/database/db_helpers_BOOKS";
 
 
 type SingleBookProps = {
@@ -75,6 +75,8 @@ export const SingleBookSection = ({ book, user, ratingScore, isLibBookExist, com
                 <Comments 
                     commentsArray={comments}
                     bookTitle={title}
+                    bookId={id}
+                    user={user}
                 />
             </div>
         </section>

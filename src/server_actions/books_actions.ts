@@ -1,9 +1,9 @@
 'use server';
-import db from "@/lib/db";
+import db from "@/database/db";
 import { PromiseValueType } from "@/interfaces/promiseValueTypeUtil";
 import { GenreLiterals } from "@/interfaces/storage/bookInterface";
-import { getUserById } from "@/lib/db_helpers";
-import { getBookById, updateBookRating } from "@/lib/db_helpers_BOOKS";
+import { getUserById } from "@/database/db_helpers";
+import { getBookById, updateBookRating } from "@/database/db_helpers_BOOKS";
 import { revalidatePath } from "next/cache";
 import { auth } from "$/auth";
 

@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { createPortal } from "react-dom";
+import { useState } from "react";
 import { StarSvg } from "@/components/shared/Svg";
 import styles from "@/styles/modules/singleBookPage/poll.module.scss";
 import debounce from "@/utils/debounceDecorator";
@@ -13,15 +12,15 @@ import {
 	m,
 } from "framer-motion";
 import { useCurrentUserClient } from "@/hooks/useCurrentUser";
-import useModal from "@/hooks/useModal";
-import getModalBlurVariants from "@/animation/variants/modalBlurVariants";
 import Backdrop from "@/components/shared/Backdrop";
-import { useRouter } from "next/navigation";
 import {
 	rateBookAction,
 	unrateBookAction,
 } from "@/server_actions/books_actions";
-import { toast, ToastContainer, Bounce } from "react-toastify";
+import { toast } from "react-toastify";
+import { ConfirmModal } from "@/components/shared/ConfirmModal";
+import { useRouter } from "next/navigation";
+
 
 type IsHoveredState = {
 	[ind: number | string]: boolean;
@@ -165,11 +164,17 @@ export const Poll = ({ bookId, user, ratingScore }: PollProps) => {
 	//RATE Book logic
 	// modal state, to adress user to login page if !authorized
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	// modal close callback
 	const closeModal = () => {
 		if (isModalOpen) {
 			setIsModalOpen(false);
 		}
 	};
+	// redirect for modal
+	const router = useRouter()
+	const redirectCallback = () => {
+		router.push("/auth/login");
+	}
 	
 	// Click handler when user Rates book
 	const handleRateClick = async (itemIndex: number) => {
@@ -279,13 +284,12 @@ export const Poll = ({ bookId, user, ratingScore }: PollProps) => {
 						/>
 					)}
 					{isModalOpen && (
-						<div key="confirmModal">
-							<ConfirmModal
-								closeCallback={closeModal}
-								modalState={isModalOpen}
-							/>
-							<Backdrop />
-						</div>
+						<ConfirmModal
+							title='Требуется авторизация, продолжить?'
+							modalState={isModalOpen}
+							closeCallback={closeModal}
+							redirectCallback={redirectCallback}
+						/>
 					)}
 					{hasRatedByUser && (
 						<m.button
@@ -365,47 +369,4 @@ const RateDescription = ({ itemIndex }: RateDescriptionProps) => {
 			<img src={rateEmojiSrc} width={70} height={70} />
 		</m.div>
 	);
-};
-
-// Modal to confirm transition to Login page
-type ConfirmModalProps = {
-	closeCallback: () => void;
-	modalState: boolean;
-};
-
-const ConfirmModal = ({ closeCallback, modalState }: ConfirmModalProps) => {
-	const modalRef = useRef<HTMLDivElement>(null);
-	useModal(modalRef, closeCallback, modalState);
-
-	const router = useRouter();
-	const handleTransitionClick = () => {
-		router.push("/auth/login");
-	};
-
-	const Modal = (
-		<m.div
-			ref={modalRef}
-			className={styles.confirmModal}
-			variants={getModalBlurVariants("17px")}
-			initial="initial"
-			animate="animate"
-			exit="exit"
-			key="transitionURLmodal"
-		>
-			<p>Требуется авторизация, продолжить?</p>
-			<div className={styles.btnWrapper}>
-				<button className={styles.cancelBtn} onClick={closeCallback}>
-					Отмена
-				</button>
-				<button
-					className={styles.successBtn}
-					onClick={handleTransitionClick}
-				>
-					Перейти
-				</button>
-			</div>
-		</m.div>
-	);
-
-	return createPortal(Modal, document.body);
 };

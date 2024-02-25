@@ -1,10 +1,10 @@
 import NextAuth, { DefaultSession } from "next-auth"
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import authConfig from "auth.config";
-import db from "@/lib/db";
-import { getUserById } from "@/lib/db_helpers";
+import db from "@/database/db";
+import { getUserById } from "@/database/db_helpers";
 import { UserRole } from "@prisma/client";
-import { getTwoFactorConfirmationByUserID } from "@/lib/db_helpers";
+import { getTwoFactorConfirmationByUserID } from "@/database/db_helpers";
 
 // types for excluding mistakes in CALLBACKs 
 type ExtendedUser = DefaultSession['user'] & {

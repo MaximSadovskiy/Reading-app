@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import { v4 as uuid } from "uuid";
 import { getPasswordResetTokenByEmail, getTwoFactorTokenByEmail, getVerificationTokenByEmail } from "./db_helpers";
-import db from "@/lib/db"; 
+import db from "@/database/db"; 
 
 // Verification token
 export const generateVerificationToken = async (email: string) => {
