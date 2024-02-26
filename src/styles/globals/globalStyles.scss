@@ -335,6 +335,14 @@ body {
         // comments
         --comments-textarea-border: var(--color-lightbrown);
         --comments-textarea-border-hover: var(--color-orange);
+        --comments-list-bg: var(--color-darkbrown);
+        --comments-list-border: var(--color-light-bisque);
+        --comments-likesvg-color-active: var(--color-orange);
+        --comments-likesvg-color-passive: var(--color-lightbrown);
+        --comments-comment-bg: var(--color-lightbrown-hover);
+        --comments-comment-border: var(--color-bisque);
+        --comment-authorname-color: var(--color-orange);
+        --comment-content-bg: var(--color-darkbrown);
     };
 };
 

@@ -1,0 +1,63 @@
+@use 'utils' as *;
+
+.commentContainer {
+    @include colFlex;
+    @include fontDefault(22);
+    
+    gap: pxIntoUnit(15);
+    background-color: var(--comments-comment-bg);
+    border: pxIntoUnit(3) solid var(--comments-comment-border);
+    border-radius: pxIntoUnit(18);
+    padding: pxIntoUnit(15);
+}
+
+.authorName {
+    padding-left: pxIntoUnit(50);
+
+    & > span {
+        @include fontMarc(35);
+
+        display: inline-block;
+        padding-right: pxIntoUnit(15);
+        color: var(--comment-authorname-color);
+    }
+}
+
+.commentContent {
+    background-color: var(--comment-content-bg);
+    line-height: 1.5;
+    padding: pxIntoUnit(13);
+    border-radius: pxIntoUnit(18);
+}
+
+.commentLike {
+    @include flex(flex-start, center, pxIntoUnit(8));
+
+    margin-left: pxIntoUnit(50);
+    background-color: var(--comment-content-bg);
+    width: fit-content;
+    padding-inline: pxIntoUnit(15);
+    padding-block: pxIntoUnit(7);
+    border-radius: pxIntoUnit(15);
+
+    & > .likesCount {
+        @include fontDefault(24);
+    }
+
+    // button over svg
+    & > button {
+        background-color: inherit;
+        cursor: pointer;
+    }
+
+    // like svg
+    & svg {
+        @include multipleTransition(fill stroke, 250ms);
+        fill: var(--comments-likesvg-color-passive);
+        stroke: var(--comments-likesvg-color-active);
+
+        &[data-active=true] {
+            fill: var(--comments-likesvg-color-active);
+        }
+    }
+}

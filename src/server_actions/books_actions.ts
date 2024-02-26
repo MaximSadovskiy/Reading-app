@@ -304,3 +304,8 @@ export const deleteCommentAction = async (userId: string, bookId: number) => {
 
     return { success: 'Комментарий успешно удалён!' }
 }
+
+// LIKE ACTION
+export const addLikeAction = async (authorId: string, bookId: number, commentId: string) => {
+    
+}

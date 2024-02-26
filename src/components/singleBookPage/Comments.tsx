@@ -15,7 +15,9 @@ interface CommentsProps {
 export const Comments = ({ commentsArray, bookTitle, user, bookId }: CommentsProps) => {
 
     const renderingComments = commentsArray.map(async (comment) => {
-        const { content, likesCount, id: commentId, authorName } = comment;
+        const { content, likes, id: commentId, authorName } = comment;
+        const likesCount = likes.length;
+
         let isLikedByUser = false;
         if (user != null) {
             isLikedByUser = await getIfUserLikedComment(user.id as string, bookId, commentId);

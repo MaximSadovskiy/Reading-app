@@ -19,9 +19,12 @@
     @include colFlex;
     
     list-style: none;
-    border: 1px solid purple;
-    min-height: pxIntoUnit(300);
+    min-height: pxIntoUnit(850);
     width: 100%;
+    padding: pxIntoUnit(20);
+    background-color: var(--comments-list-bg);
+    border: pxIntoUnit(3) solid var(--comments-list-border);
+    border-radius: pxIntoUnit(18);
 }
 
 .commentLineBreak {
