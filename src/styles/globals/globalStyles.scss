@@ -30,18 +30,44 @@ input {
     --color-darkbrown: hsl(0, 36%, 10%);
     --color-darkbrown-blur: hsla(0, 29%, 10%, 0.822);
     --color-lightbrown: hsl(0, 38%, 19%);
+    --color-lightbrown-blur: hsla(0, 38%, 19%, 0.63);
     --color-lightbrown-hover: hsl(0, 30%, 24%);
     --color-orange: hsl(25, 100%, 82%);
     --color-gray: hsl(0, 1%, 83%);
     --color-white: hsl(0, 0%, 100%); 
     --color-red: hsl(0, 89%, 31%);
+    --color-bright-red: hsl(0, 100%, 39%);
+    --color-light-red: hsl(0, 100%, 94%);
+    --color-green: hsl(130, 73%, 32%);
+    --color-light-green: hsl(138, 100%, 78%);
 }
 
 body {
     min-height: 100vh;
     overflow-x: hidden;
 
+    /* GENERAL */
+    // z-index
+    --modal-zindex: 99;
+    --backdrop-zindex: 98;
+    // widths
+    --singlebook-section-width: clamp(pxIntoUnit(200), 70vw, pxIntoUnit(1000));
+    // link
+    --link-underline: var(--color-darkbrown);
+    // button
+    --gen-btn-bg: var(--color-light-bisque);
+    --gen-btn-bg-hover: var(--color-orange);
+    --gen-btn-border: var(--color-lightbrown);
+    --gen-btn-border-hover: var(--color-lightbrown-hover);
+    --gen-btn-color: var(--color-lightbrown);
+    --gen-btn-color-hover: var(--color-lightbrown-hover);
+    --gen-btn-bg-cancel: var(--color-red);
+    --gen-btn-bg-success: var(--color-green);
+
+
+    /* SPECIFIC */
     // header
+    --header-height: 125px;
     --header-bg: var(--color-darkbrown);
     --header-bg-blur: var(--color-darkbrown-blur);
     --header-border: var(--color-orange);
@@ -50,7 +76,7 @@ body {
     --sublogo-color: var(--color-white);
     --link-color: var(--color-white);
     --link-active: var(--color-orange);
-    --link-underline: var(--color-orange);
+    --link-header-underline: var(--color-orange);
 
     // themeChanger
     --theme-btn-bg: var(--color-darkbrown);
@@ -74,7 +100,11 @@ body {
     --main-text-highlight: var(--color-lightbrown);
     --main-text-highlight-logo: var(--color-darkbrown);
     --main-link: var(--color-darkbrown);
-    --main-listmarker: var(--color-lightbrown);
+
+    // listmarker
+    --main-listmarker-bg: var(--color-bisque);
+    --main-listmarker-border: var(--color-lightbrown);
+
     --underline: var(--color-lightbrown);
     --main-aside-border: var(--color-lightbrown);
     // бегущий текст 
@@ -144,9 +174,89 @@ body {
     --carousel-slideBtn-hover: var(--color-lightbrown-hover);
     --carousel-slideBtn-color: var(--color-light-bisque);
 
+
+    // forms
+    --form-title-color: var(--color-lightbrown);
+    --form-link-color: var(--color-lightbrown);
+    --form-input-border: var(--color-lightbrown);
+    --form-input-border-hover: var(--color-orange);
+    --form-input-border-invalid: var(--color-bright-red);
+    --placeholder-color: var(--color-darkbrown-blur);
+    --form-link-underline: var(--color-lightbrown);
+
+    --error-color: var(--color-bright-red);
+
+    --panel-option-text: var(--color-darkbrown);
+    --panel-option-bg: var(--color-light-bisque);
+    --panel-option-btn-bg: var(--color-white);
+    --panel-option-btn-bg-hover: var(--color-red);
+    --panel-svg-color: var(--color-darkbrown);
+    --panel-svg-hover: var(--color-white);
+
+    --list-option-bg: var(--color-white);
+    --list-option-text: var(--color-darkbrown);
+    --list-option-bg-hover: var(--color-light-bisque);
+    --list-option-border-hover: var(--color-orange);
+    --list-option-bg-selected: var(--color-lightbrown);
+    --list-option-border-selected: var(--color-orange);
+    --list-option-text-selected: var(--color-white);
+
+    --submit-btn-bg: var(--color-light-bisque);
+    --submit-btn-border: var(--color-lightbrown);
+    --submit-btn-text: var(--color-darkbrown);
+    --submit-btn-text-hover: var(--color-light-bisque);
+    --foreground-bg: var(--color-lightbrown);
+
+    --pending-color: var(--color-lightbrown);
+    --pending-bg: var(--color-light-bisque);
+    --error-text: var(--color-red);
+    --error-bg: var(--color-light-red);
+    --error-border: var(--color-red);
+    --success-text: var(--color-green);
+    --success-bg: var(--color-light-green);
+    --success-border: var(--color-green);
+
+    --provider-icon-bg: var(--color-white);
+    --provider-icon-bg-hover: var(--color-light-bisque);
+    --provider-icon-border: var(--color-orange); 
+    --divider-text: var(--color-darkbrown);
+    --divider-lines-color: var(--color-orange);
+
+    --verification-wrapper-border: var(--color-lightbrown);
+
+    // Book Single page
+    --book-section-border: var(--color-lightbrown);
+    --book-section-shadow: var(--color-lightbrown-hover);
+    --title-text: var(--color-lightbrown);
+    --svg-fill-passive: var(--color-light-bisque);
+    --svg-fill-active: var(--color-lightbrown-hover);
+    --svg-stroke-passive: var(--color-lightbrown);
+    --svg-stroke-active: var(--color-orange);
+
+    --rating-description-text: var(--color-darkbrown);
+    --library-wrapper-bg: var(--color-white);
+    --library-wrapper-text: var(--color-darkbrown);
+    --library-wrapper-border: var(--color-orange);
+    --library-svg-color-passive: var(--color-lightbrown);
+    --library-svg-color-active: var(--color-lightbrown-hover);
+
+    // comments
+    --comments-textarea-border: var(--color-lightbrown);
+    --comments-textarea-border-hover: var(--color-orange);
+
     // darkTheme colors
     &[data-dark='true'] {
-        --underline: var(--color-orange);
+        
+        /* GENERAL */
+        // link
+        --link-underline: var(--color-orange);
+        // button
+        --gen-btn-bg: var(--color-lightbrown);
+        --gen-btn-bg-hover: var(--color-lightbrown-hover);
+        --gen-btn-border: var(--color-white);
+        --gen-btn-border-hover: var(--color-orange);
+        --gen-btn-color: var(--color-white);
+        --gen-btn-color-hover: var(--color-orange);
 
         // rootPage
         --header-border: var(--color-orange);
@@ -155,7 +265,8 @@ body {
         --main-text-highlight: var(--color-orange);
         --main-text-highlight-logo: var(--color-bisque);
         --main-link: var(--color-orange);
-        --main-listmarker: var(--color-bisque);
+        --main-listmarker-bg: var(--color-lightbrown);
+        --main-listmarker-border: var(--color-orange);
         --main-aside-border: var(--color-orange);
         // бегущий текст 
         --running-text1-bg: var(--color-darkbrown);
@@ -183,6 +294,55 @@ body {
         --carousel-slideBtn-bg: var(--color-light-bisque);
         --carousel-slideBtn-hover: var(--color-white);
         --carousel-slideBtn-color: var(--color-darkbrown);
+
+        // form
+        --form-title-color: var(--color-bisque);
+        --form-link-color: var(--color-orange);
+        --form-link-underline: var(--color-orange);
+        --form-input-border: var(--color-orange);
+        --form-input-border-hover: var(--color-orange);
+        --panel-option-text: var(--color-white);
+        --panel-option-bg: var(--color-lightbrown-hover);
+        --placeholder-color: var(--color-white);
+        --list-option-bg-hover: var(--color-bisque);
+        --list-option-border-hover: var(--color-darkbrown);
+        --list-option-bg-selected: var(--color-lightbrown);
+        --list-option-border-selected: var(--color-orange);
+        --list-option-text-selected: var(--color-white);
+        --divider-text: var(--color-bisque);
+        --divider-lines-color: var(--color-orange);
+        --verification-wrapper-border: var(--color-orange);
+
+        // Book Single page
+        --book-section-border: var(--color-orange);
+        --book-section-shadow: var(--color-light-bisque);
+        --title-text: var(--color-orange);
+        --author-text: var(--color-bisque);
+        --year-text: var(--color-light-bisque);
+
+        --svg-fill-passive: var(--color-lightbrown);
+        --svg-fill-active: var(--color-orange);
+        --svg-stroke-passive: var(--color-orange);
+        --svg-stroke-active: var(--color-lightbrown);
+
+        --rating-description-text: var(--color-orange);
+        --library-wrapper-bg: var(--color-white);
+        --library-wrapper-text: var(--color-darkbrown);
+        --library-wrapper-border: var(--color-orange);
+        --library-svg-color-passive: var(--color-white);
+        --library-svg-color-active: var(--color-orange);
+
+        // comments
+        --comments-textarea-border: var(--color-lightbrown);
+        --comments-textarea-border-hover: var(--color-orange);
+        --comments-list-bg: var(--color-darkbrown);
+        --comments-list-border: var(--color-light-bisque);
+        --comments-likesvg-color-active: var(--color-orange);
+        --comments-likesvg-color-passive: var(--color-lightbrown);
+        --comments-comment-bg: var(--color-lightbrown-hover);
+        --comments-comment-border: var(--color-bisque);
+        --comment-authorname-color: var(--color-orange);
+        --comment-content-bg: var(--color-darkbrown);
     };
 };
 

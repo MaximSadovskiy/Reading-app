@@ -1,0 +1,53 @@
+@use 'utils' as *;
+
+
+.commentsSection {
+    @include colFlex(center, flex-start, pxIntoUnit(30));
+
+    width: 130%;
+    position: absolute;
+    top: pxIntoUnit(500);
+    
+    // title
+    & > h2 {
+        @include fontHeading(2);
+        color: var(--title-text);
+    }
+}
+
+.talkingTitle {
+    @include fontHeading(3);
+    color: var(--title-text);
+}
+
+.commentList {
+    @include colFlex;
+    
+    gap: pxIntoUnit(30);
+    list-style: none;
+    width: 100%;
+    padding: pxIntoUnit(20);
+    background-color: var(--comments-list-bg);
+    border: pxIntoUnit(3) solid var(--comments-list-border);
+    border-radius: pxIntoUnit(18);
+}
+
+.commentLineBreak {
+    height: 2px;
+    width: calc(clamp(pxIntoUnit(200), 70vw, pxIntoUnit(1000)) - 40px);
+    background-color: var(--book-section-border);
+    box-shadow: 0 0 3px 2px var(--book-section-shadow);
+}
+
+// if no comments this rendered
+.noCommentsBlock {
+    @include colFlex(center, center);
+    @include fontDefault(24);
+    
+    gap: pxIntoUnit(10);
+    width: 100%;
+    padding: pxIntoUnit(20);
+    background-color: var(--comments-list-bg);
+    border: pxIntoUnit(3) solid var(--comments-list-border);
+    border-radius: pxIntoUnit(18);
+}

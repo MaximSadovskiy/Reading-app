@@ -4,7 +4,6 @@ import { GlobalContext } from '@/hooks/useContext';
 // hooks
 import useTheme from '@/hooks/useTheme';
 
-
 // types
 interface GlobalContextProps {
     children: React.ReactNode;

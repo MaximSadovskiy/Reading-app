@@ -1,0 +1,48 @@
+@use 'utils' as *;
+
+.addComment {
+    @include colFlex;
+    gap: pxIntoUnit(20);
+    width: 85%;
+
+    // subtitle
+    & > p {
+        @include fontDefault(24);
+        align-self: center;
+        color: var(--author-text);
+    }
+}
+
+.inputContainer {
+    @include flex;
+    gap: pxIntoUnit(10);
+    // input
+    & > textarea {
+        @include fontMarc(26);
+        @include transition(border-color, 300ms);
+        @include customScrollBar(var(--results-scroll-thumb), var(--results-scroll-track));
+
+        line-height: 1;
+        flex: 0.8 1 auto;
+        resize: none;
+        min-height: pxIntoUnit(120);
+        border-radius: pxIntoUnit(12);
+        padding: pxIntoUnit(10);
+        border: pxIntoUnit(4) groove var(--comments-textarea-border);
+        outline: none;
+
+        &:focus {   
+            border-color: var(--comments-textarea-border-hover);
+        }
+    }
+
+    // add comment btn
+    & > button {
+        @include defaultBtn;
+
+        padding-block: pxIntoUnit(12);
+        padding-inline: pxIntoUnit(5);
+        align-self: center;
+        flex: 0.2 1 auto;
+    }
+}

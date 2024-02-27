@@ -4,6 +4,7 @@
     @include multipleTransition((filter, color, background-color, transform, opacity), 200ms);
     @include flex(stretch, center, pxIntoUnit(5));
     @include padding(pxIntoUnit(10), pxIntoUnit(5));
+    $heightOfBtn: pxIntoUnit(50);
 
     background-color: var(--carousel-slideBtn-bg);
     border-radius: pxIntoUnit(10);
@@ -11,7 +12,7 @@
 
     /* positioning arrows */
     position: absolute;
-    top: pxIntoUnit(45);
+    bottom: 0;
     &[data-direction='left'] {
         left: 0;
     }

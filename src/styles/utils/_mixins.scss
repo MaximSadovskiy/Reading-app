@@ -25,7 +25,7 @@
     flex: $grow $shrink $basis;
 }
 
-// transition, animation
+// transition
 @mixin colorTransition($duration: 300ms) {
     transition: background-color $duration ease-in-out, color $duration ease-in-out, border-color $duration ease-in-out;
 };
@@ -39,7 +39,7 @@
 };
 
 @mixin colorTransformTransition($colorDur: 150ms, $transformDur: 150ms, $ease: ease-in-out) {
-    transition: background-color $colorDur $ease, color $colorDur $ease, transform $transformDur $ease;
+    transition: background-color $colorDur $ease, color $colorDur $ease, border-color $colorDur ease-in-out, transform $transformDur $ease;
 }
 
 @mixin multipleTransition($properties, $duration: 150ms, $ease: ease-in-out) {
@@ -48,6 +48,124 @@
         $transitions: append($transitions, $prop $duration $ease, comma);
     }
     transition: $transitions;
+}
+
+// Delay on animated childs
+@mixin animationDelayOnChildren($elementCountNumber: 3, $initDelayNumber: 1, $increasingOfDelayNumber: 0.5) {
+    @for $i from 1 through $elementCountNumber {
+        &:nth-child(#{$i}) {
+            $animationDelay: $initDelayNumber + ($increasingOfDelayNumber * ($i - 1));
+            $animationDelaySeconds: #{$animationDelay}s;
+            animation-delay: $animationDelaySeconds;
+        }
+    }
+}
+
+// animations
+@mixin animationSlideInBlur ($duration: 1s, $translateValueNumber: -400, $timingFunction: linear, $direction: X) {
+    $translateValuePx: pxIntoUnit($translateValueNumber);
+
+    opacity: 0;
+    filter: blur(10px);
+    animation: slideInWithBlur $duration $timingFunction forwards;
+
+    @keyframes slideInWithBlur {
+        from {
+            opacity: 0;
+            filter: blur(10px);
+            @if ($direction == X) {
+                transform: translateX($translateValuePx);
+            }
+            @else {
+                transform: translateY($translateValuePx); 
+            }
+        }
+        to {
+            opacity: 1;
+            filter: blur(0px);
+            transform: translateX(0px),
+        }   
+    }
+}
+
+@mixin animationTrippleFallFromTop ($duration: 1s, $initTranslateVal: -400, $timingFunction: linear) {
+    $translateValuePx: pxIntoUnit($initTranslateVal);
+
+    opacity: 0;
+    filter: blur(10px);
+    animation: fallFromTop $duration $timingFunction forwards;
+
+    $secondUpPoint: calc($initTranslateVal * 0.3);
+    $thirdUpPoint: calc($initTranslateVal * 0.15);
+    $secondUpPointPx: pxIntoUnit($secondUpPoint);
+    $thirdUpPointPx: pxIntoUnit($thirdUpPoint);
+
+    @keyframes fallFromTop {
+        0% {
+            opacity: 0;
+            transform: translateY($translateValuePx);
+        }
+
+        // visual
+        20% {
+            opacity: 1;
+        }
+
+        25% {
+            transform: translateY(0);
+        }
+
+        // visual
+        44% {
+            filter: blur(0px);
+        }
+
+        50% {
+            transform: translateY($secondUpPointPx);
+        }
+        68% {
+            transform: translateY(0);
+        }
+        85% {
+            transform: translateY($thirdUpPointPx);
+        }
+        100% {
+            opacity: 1;
+            filter: blur(0);
+            transform: translateY(0);
+        }
+    }
+}
+
+@mixin animationPianoBubbleUp ($duration: 1.25s, $bubbleUpValue: -100, $timingFunction: linear) {
+    $bubbleUpValuePx: pxIntoUnit($bubbleUpValue);
+    animation: pianoBubbleUp $duration $timingFunction forwards;
+
+    @keyframes pianoBubbleUp {
+        0% {
+            transform: translateY(0);
+        }
+        38% {
+            transform: translateY($bubbleUpValuePx);
+        }
+        100% {
+            transform: translateY(0);
+        }   
+    }
+}
+
+
+// Cancel / Success Btn hover states
+@mixin successHoverBtn {
+    background-color: var(--gen-btn-bg-success);
+    color: var(--color-white);
+    border-color: var(--color-white);
+}
+
+@mixin cancelHoverBtn {
+    background-color: var(--gen-btn-bg-cancel);
+    color: var(--color-white);
+    border-color: var(--color-white);
 }
 
 // padding, margin
@@ -91,7 +209,7 @@
 };
 
 // COMPONENTS
-@mixin linkWithUnderline($fontWeight: 500) {
+@mixin linkWithUnderline($fontWeight: 500, $underlineColor: var(--link-underline), $isScaleNeeded: true) {
     @include fontClamp(20, 2.3, 24);
     @include transition(transform);
 
@@ -100,7 +218,12 @@
     position: relative;
 
     &:hover {
-        transform: scale(1.1);
+        @if ($isScaleNeeded) {
+            transform: scale(1.1);
+        }
+        @else {
+
+        }
     };
 
     &::before {
@@ -113,7 +236,7 @@
         position: absolute;
         bottom: pxIntoUnit(-10);
         left: 0;
-        background-color: var(--link-underline);
+        background-color: $underlineColor;
         border-radius: pxIntoUnit(5);
         transform: scale(0);
     };
@@ -139,6 +262,53 @@
     scrollbar-width: $width;
     scrollbar-color: $thumbColor $trackColor;
 }
+
+@mixin customListMarker ($leftDistance: 35, $widthNumber: 10, $heightNumber: 10, $bgColor: --main-listmarker-bg, $borderColor: --main-listmarker-border) {
+    display: list-item;
+    position: relative;
+
+    // outer big circle
+    $topOuterOffsetPx: calc(50% - pxIntoUnit($heightNumber / 2));
+    &::before {
+
+        content: '';
+        display: block;
+        width: pxIntoUnit($widthNumber);
+        height: pxIntoUnit($heightNumber);
+        border-radius: 50%;
+        background-color: var(#{$bgColor});
+        border: 2px solid var(#{$borderColor});
+
+        position: absolute;
+        left: -#{pxIntoUnit($leftDistance)};
+        top: $topOuterOffsetPx;
+    }
+}
+
+// Button
+@mixin defaultBtn($justify: center, $align: center, $paddingInlineNum: 20, $paddingBlockNumber: 15) {
+    @include flex($justify, $align, pxIntoUnit(12));
+    @include padding(pxIntoUnit($paddingInlineNum), pxIntoUnit($paddingBlockNumber));
+    @include colorTransformTransition();
+    @include fontDefault(22, 600);
+
+    cursor: pointer;
+    border-radius: pxIntoUnit(18);
+    background-color: var(--gen-btn-bg);
+    color: var(--gen-btn-color);
+    border: pxIntoUnit(3) solid var(--gen-btn-border);
+
+    &:hover {
+        background-color: var(--gen-btn-bg-hover);
+        border-color: var(--gen-btn-border-hover);
+        color: var(--gen-btn-color-hover);
+        transform: scale(1.1);
+    }
+
+    &:active {
+        transform: scale(0.9);
+    }
+} 
 
 /* breakpont */
 @mixin breakpointUp($minWidth) {

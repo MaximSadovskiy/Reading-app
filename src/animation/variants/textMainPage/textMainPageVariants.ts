@@ -12,7 +12,7 @@ const textVariants: Variants = {
         opacity: 1,
         x: 0,
         transition: {
-            duration: 1.5
+            duration: 1.15
         }
     }
 };
@@ -27,7 +27,7 @@ const ulVariants: Variants = {
         x: 0,
         y: 0, 
         transition: {
-            staggerChildren: 1.2
+            staggerChildren: 0.4
         }
     }
 };
@@ -42,7 +42,7 @@ const linkVariants: Variants = {
         scale: [0, 1.15, 1],
         filter: 'blur(0px)',
         transition: {
-            duration: 1.5
+            duration: 1.15
         }
     }
 };

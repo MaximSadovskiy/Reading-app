@@ -1,0 +1,52 @@
+@use 'utils' as *;
+
+// Confirm to URL transition
+.confirmModal {
+    @include colFlex(center, space-around, pxIntoUnit(20));
+    @include colorTransition;
+
+    // positioning
+    $clampWidth: clamp(320px, 30vw, 400px);
+    $height: pxIntoUnit(240);
+    width: $clampWidth;
+    position: fixed;
+    top: calc(50vh - $height / 2);
+    right: calc(50vw - $clampWidth);
+    transform: translateX(-50%);
+
+    height: $height;
+    z-index: var(--modal-zindex);
+    background-color: var(--search-modal-bg);
+    padding: pxIntoUnit(15);
+    border: pxIntoUnit(5) groove var(--search-modal-border);
+    border-radius: pxIntoUnit(17);
+
+    &:hover {
+        background-color: var(--search-modal-bg-hover);
+    }
+
+
+    & > p {
+        @include fontDefault(22, 600);
+        line-height: 1.4;
+        text-align: center;
+        color: var(--main-text);
+    }
+}
+
+.btnWrapper {
+    @include flex(center, center, pxIntoUnit(30));
+
+    // buttons
+    & button {
+        @include defaultBtn;
+    }
+
+    & .successBtn {
+        @include successHoverBtn;
+    }
+
+    & .cancelBtn {
+        @include cancelHoverBtn;
+    }
+}

@@ -36,4 +36,5 @@ const useModal = (modalRef: ModalRefArg, closeCallback: () => void, modalState: 
     }, [modalState, modalRef]);
 };
 
+
 export default useModal;

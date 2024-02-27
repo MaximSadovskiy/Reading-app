@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { retrieveBooksWithoutFiles, retrieveBooks } from '@/booksStorage/usage/storage';
-import { BooksForSearch } from '@/booksStorage/usage/storage';
+import { searchBooksByTitle, searchBooksByAuthor } from '@/database/db_helpers_BOOKS';
+import { getAuthorDisplayName } from '@/utils/textFormat/getAuthorDisplayName';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,42 +11,41 @@ export async function GET(request: NextRequest) {
 
         // working on query
         const mode = searchParams.get('mode') as 'title' | 'author';
-        const query = searchParams.get('query')?.toLowerCase() as string;
-
-        // formatting data for response
-        const initBooks = retrieveBooksWithoutFiles();
-        let responseBooks: BooksForSearch = [];
-
-        let filteredBooks = [];
-        if (mode === 'title') {
-            filteredBooks = initBooks.filter(book => {
-                const lowercasedBookTitle = book.title.toLowerCase();
-
-                return lowercasedBookTitle.includes(query);
-            });
-        }
-
-        else {
-            filteredBooks = initBooks.filter(book => {
-                const lowercasedAuthorName = book.author.toLowerCase();
-
-                return lowercasedAuthorName.includes(query);
-            });
-        }
-
-        responseBooks = filteredBooks.map(book => {
-            const { id, title, author, rating } = book;
-
-            return {
-                id,
-                title,
-                author,
-                rating
-            }
-        });
-
-        return NextResponse.json(responseBooks);
-    } catch (err) {
+        const query = searchParams.get('query')?.trim().toLowerCase() as string;
         
+        if (mode === 'title') {
+            const booksByTitle = await searchBooksByTitle(query);
+            console.log('no books found', booksByTitle);
+            if (!booksByTitle || booksByTitle.length === 0) {
+                console.log('no books found');
+                return NextResponse.json({ error: 'no books were found' });
+            }
+            const formattedBooks = booksByTitle.map(book => {
+                const { id, title, author, rating } = book;
+                const authorName = getAuthorDisplayName(author.name, false);
+                
+                return { id, title, rating, authorName };
+            });
+            
+            
+
+            return NextResponse.json({ success: formattedBooks });
+        }
+        else {
+            const authorOfBooks = await searchBooksByAuthor(query);
+            if (!authorOfBooks) {
+                return NextResponse.json({ error: 'no books were found' });
+            }
+            const formattedBooks = authorOfBooks.books.map(book => {
+                const { id, title, rating } = book;
+                const authorName = getAuthorDisplayName(authorOfBooks.name, false)
+                
+                return { id, title, rating, authorName };
+            });
+
+            return NextResponse.json({ success: formattedBooks });
+        }
+    } catch (err) {
+
     }
 }

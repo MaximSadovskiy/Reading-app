@@ -1,0 +1,459 @@
+@use 'utils' as *;
+
+
+// PROVIDERS: Google, etc...
+.provider {
+    @include colFlex(center, center, pxIntoUnit(10));
+
+    & > p {
+        @include fontDefault(20, 500);
+        color: var(--main-text);
+    }
+}
+
+.providerBtn {
+    @include colorTransition;
+
+    width: pxIntoUnit(100);
+    height: pxIntoUnit(80);
+    border-radius: pxIntoUnit(12);
+
+    background-color: var(--provider-icon-bg);
+    border: pxIntoUnit(3) solid var(--provider-icon-border);
+
+    &:hover {
+        background-color: var(--provider-icon-bg-hover);
+    }
+
+    & > svg {
+        width: pxIntoUnit(40);
+        height: pxIntoUnit(40);
+    }
+}
+
+.divider {
+    margin-block: pxIntoUnit(40);
+    min-width: 80%;
+
+    & > span {
+        @include fontDefault(22, 600);
+
+        display: inline-flex;
+        min-width: 100%;
+        justify-content: stretch;
+        align-items: center;
+        gap: pxIntoUnit(15);
+        color: var(--divider-text);
+
+        &::before {
+            content: '';
+            display: inline-block;
+            width: 100%;
+            height: pxIntoUnit(2);
+            border-radius: pxIntoUnit(5);
+            background-color: var(--divider-lines-color);
+        }
+
+        &::after {
+            content: '';
+            display: inline-block;
+            height: pxIntoUnit(2);
+            width: 100%;
+            border-radius: pxIntoUnit(7);
+            background-color: var(--divider-lines-color);
+        }
+    }
+}
+
+/* Form Field */
+.formFieldWrapper {
+    @include colFlex(center);   
+
+    gap: pxIntoUnit(10);
+    margin-bottom: pxIntoUnit(30);
+    flex: 1 1 auto;
+    min-width: pxIntoUnit(200);
+
+
+    // label
+    & > label {
+        @include fontDefault(19, 600);
+
+        color: var(--main-text);
+    }
+
+
+    // input
+    & input {
+        @include fontDefault(20, 600);
+        @include colorTransition;
+
+        padding: pxIntoUnit(10);
+        border: pxIntoUnit(3) solid var(--form-input-border);
+        border-radius: pxIntoUnit(10);
+        width: clamp(pxIntoUnit(250), 40vw, pxIntoUnit(350));
+        min-height: pxIntoUnit(50);
+
+        &::placeholder {
+            @include fontDefault(18, 400);
+        }
+
+        &:focus {
+            border-color: var(--form-input-border-hover);
+        }
+
+        &[data-invalid=true] {
+            border-color: var(--form-input-border-invalid);
+        }
+
+        &[type='password'] {
+            font-size: pxIntoUnit(14);
+        }
+    }
+
+    // image on passwords
+    & > div {
+        position: relative;
+    }
+
+    & img {
+        cursor: pointer;
+        position: absolute;
+        top: calc((pxIntoUnit(50) - pxIntoUnit(30)) / 2);
+        right: pxIntoUnit(20);
+    }
+}
+
+// Custom Select
+$panelOptionWidth: pxIntoUnit(190);
+$panelPadding: pxIntoUnit(25);
+
+.select {
+    @include fontDefault(18, 500);
+    @include colFlex(center);
+
+    // label
+    & > label {
+        color: var(--main-text);
+        font-size: pxIntoUnit(22);
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    // selection panel
+    & > .selectionPanel {
+        @include multipleTransition(height width, 300ms);
+    
+        display: grid;
+        grid-template-columns: repeat(3, $panelOptionWidth);
+        column-gap: $panelPadding;
+        row-gap: pxIntoUnit(15);
+        justify-content: center;
+        width: calc($panelOptionWidth * 3 + $panelPadding * 4);
+
+        // panel is empty (no selected items)
+        &.panelEmpty {
+            grid-template-columns: 1fr;
+            gap: 0;
+            place-content: center;
+        }
+
+        list-style: none;
+        border: pxIntoUnit(4) solid var(--form-input-border);
+        border-radius: pxIntoUnit(12);
+        min-height: pxIntoUnit(50);
+        padding: $panelPadding;
+        margin-block: pxIntoUnit(20);
+
+        & > .placeholder {
+            @include fontDefault(19, 500);
+            justify-self: center;
+            color: var(--placeholder-color);
+        }
+
+        /* invalid state */
+        &[data-invalid=true] {
+            border: pxIntoUnit(4) solid var(--form-input-border-invalid);
+        }
+    }
+
+
+    // list of options
+    & > .listOfOptions {
+        list-style: none;
+
+        margin-block: pxIntoUnit(20);
+        display: grid;
+        grid-template-columns: repeat(2, pxIntoUnit(300));
+        grid-auto-flow: row;
+        justify-content: center;
+
+        column-gap: pxIntoUnit(10);
+        row-gap: pxIntoUnit(10);
+    }
+}
+
+
+/* panel options (selected tab) */
+.panelOption {
+    @include flex(flex-start, center, pxIntoUnit(8));
+
+    color: var(--panel-option-text);
+    background-color: var(--panel-option-bg);
+    border: pxIntoUnit(2) solid var(--form-input-border);
+    border-radius: pxIntoUnit(10);
+    width: $panelOptionWidth;
+    height: pxIntoUnit(40);
+
+
+    & > button {
+        @include colorTransition;
+
+        height: 100%;
+        border-top-left-radius: pxIntoUnit(8);
+        border-bottom-left-radius: pxIntoUnit(8);
+        background-color: var(--panel-option-btn-bg);
+
+        & > svg {
+            @include multipleTransition(fill stroke);
+            fill: var(--panel-svg-color);
+            stroke: var(--panel-svg-color);
+        }
+
+        &:hover {
+            background-color: var(--panel-option-btn-bg-hover);
+
+            & > svg {
+                fill: var(--panel-svg-hover);
+                stroke: var(--panel-svg-hover);
+            }
+        }
+    }
+}
+
+
+/* list options */
+$listOptionHeight: pxIntoUnit(50);
+
+.listOptionWrapper {
+    @include transition(border-color);
+
+    border: pxIntoUnit(3) solid var(--form-input-border);
+    border-radius: pxIntoUnit(10);
+    height: $listOptionHeight;
+    width: auto;
+    cursor: pointer;
+    flex-grow: 0;
+
+    &:hover {
+        border-color: var(--list-option-border-hover);
+    }
+
+    &.wrapperSelected {
+        border-color: var(--list-option-border-selected);
+    }
+}
+
+
+// button
+.listOption {
+    @include fontDefault(19, 600);
+    @include colorTransformTransition(300ms, 200ms);
+    @include flex(flex-start, center, pxIntoUnit(10));
+
+    width: 100%;
+    height: 100%;
+    border-radius: pxIntoUnit(7);
+    background-color: var(--list-option-bg);
+    color: var(--list-option-text);
+    flex-grow: 0;
+    padding-left: 30%;
+    position: relative;
+
+    &:hover {
+        background-color: var(--list-option-bg-hover);
+        border-color: var(--list-option-border-hover);
+    }
+
+    // checkmark svg
+    $checkmarkHeight: pxIntoUnit(30);
+    & .checkSvgWrapper {
+        position: absolute;
+        height: $checkmarkHeight;
+        top: calc(($listOptionHeight - $checkmarkHeight) / 2);
+        left: 0;
+    }
+    
+    /* selected state */
+    &.selected {
+        background-color: var(--list-option-bg-selected);
+        color: var(--list-option-text-selected);
+
+        & .checkSvgWrapper {
+            animation: slideIn 0.5s forwards linear;
+
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateX(pxIntoUnit(-60));    
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(pxIntoUnit(35));
+                }
+            }
+        }
+    }
+}
+
+
+/* errors */
+.error {
+    @include fontDefault(20, 600);
+    
+    color: var(--error-color);
+}
+
+
+/* Submit Btn */
+@function getSubmitBtnEdge($widthOrHeight, $padding) {
+    $numericValue: $widthOrHeight + ($padding * 2);
+    $remValue: pxIntoUnit($numericValue);
+
+    @return $remValue;
+}
+
+$submitBtnPadding: 20;
+$submitBtnWidth: getSubmitBtnEdge(150, $submitBtnPadding);
+$submitBtnHeight: getSubmitBtnEdge(50, $submitBtnPadding);
+
+.submitBtn {
+    @include colorTransformTransition;
+    @include fontDefault(22, 600);
+    @include flex(center, center);
+
+    width: $submitBtnWidth;
+    height: $submitBtnHeight;
+    background-color: var(--submit-btn-bg);
+    border: pxIntoUnit(3) solid var(--submit-btn-border);
+    border-radius: pxIntoUnit(10);
+    margin-block: pxIntoUnit(30);
+    padding: pxIntoUnit($submitBtnPadding, em);
+    position: relative;
+    
+    // Foreground div
+    & > [data-name="foreGround"] {
+        position: absolute;
+        top: -3px;
+        left: -3px;
+        width: $submitBtnWidth;
+        height: $submitBtnHeight;
+        border-radius: pxIntoUnit(10);
+        transform-origin: left top;
+        transform: rotate(45deg);
+        background-color: var(--foreground-bg);
+        backdrop-filter: invert;
+        z-index: 0;
+    }
+
+    & > span {
+        position: relative;
+        z-index: 10;
+    }
+
+    /* disabled state */
+    &[disabled=true] {
+        cursor: not-allowed;
+        opacity: 0.5
+    }
+};
+
+
+.submitStatus {
+    @include fontDefault(20, 600);
+    @include flex(center, center, pxIntoUnit(15));
+
+    min-height: pxIntoUnit(80);
+    padding-inline: pxIntoUnit(20);
+    border: pxIntoUnit(3) solid;
+    border-radius: pxIntoUnit(12);
+
+    &.pending {
+        color: var(--pending-color);
+        border-color: var(--pending-color);
+        background-color: var(--pending-bg);
+    }
+
+    &.error-status {
+        color: var(--error-text);
+        border-color: var(--error-border);
+        background-color: var(--error-bg);
+    }
+
+    &.success-status {
+        color: var(--success-text);
+        border-color: var(--success-border);
+        background-color: var(--success-bg);
+    }
+}
+
+
+// Verification
+.verificationWrapper {
+    @include colFlex(center, center);
+
+    height: 100%;
+    width: 100%;
+    border: pxIntoUnit(3) solid var(--verification-wrapper-border);
+    border-radius: pxIntoUnit(30);
+    padding: pxIntoUnit(20);
+
+    & > label {
+        @include fontDefault(26, 600);
+        color: var(--main-text);
+
+        &[data-status='error'] {
+            color: var(--error-text);
+        }
+
+        &[data-status='success'] {
+            color: var(--success-text);
+        }
+
+        @include breakpointDown(500) {
+            font-size: pxIntoUnit(24);
+        }
+    }
+
+    // spinner
+    & > span {
+        width: 100%;
+        height: 100%;
+
+
+        @include breakpointDown(500) {
+            width: 100%;
+            height: pxIntoUnit(150);
+        }
+    }
+}
+
+
+// Forgot Password
+.forgotPassword {
+    @include fontDefault(20);
+    @include linkWithUnderline(500, var(--form-link-underline));
+    @include flex;
+
+    width: clamp(pxIntoUnit(250), 40vw, pxIntoUnit(350));
+    margin-bottom: pxIntoUnit(30);
+
+    @include breakpointDown(500) {
+        justify-content: center;
+    }
+
+    & > a {
+        text-align: left;
+        color: var(--main-link);
+    }
+}

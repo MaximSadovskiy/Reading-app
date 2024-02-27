@@ -1,0 +1,20 @@
+@use 'utils' as *;
+
+.main {
+    @include colorTransition;
+    @include flex(center, flex-start);
+
+    min-height: calc(150vh - var(--header-height) + pxIntoUnit(2000));
+    background-color: var(--main-bg);
+    color: var(--main-text);
+
+    // if no books
+    &[data-empty=true] {
+        @include colFlex(center, center);
+        @include padding(20vw, 20vh);
+        
+        & > h2 {
+            @include fontHeading(2);
+        }
+    }
+}

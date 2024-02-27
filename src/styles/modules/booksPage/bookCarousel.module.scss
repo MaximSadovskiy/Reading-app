@@ -1,14 +1,12 @@
 @use 'utils' as *;
 
-.popularSection {
-    @include colFlex(flex-start, stretch, pxIntoUnit(20));
+.carouselSection {
+    @include colFlex(center, flex-start, pxIntoUnit(20));
     @include colorTransition;
-
-    position: relative;
 }
 
 /* container of carousel */
-.popularContainer {
+.carouselContainer {
     height: pxIntoUnit(440);
     padding-block: pxIntoUnit(12);
     padding-inline: pxIntoUnit(35);
@@ -34,17 +32,63 @@
     }
 }
 
+/* container of buttons */
+.carouselBtnContainer {
+    position: relative;
+    min-height: pxIntoUnit(85);
 
-.popularTitle {
+    width: calcWidthInSlider(1, 230, 35);
+    @include breakpointUp(550) {
+        width: calcWidthInSlider(2, 230, 35);
+    }
+    @include breakpointUp(850) {
+        width: calcWidthInSlider(3, 230, 35);
+    }
+    @include breakpointUp(1150) {
+        width: calcWidthInSlider(4, 230, 35);
+    }
+    @include breakpointUp(1450) {
+        width: calcWidthInSlider(5, 230, 35);
+    }
+    @include breakpointUp(1550) {
+        width: calcWidthInSlider(6, 230, 35);
+    }
+}
+
+.carouselTitle {
     @include fontHeading;
     
     align-self: center;
-    margin-bottom: pxIntoUnit(55);
+    margin-bottom: pxIntoUnit(15);
     color: var(--carousel-heading-color);
 }
 
+.carouselGenreDescription {
+    @include fontDefault(19);
 
-.popularList {
+    line-height: 1.4;
+    color: var(--main-text);
+
+    width: calcWidthInSlider(1, 230, 35);
+    @include breakpointUp(550) {
+        width: calcWidthInSlider(2, 230, 35);
+    }
+    @include breakpointUp(850) {
+        width: calcWidthInSlider(3, 230, 35);
+    }
+    @include breakpointUp(1150) {
+        width: calcWidthInSlider(4, 230, 35);
+    }
+    @include breakpointUp(1450) {
+        width: calcWidthInSlider(5, 230, 35);
+    }
+    @include breakpointUp(1550) {
+        width: calcWidthInSlider(6, 230, 35);
+    }
+}
+
+
+.carouselList {
     @include flex(flex-start, center, pxIntoUnit(35));
     
     height: 100%;

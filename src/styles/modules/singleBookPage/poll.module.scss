@@ -1,0 +1,68 @@
+@use 'utils' as *;
+
+
+$containerHeight: 50;
+$containerWidth: 590;
+.pollWrapper {
+    @include colFlex(center);
+
+    width: pxIntoUnit($containerWidth);
+    min-height: pxIntoUnit($containerHeight);
+
+    & > p {
+        @include fontDefault(24);
+        align-self: center;
+        margin-bottom: pxIntoUnit(15);
+    }
+
+    & > ul {
+        @include flex(center, center, pxIntoUnit(10));
+        list-style: none;
+        width: pxIntoUnit($containerWidth);
+        min-height: pxIntoUnit($containerHeight);
+
+        > li {
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        &:hover {
+            > li {
+                @include animationPianoBubbleUp(0.4s, -30);
+                @include animationDelayOnChildren(10, 0, 0.1);
+            }
+        }
+    }
+
+    // Svgs state
+    & svg, path {
+        @include multipleTransition(fill stroke, 250ms);
+
+        fill: var(--svg-fill-passive);
+        stroke: var(--svg-stroke-passive);
+    }
+
+    & svg[data-active=true], path[data-active=true] {
+        fill: var(--svg-fill-active);
+        stroke: var(--svg-stroke-active);
+    }
+}
+
+// Rate Description
+.rateDesc {
+    @include flex(center, center, pxIntoUnit(10));
+    
+    & > p {
+        @include fontDefault(24);
+        color: var(--rating-description-text);
+    }
+}
+
+// Rate Cancel Btn
+.rateCancelBtn {
+    @include defaultBtn;
+
+    &:hover {
+        @include cancelHoverBtn;
+    }
+}

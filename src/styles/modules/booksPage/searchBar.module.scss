@@ -2,14 +2,11 @@
 
 .wrapper {
     @include colFlex(center);
-        
-    margin-top: pxIntoUnit(30);
+    
     align-self: center;
-    width: max(pxIntoUnit(225), 25vw);
+    width: pxIntoUnit(300);
     height: auto;
     border-radius: pxIntoUnit(17);
-
-    margin-bottom: pxIntoUnit(100);
 }
 
 .searchPar {
@@ -78,7 +75,7 @@
     transform: translateX(-50%);
 
     height: pxIntoUnit(240);
-    z-index: 99;
+    z-index: var(--modal-zindex);
     background-color: var(--search-modal-bg);
     padding: pxIntoUnit(15);
     border: pxIntoUnit(5) groove var(--search-modal-border);

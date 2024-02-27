@@ -1,5 +1,5 @@
 
-export default function closeIfOutsideClick<T extends HTMLElement>(elementRefs: React.RefObject<T | null>[], event: MouseEvent, callback: () => void) {
+export function closeIfOutsideClick<T extends HTMLElement>(elementRefs: React.RefObject<T | null>[], event: MouseEvent, callback: () => void) {
 
     const { target } = event;
 
@@ -10,7 +10,6 @@ export default function closeIfOutsideClick<T extends HTMLElement>(elementRefs: 
     else {
         for (const elem of noNullElements) {
             if (elem.current?.contains(target as Node)) {
-                console.log('click inside');
                 return;
             }
         }
