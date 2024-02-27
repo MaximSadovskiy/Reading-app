@@ -3,7 +3,7 @@ import db from "@/database/db";
 import { PromiseValueType } from "@/interfaces/promiseValueTypeUtil";
 import { GenreLiterals } from "@/interfaces/storage/bookInterface";
 import { getUserById } from "@/database/db_helpers";
-import { getBookById, updateBookRating } from "@/database/db_helpers_BOOKS";
+import { getBookById, getCommentById, updateBookRating } from "@/database/db_helpers_BOOKS";
 import { revalidatePath } from "next/cache";
 import { auth } from "$/auth";
 
@@ -16,6 +16,8 @@ enum ErrorMessages {
     USER_NO_FOUND = 'Ошибка: пользователь не был найден, попробуйте перезайти в аккаунт',
     USER_UNAUTHORIZED = 'Ошибка: пользователь не авторизован, войдите в аккаунт, чтобы совершить действие',
     BOOK_NO_FOUND = 'Ошибка: книга не найдена, приносим свои извинения',
+    COMMENT_NO_FOUND = 'Ошибка, комментарий не найден',
+    LIKE_ALREADY_EXIST = 'Ошибка, вы не можете поставить лайк одному комментарию больше 1 раза',
 }
 
 export const getPopularBooksAction = async (limit: number) => {
@@ -261,6 +263,7 @@ export const getLibraryBookAction = async (userId: string, bookId: number) => {
 
 
 // COMMENTS & LIKES
+// Add comment
 export const addCommentAction = async (content: string, userId: string, bookId: number) => {
     const user = await getUserById(userId);
     if (!user) {
@@ -277,14 +280,36 @@ export const addCommentAction = async (content: string, userId: string, bookId: 
             authorId: userId,
             authorName: user.username,
             bookId,
+            createdAt: new Date(),
         }
     });
 
-    return { success: 'Комментарий добавлен!' }
+    return { success: 'Комментарий успешно добавлен! Чтобы увидеть изменение - перезагрузите страницу:)' }
 }
 
-export const deleteCommentAction = async (userId: string, bookId: number) => {
-    const user = await getUserById(userId);
+
+// Delete Comment
+export const deleteCommentAction = async (commentId: string) => {
+    // check if it exist first
+    const existingComment = await db.comment.findUnique({
+        where: { id: commentId }
+    });
+    if (!existingComment) {
+        return { error: ErrorMessages.COMMENT_NO_FOUND }
+    }
+
+    await db.comment.delete({
+        where: {
+            id: commentId,
+        }
+    });
+
+    return { success: 'Комментарий успешно удалён! Чтобы увидеть изменение - перезагрузите страницу:)' }
+}
+
+// LIKE ACTION
+export const addLikeAction = async (authorId: string, bookId: number, commentId: string) => {
+    const user = await getUserById(authorId);
     if (!user) {
         return { error: ErrorMessages['USER_NO_FOUND'] };
     }
@@ -292,20 +317,64 @@ export const deleteCommentAction = async (userId: string, bookId: number) => {
     if (!book) {
         return { error: ErrorMessages['BOOK_NO_FOUND'] };
     }
+    const comment = await getCommentById(commentId);
+    if (!comment) {
+        return { error: ErrorMessages['COMMENT_NO_FOUND']}
+    }
 
-    await db.comment.delete({
-        where: {
-            commendId: {
-                authorId: userId,
-                bookId,
-            }
+    // check if like already exist
+    const existingLike = await db.like.findUnique({
+        where: { likeId: {
+            bookId,
+            authorId,
+            commentId,
+        }}
+    });
+    if (existingLike) {
+        return { error: ErrorMessages['LIKE_ALREADY_EXIST'] }
+    }
+
+    // creating like
+    await db.like.create({
+        data: {
+            authorId,
+            bookId,
+            commentId,
         }
     });
 
-    return { success: 'Комментарий успешно удалён!' }
+    // revalidate
+    revalidatePath(`/books/${bookId}`);
+
+    return { success: 'Действие выполнено успешно!' }
 }
 
-// LIKE ACTION
-export const addLikeAction = async (authorId: string, bookId: number, commentId: string) => {
-    
+// remove like
+export const removeLikeAction = async (authorId: string, bookId: number, commentId: string) => {
+    const user = await getUserById(authorId);
+    if (!user) {
+        return { error: ErrorMessages['USER_NO_FOUND'] };
+    }
+    const book = await getBookById(bookId);
+    if (!book) {
+        return { error: ErrorMessages['BOOK_NO_FOUND'] };
+    }
+    const comment = await getCommentById(commentId);
+    if (!comment) {
+        return { error: ErrorMessages['COMMENT_NO_FOUND']}
+    }
+
+    // remove like
+    await db.like.delete({
+        where: { likeId: {
+            authorId,
+            commentId,
+            bookId,
+        }}
+    });
+
+    // revalidate
+    revalidatePath(`/books/${bookId}`);
+
+    return { success: 'Действие успешно отменено!' }
 }

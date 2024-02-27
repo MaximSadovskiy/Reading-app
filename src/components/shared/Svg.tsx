@@ -217,6 +217,7 @@ export const LikeSvg = ({ width, height, strokeWidth, isActive }: LikeSvgProps) 
             width={width}
             height={height}
             data-active={isActive}
+            data-mode='like'
         >
             <path
                 d="M4.331 12.047 12 20l7.669-7.953A4.804 4.804 0 0 0 21 8.714C21 6.111 18.965 4 16.454 4a4.465 4.465 0 0 0-3.214 1.38L12 6.668 10.76 5.38A4.465 4.465 0 0 0 7.546 4C5.036 4 3 6.11 3 8.714c0 1.25.479 2.45 1.331 3.333Z"
@@ -228,6 +229,30 @@ export const LikeSvg = ({ width, height, strokeWidth, isActive }: LikeSvgProps) 
                 strokeWidth={strokeWidth}
                 d="M4.331 12.047 12 20l7.669-7.953A4.804 4.804 0 0 0 21 8.714C21 6.111 18.965 4 16.454 4a4.465 4.465 0 0 0-3.214 1.38L12 6.668 10.76 5.38A4.465 4.465 0 0 0 7.546 4C5.036 4 3 6.11 3 8.714c0 1.25.479 2.45 1.331 3.333Z"
             />
+        </svg>
+    )
+};
+
+
+// DELETE svg
+type DeleteSvgProps = {
+    width: number;
+    height: number;
+    isActive: boolean;
+}
+
+export const DeleteSvg = ({ width, height, isActive }: DeleteSvgProps) => {
+
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlSpace="preserve"
+            width={width}
+            height={height}
+            viewBox="0 0 32 32"
+            data-active={isActive}
+        >
+            <path d="M27 6h-6V5c0-1.654-1.346-3-3-3h-4c-1.654 0-3 1.346-3 3v1H5c-1.103 0-2 .897-2 2v1a1 1 0 0 0 1 1h24a1 1 0 0 0 1-1V8c0-1.103-.897-2-2-2zM13 5c0-.551.449-1 1-1h4c.551 0 1 .449 1 1v1h-6V5zM6 12v15c0 1.654 1.346 3 3 3h14c1.654 0 3-1.346 3-3V12H6zm13.707 10.293a.999.999 0 1 1-1.414 1.414L16 21.414l-2.293 2.293a.999.999 0 1 1-1.414-1.414L14.586 20l-2.293-2.293a.999.999 0 1 1 1.414-1.414L16 18.586l2.293-2.293a.999.999 0 1 1 1.414 1.414L17.414 20l2.293 2.293z" />
         </svg>
     )
 };

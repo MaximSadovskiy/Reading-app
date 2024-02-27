@@ -98,9 +98,9 @@ model Comment {
     book       Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
     bookId     Int
     likes      Like[]
-    likesCount Int    @default(0)
+    createdAt DateTime
 
-    @@unique(name: "commendId", [authorId, bookId])
+    @@unique(name: "commentId", [authorId, bookId, createdAt])
 }
 
 model Like {

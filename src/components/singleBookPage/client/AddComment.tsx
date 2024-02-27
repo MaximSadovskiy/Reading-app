@@ -52,6 +52,9 @@ export const AddComment = ({ bookTitle, user, bookId }: AddCommentProps) => {
                 type: 'success',
             });
         }
+
+        // reset input
+        setCommentText('');
     };
 
     // Modal state
@@ -79,9 +82,10 @@ export const AddComment = ({ bookTitle, user, bookId }: AddCommentProps) => {
             {isModalOpen && (
                 <ConfirmModal 
                     title="Требуется авторизацяи, перейти?"
+                    activeBtnText="Перейти"
                     modalState={isModalOpen}
                     closeCallback={closeCallback}
-                    redirectCallback={redirectCallback}
+                    activeCallback={redirectCallback}
                 />
             )}
         </div>

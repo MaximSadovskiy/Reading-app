@@ -9,20 +9,22 @@ import Backdrop from "./Backdrop";
 // Modal to confirm transition to Login page
 type ConfirmModalProps = {
 	closeCallback: () => void;
-    redirectCallback: () => void;
+    activeCallback: () => void;
 	modalState: boolean;
 	title: string;
+    activeBtnText: string;
 };
 
 export const ConfirmModal = ({
 	closeCallback,
 	modalState,
 	title,
-    redirectCallback,
+    activeCallback,
+    activeBtnText,
 }: ConfirmModalProps) => {
 	const modalRef = useRef<HTMLDivElement>(null);
 	useModal(modalRef, closeCallback, modalState);
-	const handleTransitionClick = () => redirectCallback();
+	const handleActiveClick = () => activeCallback();
 
 	const Modal = (
             <div key="confirmModal">
@@ -34,7 +36,7 @@ export const ConfirmModal = ({
                         initial="initial"
                         animate="animate"
                         exit="exit"
-                        key="transitionURLmodal"
+                        key="confirmActionModal"
                     >
                         <p>{title}</p>
                         <div className={styles.btnWrapper}>
@@ -43,9 +45,9 @@ export const ConfirmModal = ({
                             </button>
                             <button
                                 className={styles.successBtn}
-                                onClick={handleTransitionClick}
+                                onClick={handleActiveClick}
                             >
-                                Перейти
+                                {activeBtnText}
                             </button>
                         </div>
                     </m.div>

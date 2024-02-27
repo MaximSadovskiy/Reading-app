@@ -284,7 +284,8 @@ export const Poll = ({ bookId, user, ratingScore }: PollProps) => {
 							title='Требуется авторизация, продолжить?'
 							modalState={isModalOpen}
 							closeCallback={closeModal}
-							redirectCallback={redirectCallback}
+							activeCallback={redirectCallback}
+							activeBtnText="Перейти"
 						/>
 					)}
 					{hasRatedByUser ? (
