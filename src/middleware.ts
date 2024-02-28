@@ -18,6 +18,7 @@ export default auth((req) => {
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname) || bookIdRegex.test(nextUrl.pathname);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
+    return;
     if (isApiAuthRoute || isPublicRoute || isAuthRoute) {
         return;
     }

@@ -1,8 +1,7 @@
-import { promises as fs, readFile } from "fs";
-import { ReadBlock } from "@/components/readLayout/ReadBlock";
+import { promises as fs} from "fs";
+import { ReadBlockComponent } from "@/components/readLayout/ReadBlock";
 import { File } from "@/utils/FileUtil";
 import styles from "@/styles/modules/readLayout/readPage.module.scss";
-import { useSearchParams } from "next/navigation";
 
 async function getFile(path: string): Promise<File | null> {
   let buf: Buffer;
@@ -39,7 +38,9 @@ export default async function Read(context: any) {
   return (
     <main className={styles.main}>
       <div className={styles.readerBlock}>
+
         <h1 className={styles.title}>{bookName}</h1>
+
         <img
           className={styles.img}
           src="https://litmarket.ru/storage/books/89821_1704286953_65955ae918d16.jpg"
@@ -50,10 +51,12 @@ export default async function Read(context: any) {
           title='обложка книги Иоганн Милтон "Идол с глиняного холма"'
           data-was-processed="true"
         ></img>
-        <ReadBlock
+
+        <ReadBlockComponent
           text={str}
           sections={JSON.parse(JSON.stringify(sections))}
-        ></ReadBlock>
+        ></ReadBlockComponent>
+
       </div>
     </main>
   );
