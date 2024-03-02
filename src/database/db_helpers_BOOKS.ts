@@ -147,22 +147,6 @@ export const updateBookRating = async (bookId: number) => {
 };
 
 // COMMENTS & LIKES
-type GetBookCommentsPromise = ReturnType<typeof getCommentsOfBookById>;
-type GetBookComments = PromiseValueType<GetBookCommentsPromise>;
-export type CommentsType = NonNullable<GetBookComments>['success'];
-
-export const getCommentsOfBookById = async (bookId: number) => {
-    const comments = await db.comment.findMany({
-        where: { bookId },
-        // test
-        include: { likes: true }
-    });
-    if (!comments) {
-        return null;
-    }
-
-    return { success: comments }
-} 
 
 // is user liked this comment
 // MB DELETE LATER
@@ -192,3 +176,25 @@ export const getCommentById = async (commentId: string) => {
     }
     return comment;
 };
+
+
+
+// update likesCount field of comment
+export const updateLikesCountOfComment = async (commentId: string) => {
+    const likesOfComment = await db.like.findMany({
+        where: { commentId },
+    });
+    if (!likesOfComment) return;
+
+    const newLikesCount = likesOfComment.length;
+    
+    // find comment and update likesCount
+    await db.comment.update({
+        where: { id: commentId },
+        data: {
+            likesCount: newLikesCount,
+        }
+    });
+
+    return { success: 'likesCount field was successfully incremented' }
+}

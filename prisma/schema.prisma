@@ -18,7 +18,7 @@ enum UserRole {
 model User {
     id                    String                 @id @default(cuid())
     username              String
-    email                 String                @unique
+    email                 String                 @unique
     password              String
     role                  UserRole               @default(USER)
     emailVerified         DateTime?
@@ -90,15 +90,16 @@ model Author {
 
 // Comments & Likes
 model Comment {
-    id         String @id @default(cuid())
+    id         String   @id @default(cuid())
     content    String
-    author     User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
     authorId   String
     authorName String
-    book       Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
+    book       Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
     bookId     Int
     likes      Like[]
-    createdAt DateTime
+    likesCount Int      @default(0)
+    createdAt  DateTime
 
     @@unique(name: "commentId", [authorId, bookId, createdAt])
 }

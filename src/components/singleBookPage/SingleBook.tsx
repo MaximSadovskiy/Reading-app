@@ -6,7 +6,7 @@ import type { UserType } from "@/hooks/useCurrentUser";
 import { Poll } from "./client/Poll";
 import { AddToLibrary } from "./client/AddToLibrary";
 import { Comments } from "./Comments";
-import type { CommentsType } from "@/database/db_helpers_BOOKS";
+import { CommentsType } from "@/server_actions/books_actions"
 
 
 type SingleBookProps = {

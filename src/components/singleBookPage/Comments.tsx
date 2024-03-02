@@ -1,8 +1,11 @@
+'use client';
+
 import styles from "@/styles/modules/singleBookPage/comments.module.scss";
-import { CommentsType } from "@/database/db_helpers_BOOKS";
+import { CommentsType } from "@/server_actions/books_actions";
 import { AddComment } from "./client/AddComment";
 import type { UserType } from "@/hooks/useCurrentUser";
 import { SingleComment } from "./client/SingleComment";
+import { PaginationBtns } from "./client/PaginationBtns";
 
 
 interface CommentsProps {
@@ -38,7 +41,7 @@ export const Comments = ({ commentsArray, bookTitle, user, bookId }: CommentsPro
                                     : 'right';
         
         return (
-            <li>
+            <li key={commentId}>
                 <SingleComment 
                     content={content}
                     hasLikedbyUser={hasLikedByUser}
@@ -53,6 +56,10 @@ export const Comments = ({ commentsArray, bookTitle, user, bookId }: CommentsPro
             </li>
         )
     });
+
+
+    /* Pagination */
+    const numberOfAllComments = commentsArray.length;
 
     return (
         <section className={styles.commentsSection}>
@@ -75,6 +82,9 @@ export const Comments = ({ commentsArray, bookTitle, user, bookId }: CommentsPro
                     <p>Будьте первым кто поделится своим мнением!</p>
                 </div>
             )}
+            <PaginationBtns 
+                numberOfAllComments={numberOfAllComments}
+            />
         </section>
     )
 };

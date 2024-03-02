@@ -80,10 +80,6 @@ export const SingleComment = memo(({
 }: SingleCommentProps) => {
 
 	const [isSvgLiked, setIsSvgLiked] = useState(hasLikedbyUser);
-	// TEST
-	useEffect(() => {
-		console.log('isCreated by user: ', isCreatedByUser);
-	}, []);
 
 	// state that changes Svg bg on hover
 	const [isSvgHovered, setIsSvgHovered] = useState<SvgState>({
@@ -258,15 +254,16 @@ export const SingleComment = memo(({
 						data-mode='like'
 					>
 						<LikeSvg
-							width={60}
-							height={60}
+							width={40}
+							height={40}
 							strokeWidth={1}
 							isActive={isSvgLiked || isSvgHovered['like']}
 						/>
 					</button>
 					<p className={styles.likesCount}>{likesCount}</p>
 				</div>
-				<div className={styles.commentLike}>
+				{/* User can only delete a comment if it was created by him */}
+				{isCreatedByUser && (<div className={styles.commentLike}>
 					<button
 						onMouseEnter={hanldeMouseEnter}
 						onMouseLeave={handleMouseLeave}
@@ -275,12 +272,12 @@ export const SingleComment = memo(({
 						data-mode='delete'
 					>
 						<DeleteSvg 
-							width={60}
-							height={60}
+							width={40}
+							height={40}
 							isActive={isSvgHovered['delete']}
 						/>
 					</button>
-				</div>
+				</div>)}
 			</div>
 			<AnimatePresence>
 				{isModalOpen && (

@@ -3,7 +3,7 @@ import db from "@/database/db";
 import { PromiseValueType } from "@/interfaces/promiseValueTypeUtil";
 import { GenreLiterals } from "@/interfaces/storage/bookInterface";
 import { getUserById } from "@/database/db_helpers";
-import { getBookById, getCommentById, updateBookRating } from "@/database/db_helpers_BOOKS";
+import { getBookById, getCommentById, updateBookRating, updateLikesCountOfComment } from "@/database/db_helpers_BOOKS";
 import { revalidatePath } from "next/cache";
 import { auth } from "$/auth";
 
@@ -263,6 +263,42 @@ export const getLibraryBookAction = async (userId: string, bookId: number) => {
 
 
 // COMMENTS & LIKES
+
+// get comments of book, paginated
+type GetBookCommentsPromise = ReturnType<typeof getCommentsOfBookById>;
+type GetBookComments = PromiseValueType<GetBookCommentsPromise>;
+export type CommentsType = NonNullable<GetBookComments>['success'];
+
+export const getCommentsOfBookById = async (bookId: number, offset: number, countToTake: number) => {
+    const comments = await db.comment.findMany({
+        where: { bookId },
+        // test
+        include: { likes: true },
+        // по популярности
+        orderBy: { likesCount: 'desc' },
+        // pagination
+        take: countToTake,
+        skip: offset,
+    });
+    if (!comments) {
+        return null;
+    }
+
+    return { success: comments }
+}
+
+// get how many comments book have (length)
+export const getNumberOfAllComments = async (bookId: number) => {
+    const allComments = await db.comment.findMany({
+        where: { bookId },
+    });
+
+    const numberOfComments = allComments.length;
+    
+    return numberOfComments; 
+}
+
+
 // Add comment
 export const addCommentAction = async (content: string, userId: string, bookId: number) => {
     const user = await getUserById(userId);
@@ -281,6 +317,7 @@ export const addCommentAction = async (content: string, userId: string, bookId: 
             authorName: user.username,
             bookId,
             createdAt: new Date(),
+            likesCount: 0,
         }
     });
 
@@ -343,6 +380,10 @@ export const addLikeAction = async (authorId: string, bookId: number, commentId:
         }
     });
 
+
+    // update like count of comment
+    await updateLikesCountOfComment(commentId);
+
     // revalidate
     revalidatePath(`/books/${bookId}`);
 
@@ -372,6 +413,9 @@ export const removeLikeAction = async (authorId: string, bookId: number, comment
             bookId,
         }}
     });
+
+    // update like count of comment
+    await updateLikesCountOfComment(commentId);
 
     // revalidate
     revalidatePath(`/books/${bookId}`);

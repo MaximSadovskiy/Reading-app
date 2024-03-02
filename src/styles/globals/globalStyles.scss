@@ -343,6 +343,11 @@ body {
         --comments-comment-border: var(--color-bisque);
         --comment-authorname-color: var(--color-orange);
         --comment-content-bg: var(--color-darkbrown);
+        // pagination btns
+        --comment-btn-active-bg: var(--color-light-bisque);
+        --comment-btn-active-color: var(--color-lightbrown);
+        --comment-btn-hover-bg: var(--color-white);
+        --comment-btn-hover-color: var(--color-orange);
     };
 };
 

@@ -1,0 +1,34 @@
+@use 'utils' as *;
+
+$btnMinWidth: 60;
+$wrapperMinWidth: $btnMinWidth * 5;
+.btnsWrapper {
+    @include flex(center, center);
+    min-width: pxIntoUnit($wrapperMinWidth);
+
+    & > ul {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(pxIntoUnit(60), auto));
+        gap: pxIntoUnit(20);
+        place-content: center;
+        place-items: center;
+        list-style: none;
+        min-width: 100%;
+    }
+}
+
+.singleBtn {
+    @include defaultBtn;
+
+    &[data-active=true] {
+        background-color: var(--comment-btn-active-bg);
+        color: var(--comment-btn-active-color);
+        border-color: var(--comment-btn-active-color);
+
+        &:hover {
+            background-color: var(--comment-btn-hover-bg);
+            color: var(--comment-btn-hover-color);
+            border-color: var(--comment-btn-hover-color);
+        }
+    }
+}

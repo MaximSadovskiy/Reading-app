@@ -2,13 +2,13 @@ import { getBookById } from "@/database/db_helpers_BOOKS";
 import { SingleBookSection } from "@/components/singleBookPage/SingleBook";
 import styles from "@/styles/modules/singleBookPage/page.module.scss";
 import type { ReturnGetBookByIdType } from "@/database/db_helpers_BOOKS";
-import { getCommentsOfBookById } from "@/database/db_helpers_BOOKS";
+import { getCommentsOfBookById } from "@/server_actions/books_actions";
 import { useCurrentUserServer } from "@/hooks/useCurrentUser";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/ReactToastify.css';
 import { getRatingScoreAction, getLibraryBookAction } from "@/server_actions/books_actions";
 import type { GetRatingScore } from "@/server_actions/books_actions";
-import type { CommentsType } from "@/database/db_helpers_BOOKS";
+import { CommentsType } from "@/server_actions/books_actions"
 
 /* 
 export async function generateStaticParams() {
@@ -21,10 +21,14 @@ export async function generateStaticParams() {
 */
 
 type SingleBookProps = {
-    params: { id: string }
+    params: { id: string },
+    searchParams?: { page?: string },
 }
 
-const SingleBookPage = async ({ params }: SingleBookProps) => {
+// how many comments to take for page
+const takeCommentsLimit = 4;
+
+const SingleBookPage = async ({ params, searchParams }: SingleBookProps) => {
     const book = await getBookById(parseInt(params.id)) as NonNullable<ReturnGetBookByIdType>;
 
     // get Book Data (rating score) by user
@@ -59,8 +63,14 @@ const SingleBookPage = async ({ params }: SingleBookProps) => {
         }
     } 
 
-    // get comments for book
-    const commentsResult = await getCommentsOfBookById(book.id);
+    // get first 5 comments for book with pagination
+    const pageNumber = searchParams?.page ? parseInt(searchParams.page) : 1;
+    const offset = (pageNumber - 1) * takeCommentsLimit;
+    // log
+    console.log('pageNumber: ' + pageNumber + 'offset: ' + offset);
+
+    const commentsResult = await getCommentsOfBookById(book.id, offset, takeCommentsLimit);
+
     let comments: CommentsType = [];
     if (commentsResult) {
         comments = commentsResult.success;
