@@ -158,14 +158,14 @@
 // Cancel / Success Btn hover states
 @mixin successHoverBtn {
     background-color: var(--gen-btn-bg-success);
-    color: var(--color-white);
-    border-color: var(--color-white);
+    color: var(--gen-btn-color-success);
+    border-color: var(--gen-btn-border-success);
 }
 
 @mixin cancelHoverBtn {
     background-color: var(--gen-btn-bg-cancel);
-    color: var(--color-white);
-    border-color: var(--color-white);
+    color: var(--gen-btn-color-cancel);
+    border-color: var(--gen-btn-border-cancel);
 }
 
 // padding, margin

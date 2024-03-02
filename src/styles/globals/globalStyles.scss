@@ -61,11 +61,17 @@ body {
     --gen-btn-border-hover: var(--color-lightbrown-hover);
     --gen-btn-color: var(--color-lightbrown);
     --gen-btn-color-hover: var(--color-lightbrown-hover);
+    // cancel & success states
     --gen-btn-bg-cancel: var(--color-red);
+    --gen-btn-color-cancel: var(--color-white);
+    --gen-btn-border-cancel: var(--color-lightbrown);
     --gen-btn-bg-success: var(--color-green);
+    --gen-btn-color-success: var(--color-white);
+    --gen-btn-border-success: var(--color-lightbrown);
     // shadow
     --gen-shadow: var(--color-lightbrown-hover);
-
+    // modal
+    --gen-modal-color: var(--color-white);
     /* SPECIFIC */
     // header
     --header-height: 125px;
@@ -229,10 +235,11 @@ body {
     --book-section-border: var(--color-lightbrown);
     --book-section-shadow: var(--color-lightbrown-hover);
     --title-text: var(--color-lightbrown);
+
     --svg-fill-passive: var(--color-light-bisque);
-    --svg-fill-active: var(--color-lightbrown-hover);
-    --svg-stroke-passive: var(--color-lightbrown);
-    --svg-stroke-active: var(--color-orange);
+    --svg-fill-active: var(--color-orange);
+    --svg-stroke-passive: var(--color-lightbrown-hover);
+    --svg-stroke-active: var(--color-lightbrown-hover);
 
     --rating-description-text: var(--color-darkbrown);
     --library-wrapper-bg: var(--color-white);
@@ -244,6 +251,20 @@ body {
     // comments
     --comments-textarea-border: var(--color-lightbrown);
     --comments-textarea-border-hover: var(--color-orange);
+    --comments-list-bg: var(--color-white);
+    --comments-list-border: var(--color-lightbrown);
+    --comments-likesvg-color-active: var(--color-lightbrown);
+    --comments-likesvg-color-passive: var(--color-orange);
+    --comments-comment-bg: var(--color-light-bisque);
+    --comments-comment-border: var(--color-darkbrown);
+    --comment-authorname-color: var(--color-darkbrown);
+    --comment-content-bg: var(--color-white);
+
+    // pagination btns
+    --comment-btn-active-bg: var(--color-lightbrown);
+    --comment-btn-active-color: var(--color-white);
+    --comment-btn-hover-bg: var(--color-darkbrown);
+    --comment-btn-hover-color: var(--color-white);
 
     // tooltip
     --tooltip-bg: var(--color-light-bisque);
@@ -265,6 +286,10 @@ body {
         --gen-btn-color: var(--color-white);
         --gen-btn-color-hover: var(--color-orange);
         --gen-shadow: var(--color-light-bisque);
+
+        // cancel & success states
+        --gen-btn-border-cancel: var(--color-white);
+        --gen-btn-border-success: var(--color-white);
 
         // rootPage
         --header-border: var(--color-orange);

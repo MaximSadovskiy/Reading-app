@@ -30,7 +30,7 @@
         @include fontDefault(22, 600);
         line-height: 1.4;
         text-align: center;
-        color: var(--main-text);
+        color: var(--gen-modal-color);
     }
 }
 
@@ -42,11 +42,11 @@
         @include defaultBtn;
     }
 
-    & .successBtn {
+    & .successBtn:hover {
         @include successHoverBtn;
     }
 
-    & .cancelBtn {
+    & .cancelBtn:hover {
         @include cancelHoverBtn;
     }
 }

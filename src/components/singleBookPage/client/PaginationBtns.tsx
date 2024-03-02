@@ -130,7 +130,7 @@ export const PaginationBtns = ({ numberOfAllComments }: PaginationBtnsProps) => 
     return (
         <div className={styles.btnsWrapper}>
             <AnimatePresence>
-                {btnCoords && (
+                {(isTooltipRendered && btnCoords) && (
                     <Tooltip
                         message={tooltipMessage}
                         relativeElCoords={btnCoords} 
