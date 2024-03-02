@@ -321,12 +321,14 @@ export const addCommentAction = async (content: string, userId: string, bookId: 
         }
     });
 
+    revalidatePath(`/books/${bookId}`);
+
     return { success: 'Комментарий успешно добавлен! Чтобы увидеть изменение - перезагрузите страницу:)' }
 }
 
 
 // Delete Comment
-export const deleteCommentAction = async (commentId: string) => {
+export const deleteCommentAction = async (commentId: string, bookId: number) => {
     // check if it exist first
     const existingComment = await db.comment.findUnique({
         where: { id: commentId }
@@ -340,6 +342,8 @@ export const deleteCommentAction = async (commentId: string) => {
             id: commentId,
         }
     });
+
+    revalidatePath(`/books/${bookId}`);
 
     return { success: 'Комментарий успешно удалён! Чтобы увидеть изменение - перезагрузите страницу:)' }
 }

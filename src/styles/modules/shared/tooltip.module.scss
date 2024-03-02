@@ -1,0 +1,19 @@
+@use 'utils' as *;
+
+.tooltip {
+    @include colFlex(center, center);
+    @include fontDefault(18, 400);
+
+    z-index: 90;
+    // colors
+    position: fixed;
+    width: max-content;
+    padding: pxIntoUnit(10);
+    border: pxIntoUnit(2) solid;
+    border-radius: pxIntoUnit(10);
+
+    background-color: var(--tooltip-bg);
+    color: var(--tooltip-color);
+    border-color: var(--tooltip-border);
+    box-shadow: 0 0 3px 2px var(--tooltip-shadow);
+}

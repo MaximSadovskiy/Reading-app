@@ -2,18 +2,29 @@
 
 $btnMinWidth: 60;
 $wrapperMinWidth: $btnMinWidth * 5;
+
 .btnsWrapper {
     @include flex(center, center);
     min-width: pxIntoUnit($wrapperMinWidth);
+    margin-top: pxIntoUnit(50);
 
     & > ul {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(pxIntoUnit(60), auto));
+        grid-template-columns: repeat(4, minmax(pxIntoUnit(60), auto));
         gap: pxIntoUnit(20);
         place-content: center;
         place-items: center;
         list-style: none;
         min-width: 100%;
+
+        // breakpoints
+        @include breakpointDown(700) {
+            grid-template-columns: repeat(3, minmax(pxIntoUnit(60), auto));
+        }
+
+        @include breakpointDown(500) {
+            grid-template-columns: repeat(2, minmax(pxIntoUnit(60), auto));
+        }
     }
 }
 

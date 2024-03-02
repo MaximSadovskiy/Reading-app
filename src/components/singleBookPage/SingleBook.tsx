@@ -15,9 +15,10 @@ type SingleBookProps = {
     ratingScore: number | null;
     isLibBookExist: boolean;
     comments: CommentsType;
+    numberOfComments: number;
 }
 
-export const SingleBookSection = ({ book, user, ratingScore, isLibBookExist, comments }: SingleBookProps) => {
+export const SingleBookSection = ({ book, user, ratingScore, isLibBookExist, comments, numberOfComments }: SingleBookProps) => {
 
     const { id, title, author, year, genres, description, quotes, rating } = book;
     const authorName = author.name;
@@ -77,6 +78,7 @@ export const SingleBookSection = ({ book, user, ratingScore, isLibBookExist, com
                     bookTitle={title}
                     bookId={id}
                     user={user}
+                    numberOfComments={numberOfComments}
                 />
             </div>
         </section>

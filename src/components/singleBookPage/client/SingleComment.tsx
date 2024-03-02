@@ -216,7 +216,7 @@ export const SingleComment = memo(({
 	};
 	// delete modal callback
 	const deleteCallback = async () => {
-		const result = await deleteCommentAction(commentId);
+		const result = await deleteCommentAction(commentId, bookId);
 		if (result.error) {
 			toast(result.error, {
 				theme: 'colored',

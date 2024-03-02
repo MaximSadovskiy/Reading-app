@@ -63,7 +63,8 @@ body {
     --gen-btn-color-hover: var(--color-lightbrown-hover);
     --gen-btn-bg-cancel: var(--color-red);
     --gen-btn-bg-success: var(--color-green);
-
+    // shadow
+    --gen-shadow: var(--color-lightbrown-hover);
 
     /* SPECIFIC */
     // header
@@ -244,6 +245,12 @@ body {
     --comments-textarea-border: var(--color-lightbrown);
     --comments-textarea-border-hover: var(--color-orange);
 
+    // tooltip
+    --tooltip-bg: var(--color-light-bisque);
+    --tooltip-color: var(--color-darkbrown);
+    --tooltip-border: var(--color-lightbrown);
+    --tooltip-shadow: var(--color-lightbrown-hover);
+
     // darkTheme colors
     &[data-dark='true'] {
         
@@ -257,6 +264,7 @@ body {
         --gen-btn-border-hover: var(--color-orange);
         --gen-btn-color: var(--color-white);
         --gen-btn-color-hover: var(--color-orange);
+        --gen-shadow: var(--color-light-bisque);
 
         // rootPage
         --header-border: var(--color-orange);
@@ -348,6 +356,12 @@ body {
         --comment-btn-active-color: var(--color-lightbrown);
         --comment-btn-hover-bg: var(--color-white);
         --comment-btn-hover-color: var(--color-orange);
+
+        // tooltip
+        --tooltip-bg: var(--color-light-bisque);
+        --tooltip-color: var(--color-darkbrown);
+        --tooltip-border: var(--color-lightbrown-hover);
+        --tooltip-shadow: var(--color-lightbrown-hover);
     };
 };
 

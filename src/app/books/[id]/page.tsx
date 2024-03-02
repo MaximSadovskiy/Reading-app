@@ -2,7 +2,7 @@ import { getBookById } from "@/database/db_helpers_BOOKS";
 import { SingleBookSection } from "@/components/singleBookPage/SingleBook";
 import styles from "@/styles/modules/singleBookPage/page.module.scss";
 import type { ReturnGetBookByIdType } from "@/database/db_helpers_BOOKS";
-import { getCommentsOfBookById } from "@/server_actions/books_actions";
+import { getCommentsOfBookById, getNumberOfAllComments } from "@/server_actions/books_actions";
 import { useCurrentUserServer } from "@/hooks/useCurrentUser";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/ReactToastify.css';
@@ -76,6 +76,9 @@ const SingleBookPage = async ({ params, searchParams }: SingleBookProps) => {
         comments = commentsResult.success;
     }
 
+    // number of all comments to display correct pages count
+    const numberOfAllComments = await getNumberOfAllComments(book.id);
+
 
     return (
         <main className={styles.main}>
@@ -89,6 +92,7 @@ const SingleBookPage = async ({ params, searchParams }: SingleBookProps) => {
                 ratingScore={ratingScore}
                 isLibBookExist={isLibraryBookExist}
                 comments={comments} 
+                numberOfComments={numberOfAllComments}
             />
         </main>
     )

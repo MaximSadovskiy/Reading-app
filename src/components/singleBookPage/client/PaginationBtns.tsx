@@ -2,6 +2,10 @@
 
 import { useRouter, usePathname, useSearchParams } from "next/navigation"; 
 import styles from "@/styles/modules/singleBookPage/paginationBtns.module.scss";
+import { useRef, useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import { Tooltip } from "@/components/shared/Tooltip";
+
 
 interface PaginationBtnsProps {
     numberOfAllComments: number;
@@ -13,8 +17,11 @@ interface BtnWithPageNumber extends HTMLButtonElement {
     }
 }
 
+type TimerRefType = ReturnType<typeof setTimeout>;
+
 // how many comments take for 1 page
 const takeCommentsLimit = 4;
+const tooltipMessage = 'Вы на этой странице';
 
 export const PaginationBtns = ({ numberOfAllComments }: PaginationBtnsProps) => {
 
@@ -24,7 +31,7 @@ export const PaginationBtns = ({ numberOfAllComments }: PaginationBtnsProps) => 
     const { replace } = useRouter();
     
     const currentPageNumber = searchParams.get('page') ?? '1';
-    
+
     // change page number on click
     const handleChangePageNumber = (e: React.MouseEvent) => {
         const target = e.currentTarget.closest('button[data-page]') as BtnWithPageNumber;
@@ -37,6 +44,55 @@ export const PaginationBtns = ({ numberOfAllComments }: PaginationBtnsProps) => 
         const newURL = `${pathName}?${newSearchParams.toString()}`;
         // change url to new page number
         replace(newURL);
+    };
+
+    
+    // TOOLTIP state
+    const [isTooltipRendered, setIsTooltipRendered] = useState(false);
+    const [btnCoords, setBtnCoords] = useState<DOMRect | null>(null);
+
+    const timerRef = useRef<TimerRefType | null>(null);
+
+    // EVENT HANDLERS
+    const handleMouseEnter = async (e: React.MouseEvent) => {
+        const target = e.currentTarget.closest('button[data-active=true]');
+        
+        if (!target) return;
+        
+        // set timer
+        const result = await new Promise((res) => {
+            timerRef.current = setTimeout(() => {
+                // callback after 200ms
+                // this time timer can be null
+                // if user moves mouse away from element
+                if (timerRef.current !== null) {
+                    res(true);
+                }
+                // negative case (user moves mouse away)
+                else {
+                    res(false);
+                }
+                
+            }, 200);
+        });
+    
+
+        if (!result) return;
+        // user on element yet --> set states
+        setBtnCoords(target.getBoundingClientRect());
+        setIsTooltipRendered(true);
+    };
+
+    // no tooltip if mouse leaves
+    const handleMouseLeave = () => {
+        if (timerRef.current) {
+            clearTimeout(timerRef.current);
+            timerRef.current = null;
+        }
+
+        // reset state
+        setIsTooltipRendered(false);
+        setBtnCoords(null);
     };  
     
     
@@ -59,6 +115,8 @@ export const PaginationBtns = ({ numberOfAllComments }: PaginationBtnsProps) => 
                 <button
                     className={styles.singleBtn} 
                     onClick={handleChangePageNumber}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
                     data-page={pageNumber}
                     data-active={isActive}
                 >
@@ -71,6 +129,14 @@ export const PaginationBtns = ({ numberOfAllComments }: PaginationBtnsProps) => 
 
     return (
         <div className={styles.btnsWrapper}>
+            <AnimatePresence>
+                {btnCoords && (
+                    <Tooltip
+                        message={tooltipMessage}
+                        relativeElCoords={btnCoords} 
+                    />
+                )}
+            </AnimatePresence>
             <ul>
                 {renderingBtns}
             </ul>

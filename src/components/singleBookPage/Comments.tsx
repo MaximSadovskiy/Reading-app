@@ -1,5 +1,3 @@
-'use client';
-
 import styles from "@/styles/modules/singleBookPage/comments.module.scss";
 import { CommentsType } from "@/server_actions/books_actions";
 import { AddComment } from "./client/AddComment";
@@ -12,12 +10,13 @@ interface CommentsProps {
     commentsArray: CommentsType; 
     bookTitle: string;
     user: UserType;
-    bookId: number;   
+    bookId: number;
+    numberOfComments: number;   
 }
 
 type AuthorNameDirection = 'left' | 'right';
 
-export const Comments = ({ commentsArray, bookTitle, user, bookId }: CommentsProps) => {
+export const Comments = ({ commentsArray, bookTitle, user, bookId, numberOfComments }: CommentsProps) => {
 
     const renderingComments = commentsArray.map((comment, index) => {
         const { content, likes, id: commentId, authorName, authorId } = comment;
@@ -57,10 +56,6 @@ export const Comments = ({ commentsArray, bookTitle, user, bookId }: CommentsPro
         )
     });
 
-
-    /* Pagination */
-    const numberOfAllComments = commentsArray.length;
-
     return (
         <section className={styles.commentsSection}>
             <h2>Комментарии</h2>
@@ -83,7 +78,7 @@ export const Comments = ({ commentsArray, bookTitle, user, bookId }: CommentsPro
                 </div>
             )}
             <PaginationBtns 
-                numberOfAllComments={numberOfAllComments}
+                numberOfAllComments={numberOfComments}
             />
         </section>
     )
