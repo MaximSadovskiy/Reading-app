@@ -17,20 +17,21 @@ import upDownVariants from "@/animation/variants/upDownVariants";
 import { closeIfOutsideClick } from "@/utils/clickOutsideCloseFunction";
 
 
-const baseApiUrl = 'http://localhost:3000/api/books/search';
-
 type BooksForSearch = {
     id: number;
     title: string;
-    authorName: string;
+    authorDisplayName: string;
     rating: number;
 }[];
 
 type SearchResult = { error: string } | { success: BooksForSearch } | undefined;
 
 // WRAPPER
+type SearchProps = {
+    baseApiUrl: string;
+}
 
-const SearchBar = () => {
+const SearchBar = ({ baseApiUrl }: SearchProps) => {
 
     // Modal and Backdrop Open state 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -64,7 +65,11 @@ const SearchBar = () => {
                 <AnimatePresence>
                     {isModalOpen && (
                         <>
-                            <SearchModal isModalOpen={isModalOpen} closeModal={closeModal} />
+                            <SearchModal 
+                                isModalOpen={isModalOpen} 
+                                closeModal={closeModal}
+                                baseApiUrl={baseApiUrl} 
+                            />
                             <Backdrop />
                         </>
                     )}
@@ -83,9 +88,10 @@ export default SearchBar;
 interface SearchModalProps {
     isModalOpen: boolean;
     closeModal: () => void;
+    baseApiUrl: string
 }
 
-const SearchModal = ({ isModalOpen, closeModal }: SearchModalProps) => {
+const SearchModal = ({ isModalOpen, closeModal, baseApiUrl }: SearchModalProps) => {
 
     const modalRef = useRef<HTMLDivElement>(null);
 
@@ -141,7 +147,7 @@ const SearchModal = ({ isModalOpen, closeModal }: SearchModalProps) => {
 
                         // RESULT
                         const searchResultObject: SearchResult = await response.json();
-                        if (!searchResultObject || 'error' in searchResultObject) {
+                        if (!searchResultObject || 'error' in searchResultObject || searchResultObject.success.length === 0) {
                             setIsLoading(false);
                             setIsNoResults(true);
                             return;
@@ -257,7 +263,7 @@ const SearchResults = (props: SearchResultsProps) => {
     const renderedList = searchResults.map(searchResult => (
         <li key={searchResult.id} className={styles.resultsItem}>
             <Link href={`/books/${searchResult.id}`} className={styles.resultsWrapperUnderP}>
-                <p className={styles.resultsAuthor}>{searchResult.authorName}</p>
+                <p className={styles.resultsAuthor}>{searchResult.authorDisplayName}</p>
                 <p className={styles.resultsDash}>&#8212;</p>
                 <p className={styles.resultsTitle}>"{searchResult.title}"</p>
                 <p className={styles.resultsRating}>{searchResult.rating}</p>

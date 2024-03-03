@@ -144,7 +144,7 @@ const TextSection = ({ textData }: TextSectionProps) => {
                         variants={linkVariants}
                     >
                         <TextWithLink
-                            href='/lc'
+                            href='/auth/register'
                             parText={textBeforeLinkToLC}
                             linkText={textOfLinkLC}
                         />

@@ -21,22 +21,31 @@ enum ErrorMessages {
 }
 
 export const getPopularBooksAction = async (limit: number) => {
-    const books = await db.book.findMany({
+    const booksOnGenre = await db.book.findMany({
         take: limit,
         orderBy: { rating: 'desc' },
-        include: { author: true },
+        select: {
+            id: true,
+            title: true,
+            thumbnail: true,
+            rating: true,
+            author: {
+                select: {
+                    name: true,
+                }
+            }
+        }
     });
 
     // id, title, author, rating, thumbnail
-    const popularBooks = books.map(book => {
+    const recomendationBooks = booksOnGenre.map(book => {
+        const { id, title, author, thumbnail, rating } = book;
 
-        const { id, title, thumbnail, rating, author } = book;
-        const { name } = author;
-
-        return { id, title, authorName: name, thumbnail, rating };
+        return { id, title, authorName: author.name, thumbnail, rating}
     });
 
-    return popularBooks;
+
+    return recomendationBooks;
 };
 
 
@@ -46,16 +55,24 @@ export const getBookRecomendationsByGenre = async (genre: GenreLiterals, limit: 
         where: { genres: { has: genre }},
         take: limit,
         orderBy: { rating: 'desc' },
-        include: { author: true },
+        select: {
+            id: true,
+            title: true,
+            thumbnail: true,
+            rating: true,
+            author: {
+                select: {
+                    name: true,
+                }
+            }
+        }
     });
 
     // id, title, author, rating, thumbnail
     const recomendationBooks = booksOnGenre.map(book => {
+        const { id, title, author, thumbnail, rating } = book;
 
-        const { id, title, thumbnail, rating, author } = book;
-        const { name } = author;
-
-        return { id, title, authorName: name, thumbnail, rating };
+        return { id, title, authorName: author.name, thumbnail, rating}
     });
 
 
@@ -227,6 +244,8 @@ export const deleteFromLibraryAction = async (userId: string, bookId: number) =>
             }
         }
     });
+
+    revalidatePath('/my_library');
 
     return { success: 'Книга удалена из вашей библиотеки!' }
 }
@@ -426,3 +445,45 @@ export const removeLikeAction = async (authorId: string, bookId: number, comment
 
     return { success: 'Действие успешно отменено!' }
 }
+
+
+// MY_LIBRARY
+type LibraryBooksPromise = ReturnType<typeof getAllLibraryBooks>;
+export type LibraryBooks = PromiseValueType<LibraryBooksPromise>;
+export type LibraryBooksSuccess = NonNullable<LibraryBooks['success']>;
+
+export const getAllLibraryBooks = async (userId: string) => {
+    const libraryBooks = await db.libraryBook.findMany({
+        where: { userId },
+        select: {
+            book: {
+                select: {
+                    id: true,
+                    title: true,
+                    thumbnail: true,
+                    rating: true,
+                    genres: true,
+                    author: {
+                        select: {
+                            name: true,
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // check if length === 0 - должно проходить через ошибку
+    if (libraryBooks === null) {
+        return { error: 'no books' };
+    }
+
+    const booksData = libraryBooks.map((libBook) => {
+
+        const { id, title, author, thumbnail, rating, genres } = libBook.book;
+
+        return { id, title, thumbnail, rating, authorName: author.name, genres }
+    });
+
+    return { success: booksData };
+};

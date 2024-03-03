@@ -2,18 +2,25 @@
 
 .main {
     @include colorTransition;
-    // temp
-    @include colFlex(center, center);
+    @include colFlex(center);
 
     min-height: calc(100vh - var(--header-height));
     background-color: var(--main-bg);
+    color: var(--main-text);
+    gap: pxIntoUnit(12);
+    padding-top: pxIntoUnit(40);
 
-    // temp
-    & > button {
-        @include fontDefault(20);
-        @include colorTransformTransition;
+    & > h2 {
+        @include fontHeading(2);
+        @include animationSlideInBlur(900ms, -700);
 
-        padding: pxIntoUnit(20);
-        border-radius: pxIntoUnit(12);
+        color: var(--main-text-highlight);
+    }
+
+    & > p {
+        @include fontDefault(23);
+        @include animationSlideInBlur(900ms, -700);
+
+        animation-delay: 0.9s;
     }
 }

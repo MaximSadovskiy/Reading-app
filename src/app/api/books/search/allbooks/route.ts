@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { searchBooksByTitle, searchBooksByAuthor } from '@/database/db_helpers_BOOKS';
 import { getAuthorDisplayName } from '@/utils/textFormat/getAuthorDisplayName';
+import { SEARCH_ALL_BOOKS_URL } from '@/apiUrls';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,11 +16,11 @@ export async function GET(request: NextRequest) {
         
         if (mode === 'title') {
             const booksByTitle = await searchBooksByTitle(query);
-            console.log('no books found', booksByTitle);
+
             if (!booksByTitle || booksByTitle.length === 0) {
-                console.log('no books found');
                 return NextResponse.json({ error: 'no books were found' });
             }
+
             const formattedBooks = booksByTitle.map(book => {
                 const { id, title, author, rating } = book;
                 const authorName = getAuthorDisplayName(author.name, false);
@@ -46,6 +47,6 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ success: formattedBooks });
         }
     } catch (err) {
-
+        console.log(`Error on endpoint: ${SEARCH_ALL_BOOKS_URL}`);
     }
 }

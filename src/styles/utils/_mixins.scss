@@ -83,7 +83,12 @@
         to {
             opacity: 1;
             filter: blur(0px);
-            transform: translateX(0px),
+            @if ($direction == X) {
+                transform: translateX(0);
+            }
+            @else {
+                transform: translateY(0); 
+            }
         }   
     }
 }

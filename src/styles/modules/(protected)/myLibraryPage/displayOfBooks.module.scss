@@ -1,0 +1,8 @@
+@use 'utils' as *;
+
+.mainSection {
+    @include colFlex(center, flex-start, pxIntoUnit(120));
+
+    margin-top: pxIntoUnit(100);
+    margin-bottom: pxIntoUnit(200);
+}

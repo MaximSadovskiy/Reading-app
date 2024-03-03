@@ -3,6 +3,8 @@ import { GenreValues } from "@/interfaces/storage/bookInterface";
 import { getUserById } from "./db_helpers";
 import db from "./db";
 import type { PromiseValueType } from "@/interfaces/promiseValueTypeUtil";
+import { LibraryBooksSuccess } from "@/server_actions/books_actions";
+import { getAuthorDisplayName } from "@/utils/textFormat/getAuthorDisplayName";
 
 // Favourite genres
 export const getFavouriteGenres = async (userId: string): Promise<GenreLiterals[] | null> => {
@@ -35,7 +37,7 @@ export type SearchByTitleReturn = ReturnType<typeof searchBooksByTitle>;
 export const searchBooksByTitle = async (query: string) => {
     const booksByTitle = await db.book.findMany({
         where: { title: {
-            contains: query,
+            startsWith: query,
             mode: 'insensitive',
         }},
         orderBy: { rating: 'desc' },
@@ -64,7 +66,7 @@ export type SearchByAuthorReturn = ReturnType<typeof searchBooksByAuthor>;
 export const searchBooksByAuthor =  async (query: string) => {
     const booksByAuthor = await db.author.findFirst({
         where: { name: { 
-            contains: query,
+            startsWith: query,
             mode: 'insensitive', 
         }},
         select: {
@@ -84,6 +86,82 @@ export const searchBooksByAuthor =  async (query: string) => {
 
     return booksByAuthor;
 };
+
+
+// My_library search
+export const searchMyLibraryBooksByTitle = async (title: string, userId: string) => {
+    const allMyLibBooks = await db.libraryBook.findMany({
+        where: {
+            userId,
+            book: {
+                title: { startsWith: title, mode: 'insensitive', }
+            }
+        },
+        select: {
+            book: {
+                select: {
+                    id: true,
+                    title: true,
+                    rating: true,
+                    author: {
+                        select: { 
+                            name: true,
+                        }
+                    }
+                },
+            },
+        }
+    });
+
+    const returnBooks = allMyLibBooks.map(dataWrapper => {
+        const { id, title, author, rating } = dataWrapper.book;
+
+        const authorDisplayName = getAuthorDisplayName(author.name, false);
+
+        return { id, title, authorDisplayName, rating };
+    });
+
+    return returnBooks;
+};
+
+
+export const searchMyLibraryBooksByAuthor = async (authorName: string, userId: string) => {
+    const allBooksWithAuthorName = await db.libraryBook.findMany({
+        where: {
+            userId,
+            book: {
+                author: {
+                    name: { startsWith: authorName, mode: 'insensitive', }
+                }
+            }
+        },
+        select: {
+            book: {
+                select: {
+                    id: true,
+                    title: true,
+                    rating: true,
+                    author: {
+                        select: {
+                            name: true,
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    const returnBooks = allBooksWithAuthorName.map(wrapperObject => {
+        const { id, title, rating, author} = wrapperObject.book;
+
+        const authorDisplayName = getAuthorDisplayName(author.name, false);
+
+        return { id, title, authorDisplayName, rating };
+    });
+
+    return returnBooks;
+};
+
 
 // SINGLE BOOK PAGE
 type ReturnGetBookByIdPromise = ReturnType<typeof getBookById>;
@@ -198,3 +276,14 @@ export const updateLikesCountOfComment = async (commentId: string) => {
 
     return { success: 'likesCount field was successfully incremented' }
 }
+
+
+// My_library
+export const getBooksByGenre = (booksArray: LibraryBooksSuccess, genre: GenreLiterals[number]) => { 
+
+    const allBooksWithGenre = booksArray.filter(book => {
+        return book.genres.includes(genre);
+    });
+
+    return allBooksWithGenre;
+};
