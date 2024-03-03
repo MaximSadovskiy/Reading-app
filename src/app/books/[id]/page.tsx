@@ -10,15 +10,6 @@ import { getRatingScoreAction, getLibraryBookAction } from "@/server_actions/boo
 import type { GetRatingScore } from "@/server_actions/books_actions";
 import { CommentsType } from "@/server_actions/books_actions"
 
-/* 
-export async function generateStaticParams() {
-  const posts = await fetch('https://.../posts').then((res) => res.json())
- 
-  return posts.map((post) => ({
-    slug: post.slug,
-  }))
-} 
-*/
 
 type SingleBookProps = {
     params: { id: string },

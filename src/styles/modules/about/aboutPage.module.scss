@@ -1,0 +1,18 @@
+@use 'utils' as *;
+
+.main {
+    @include colFlex(flex-start, flex-start, pxIntoUnit(30));
+    @include colorTransition;
+
+    background-color: var(--main-bg);
+    color: var(--main-text);
+    min-height: 200vh;
+
+    padding-bottom: pxIntoUnit(200);
+    padding-inline: pxIntoUnit(80);
+
+    & h2 {
+        @include fontHeading(2);
+        color: var(--main-highlight);
+    }
+}
