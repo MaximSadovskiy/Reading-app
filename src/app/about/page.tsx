@@ -1,20 +1,22 @@
 import styles from "@/styles/modules/about/aboutPage.module.scss";
-import { dotsToParagraphs } from "@/utils/textFormat/dotsToParagraphs";
 import { textDataForAboutPage } from "./textData";
+import { splitTextToParagraphs } from "@/utils/textFormat/dotsToParagraphs";
+
 
 export default function AboutPage() {
 
-    const renderingText = textDataForAboutPage.map(text => dotsToParagraphs(text));
-    const renderingBlocksOfText = renderingText.map(textInPars => (
-        <div>
-            {textInPars}
+    const renderingBlocksOfText = textDataForAboutPage.map((textData, index) => (
+        <div className={styles.textDiv} key={index}>
+            {splitTextToParagraphs(textData)}
         </div>
-    ));
+    )); 
 
     return (
         <main className={styles.main}>
             <h2>Hello from about page!</h2>
-            {renderingBlocksOfText}
+            <section className={styles.textSection}>
+                {renderingBlocksOfText}
+            </section>
             {/* contacts / donate */}
         </main>
     )
