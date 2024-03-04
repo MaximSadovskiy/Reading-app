@@ -27,7 +27,7 @@ export const getCurrentVisibleDistance = (windowWidth: number, cardWidth: number
     else if (windowWidth < 850) cardCount = 2;
     else if (windowWidth < 1150) cardCount = 3;
     else if (windowWidth < 1450) cardCount = 4;
-    else if (windowWidth < 1550) cardCount = 5;
+    else if (windowWidth < 1750) cardCount = 5;
     else cardCount = 6;
     
 
@@ -38,6 +38,20 @@ export const getCurrentVisibleDistance = (windowWidth: number, cardWidth: number
     return output;
 };
 
+// сколько карточек внутри контейнера на текущей ширине экрана
+export const getVisibleCardCount = (windowWidth: number) => {
+
+    let cardCount: number;
+
+    if (windowWidth < 550) cardCount = 1;
+    else if (windowWidth < 850) cardCount = 2;
+    else if (windowWidth < 1150) cardCount = 3;
+    else if (windowWidth < 1450) cardCount = 4;
+    else if (windowWidth < 1750) cardCount = 5;
+    else cardCount = 6;
+
+    return cardCount;
+}
 
 /* получить максимальную дистанцию скролла */
 export const getMaxScrollDistance = (windowWidth: number, cardCount: number, cardWidth: number, gapWidth: number) => {
@@ -77,4 +91,14 @@ export const getCenterOfCard = (windowWidth: number, currentScrollValue: number,
     const newPerspectiveValue = centerOfVisibleContainerWithScroll + difference;
 
     return `${newPerspectiveValue}px`;
+};
+
+
+// if there cards behind viewport --> can scroll, otherwise - dont
+export const isShouldScroll = (windowWidth: number, allCardCount: number) => {
+
+    const countOfVisibleCards = getVisibleCardCount(windowWidth);
+    const shouldScroll = countOfVisibleCards < allCardCount;
+
+    return shouldScroll;
 };

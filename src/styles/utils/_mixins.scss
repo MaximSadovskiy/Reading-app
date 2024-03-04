@@ -122,7 +122,7 @@
 
         // visual
         44% {
-            filter: blur(0px);
+            filter: blur(7px);
         }
 
         50% {
@@ -130,6 +130,7 @@
         }
         68% {
             transform: translateY(0);
+            filter: blur(3px);
         }
         85% {
             transform: translateY($thirdUpPointPx);

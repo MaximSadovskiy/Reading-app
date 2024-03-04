@@ -26,13 +26,6 @@ const Navbar = () => {
                 </li>
                 <li>
                     <Link 
-                        href='/read' 
-                        className={`${styles.link} ${currentPath.startsWith('/read') ? styles.active : ''}`}
-                    >Чтение
-                    </Link>
-                </li>
-                <li>
-                    <Link 
                         href='/about' 
                         className={`${styles.link} ${currentPath === '/about' ? styles.active : ''}`}
                     >О нас
