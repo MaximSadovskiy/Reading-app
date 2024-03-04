@@ -6,6 +6,7 @@ import { PaginationBlockComponent } from "@/components/readLayout/PaginationBloc
 
 interface ReaderProp {
   text: string;
+  title: string;
   sections: Array<Section>;
 }
 function readSection(prop: ReaderProp, section: Section) {
@@ -48,10 +49,10 @@ function ReadBlockComponent(prop: ReaderProp) {
     setSectionIndex(newIndex);
     changeText(readSection(prop, prop.sections[newIndex]));
   }
-  function change(lul: string) {
-    let index = prop.sections.findIndex((elem) => elem.sectionName === lul);
+  function change(sectionName: string) {
+    let index = prop.sections.findIndex((elem) => elem.sectionName === sectionName);
     if (index === -1) {
-      console.error("Cannot find section with name: " + lul);
+      console.error("Cannot find section with name: " + sectionName);
       return;
     }
     setSectionIndex(index);
@@ -67,10 +68,17 @@ function ReadBlockComponent(prop: ReaderProp) {
   if (prop.text.length > 0) {
     const paragraphsArr = splitTextToParagraphs(text);
     const paragraphsElements = [];
+    //push name of section at the top
+    paragraphsElements.push(
+      <h1 key={0} className={styles.title}>
+        {"Страница: " + prop.sections[sectionIndex].sectionName}
+      </h1>
+    );
     for (let i = 0; i < paragraphsArr.length; ++i) {
       paragraphsElements.push(
-        <p key={i} className={styles.paragraphText}>
-          {paragraphsArr[i]}
+        //&emsp; = tab
+        <p key={i + 1} className={styles.paragraphText}>
+          &emsp; {paragraphsArr[i]}
         </p>
       );
     }
@@ -80,14 +88,35 @@ function ReadBlockComponent(prop: ReaderProp) {
         sectionNames.push(section.sectionName);
       }
     });
-
+    // Only add title if it's starting page
+    const header = [];
+    if (sectionIndex === 0) {
+      header.push(<h1 className={styles.title}>{prop.title}</h1>);
+      header.push(<img
+        className={styles.img}
+        src="https://litmarket.ru/storage/books/89821_1704286953_65955ae918d16.jpg"
+        data-src="https://litmarket.ru/storage/books/89821_1704286953_65955ae918d16.jpg"
+        width="152"
+        height="238"
+        alt='обложка книги Иоганн Милтон "Идол с глиняного холма"'
+        title='обложка книги Иоганн Милтон "Идол с глиняного холма"'
+        data-was-processed="true"
+      ></img>);
+    }
     return (
       <>
+        {header}
+
         {paragraphsElements}
+
         <PaginationBlockComponent
           list={sectionNames}
-          onClickFunction={(ev: any) => { change(ev.target.outerText); }}
-          onClickMoveOneFunction={(isLeft: boolean) => { changeOne(isLeft)}}
+          onClickFunction={(ev: any) => {
+            change(ev.target.outerText);
+          }}
+          onClickMoveOneFunction={(isLeft: boolean) => {
+            changeOne(isLeft);
+          }}
           currentSectionIndex={sectionIndex}
         ></PaginationBlockComponent>
       </>

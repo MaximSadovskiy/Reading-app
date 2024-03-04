@@ -39,21 +39,9 @@ export default async function Read(context: any) {
     <main className={styles.main}>
       <div className={styles.readerBlock}>
 
-        <h1 className={styles.title}>{bookName}</h1>
-
-        <img
-          className={styles.img}
-          src="https://litmarket.ru/storage/books/89821_1704286953_65955ae918d16.jpg"
-          data-src="https://litmarket.ru/storage/books/89821_1704286953_65955ae918d16.jpg"
-          width="152"
-          height="238"
-          alt='обложка книги Иоганн Милтон "Идол с глиняного холма"'
-          title='обложка книги Иоганн Милтон "Идол с глиняного холма"'
-          data-was-processed="true"
-        ></img>
-
         <ReadBlockComponent
           text={str}
+          title={bookName}
           sections={JSON.parse(JSON.stringify(sections))}
         ></ReadBlockComponent>
 
