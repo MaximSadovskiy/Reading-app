@@ -4,7 +4,7 @@ const UNICODE_RANGE = 26;
 
 // users data for SEEDing database
 export const usersData = {
-    names: ['Игорь', 'Оля', 'Максим', 'Роман', 'Антон', 'Mikhail', 'rEgEn', 'sToryTailer', 'ruSSian_BeAr', 'GarryOldman', 'kerojey', 'blind_owl', 'Карманный_кошелёк', 'ФанЗиПам', 'Не_Думаю_Но_Знаю', 'Пушкин-Вор'],
+    names: ['Игорь', 'Оля', 'Максим', 'Роман', 'Антон', 'Mikhail', 'rEgEn', 'sToryTailer', 'ruSSian_BeAr', 'GarryOldman', 'kerojey', 'blind_owl', 'Карманный_кошелёк', 'ФанЗиПам', 'Не_Думаю_Но_Знаю', 'Пушкин-Вор', 'Геральт_из_Ливии', 'пролЕтАрий_из_ВиТебска', 'seemsGood', 'StariyHrych', 'Стул+Стол', 'undefined', 'скитающийся_скиталец', 'BurriTTo_', 'что-тотам'],
     
     getRandomName() {
         const randomIndex = Math.floor(Math.random() * this.names.length);

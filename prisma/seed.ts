@@ -1,10 +1,11 @@
 import { randomUUID } from "crypto";
-import { PrismaClient, Comment, Like } from "@prisma/client";
+import { PrismaClient, Comment, Like, User, Rating } from "@prisma/client";
 import { GenreLiterals, GenreValues } from "@/interfaces/storage/bookInterface";
 import { authorsData } from "@/booksStorage/textData/storage";
 import { commentsData } from "@/booksStorage/textData/commentTextData";
 import { usersData } from "@/booksStorage/textData/usersTextData";
-
+import { updateLikesCountOfComment } from "@/database/db_helpers_BOOKS";
+import { updateBookRating } from "@/database/db_helpers_BOOKS";
 
 const prisma = new PrismaClient();
 
@@ -12,7 +13,7 @@ const prisma = new PrismaClient();
 async function main() {
 
     // Authors & Books
-    for (const author of authorsData) {
+    for await (const author of authorsData) {
         await prisma.author.create({
             data: {
                 name: author.name,
@@ -26,26 +27,52 @@ async function main() {
     }
 
     // Users (не настоящие пользователи)
-    const userIds = await createTestUserRecords(10);
+    const userRecordsData = getUserRecordsData(20);
+    const userIds = userRecordsData.map(data => data.id);
 
-    // Comments
+    await prisma.user.createMany({
+        data: userRecordsData
+    });
+
     const bookGenresAndIds = await prisma.book.findMany({
         select: {
             id: true,
             genres: true,
         }
     });
-
+    
     // for each book
     for await (const book of bookGenresAndIds) {
-        // get random comments of length 'limit'
-        const commentsIds = await createCommentRecords(10, book.id, book.genres as GenreLiterals[], userIds);
+        // Rating
+        const ratingData = getRandomRatingScores([5, 10], userIds, book.id);
+        await prisma.rating.createMany({
+            data: ratingData,
+        });
 
+        // update ratingScore field of book record
+        await updateBookRating(book.id);
+
+        // Comments
+        // get random comments of length 'limit'
+        const commentRecordsData = await getRandomCommentRecordsData([5, 15], book.id, book.genres as GenreLiterals[], userIds);
+        
+        const commentIds = commentRecordsData.map(data => data.id);
+
+        await prisma.comment.createMany({
+            data: commentRecordsData,
+        });
 
         // Likes
         // ids of the current book
-        for (const commendId of commentsIds) {
-            await addLikesToComment([4, 8], book.id, userIds, commendId);
+        for await (const commentId of commentIds) {
+            const likesData = getLikesDataForComment([3, 10], book.id, userIds, commentId);
+
+            await prisma.like.createMany({
+                data: likesData,
+            });
+
+            // update likescount field on comment
+            await updateLikesCountOfComment(commentId);
         }
     }
 }
@@ -67,33 +94,27 @@ main()
 
 // USERS
 // create User records
-async function createTestUserRecords(limit: number) {
+function getUserRecordsData(limit: number) {
 
-    // collect userIds, to retrieve names for comments later
-    const userIds: string[] = [];
+    const users: User[] = []; 
 
-    for (let i = 0; i < limit; i++) {
-        const uuid = randomUUID();
-        userIds.push(uuid);
+    while (users.length < limit) {
+        const user: User = {
+            username: usersData.getRandomName(),
+            email: usersData.generateEmail(),
+            password: randomUUID(),
+            id: randomUUID(),
+            emailVerified: new Date(),
+            favouriteGenres: getRandomFavGenres(),
+            image: '',
+            isTwoFactorEnabled: false,
+            role: 'USER',
+        }
 
-        await prisma.user.create(
-            {
-                data: {
-                    username: usersData.getRandomName(),
-                    email: usersData.generateEmail(),
-                    password: randomUUID(),
-                    id: uuid,
-                    emailVerified: new Date(),
-                    favouriteGenres: getRandomFavGenres(),
-                    image: '',
-                    isTwoFactorEnabled: false,
-                    role: 'USER',
-                }
-            }
-        )
+        users.push(user);
     }
 
-    return userIds;
+    return users;
 }
 
 // favourite genres for Users
@@ -142,13 +163,15 @@ function getRandomUserName() {
 
 // COMMENTS
 // create db Comment records
-async function createCommentRecords(limit: number, bookId: number, genres: GenreLiterals[], userIds: string[]) {
+type Tuple2 = [number, number];
 
+async function getRandomCommentRecordsData([min, max]: Tuple2, bookId: number, genres: GenreLiterals[], userIds: string[]) {
+
+    const commentRecordsData: Comment[] = [];
     const genresArrLength = genres.length;
-    const commentIds = [];
+    const randomCount = Math.floor(Math.random() * (max - min)) + min; 
 
-    let i = 0;
-    while (i < limit) {
+    while (commentRecordsData.length < randomCount) {
         const randomGenreInd = Math.floor(Math.random() * genresArrLength);
         const randomGenre = genres[randomGenreInd];
         // get random comment from that genre
@@ -157,68 +180,99 @@ async function createCommentRecords(limit: number, bookId: number, genres: Genre
         const userId = getRandomUserId(userIds);
         const userName = await getUserNameById(userId);
 
-        const commentId = randomUUID();
-        commentIds.push(commentId);
+        const commentRecord: Comment = {
+            id: randomUUID(),
+            content,
+            authorId: userId,
+            authorName: userName ?? getRandomUserName(),
+            bookId,
+            likesCount: 0,
+            createdAt: getRandomDateOffset(),
+        };
 
-        await prisma.comment.create({
-            data: {
-                id: commentId,
-                content,
-                authorId: userId,
-                authorName: userName ?? getRandomUserName(),
-                bookId,
-                likesCount: 0,
-                createdAt: getRandomDateOffset(),
-            }
-        });
-
-        i++;
+        commentRecordsData.push(commentRecord);
     }
 
-    return commentIds;
+    return commentRecordsData;
 }
 
 
 // LIKES
-async function addLikesToComment([minCount, maxCount]: [number, number], bookId: number, userIds: string[], commentId: string) {
+function getLikesDataForComment([minCount, maxCount]: [number, number], bookId: number, userIds: string[], commentId: string) {
 
+    const likesData: Like[] = [];
     // 1 user cant like more than 1 time
-    const usedIds: string[] = [];
+    const alreadyUsedIds: string[] = [];
     const randomCountOfLikes = Math.floor(Math.random() * (maxCount - minCount)) + minCount;
 
-    let i = 0;
-    while (i < randomCountOfLikes) {
+    while (likesData.length < randomCountOfLikes) {
         const userId = getRandomUserId(userIds);
-        if (!usedIds.includes(userId)) {
+        if (!alreadyUsedIds.includes(userId)) {
             // push to prevent violation of unique constraint
-            usedIds.push(userId);
-
-            await prisma.like.create({
-                data: {
-                    bookId,
-                    authorId: userId,
-                    commentId,
-                }
-            });
+            alreadyUsedIds.push(userId);
             
-            i++;
+            const like: Like = {
+                bookId,
+                authorId: userId,
+                commentId,
+            };
+
+            likesData.push(like);
         }   
         else {
             continue;
         }
     }
+
+
+    return likesData;
 } 
+
+// Rating
+function getRandomRatingScores([minCount, maxCount]: Tuple2, userIds: string[], bookId: number) {
+
+    // number of scores
+    const randomCountOnScores = Math.floor(Math.random() * (maxCount - minCount)) + minCount;
+    const ratingData: Rating[] = [];
+    // 1 user cant add 2 rating marks
+    const alreadyUsedIds: string[] = [];
+
+    while (ratingData.length < randomCountOnScores) {
+        const userId = getRandomUserId(userIds);
+        // uniqueness checking
+        if (!alreadyUsedIds.includes(userId)) {
+             // from 5 to 10
+            const ratingScore = Math.floor(Math.random() * 5) + 5;
+            // random userId
+            alreadyUsedIds.push(userId);
+
+            const rating: Rating = {
+                bookId,
+                userId,
+                ratingScore,
+            }
+
+            ratingData.push(rating);
+        }
+    }
+
+
+    return ratingData;
+}
 
 // get random past date
 function getRandomDateOffset() {
     const now = Date.now();
     const dayToMs = 3600 * 1000 * 24;
+    const minuteToMs = 60 * 60 * 1000;
     // 0 - 60 days away
     const randomDayCount = Math.floor(Math.random() * 60);
-    const randomSeconds = Math.floor(Math.random() * 3600);
+    // 0 - 1000 minutes range
+    const randomMinutesCount = Math.floor(Math.random() * 1000);
 
     // now - days + seconds
-    const resultBackDate = now - (randomDayCount * dayToMs) + randomSeconds;
+    const resultBackDate = now - (randomDayCount * dayToMs) + (randomMinutesCount * minuteToMs);
+
     return new Date(resultBackDate);
 }
 

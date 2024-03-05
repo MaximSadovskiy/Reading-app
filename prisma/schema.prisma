@@ -39,7 +39,7 @@ model User {
 
 model Book {
     id           Int           @id @default(autoincrement())
-    title        String
+    title        String        @unique
     author       Author        @relation(fields: [authorId], references: [id])
     authorId     Int
     genres       String[]
@@ -81,7 +81,7 @@ model LibraryBook {
 
 model Author {
     id      Int     @id @default(autoincrement())
-    name    String
+    name    String  @unique
     books   Book[]
     picture String?
 
