@@ -49,7 +49,7 @@ model Book {
     rating       Float         @default(7.5)
     thumbnail    String
     picture      String?
-    file         Bytes
+    file         String
     ratingScores Rating[]
     libraryBooks LibraryBook[]
     comments     Comment[]

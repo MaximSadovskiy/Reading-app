@@ -1,6 +1,6 @@
 import { LibraryBooksSuccess } from "@/server_actions/books_actions";
 import { GenreLiterals } from "@/interfaces/storage/bookInterface";
-import { GenreDescription, genreDescriptions } from "@/booksStorage/usage/genresDescription";
+import { GenreDescription, genreDescriptions } from "@/booksStorage/textData/genresDescription";
 import styles from "@/styles/modules/(protected)/myLibraryPage/displayOfBooks.module.scss";
 import BookCarousel from "../booksPage/bookCarousel";
 import SearchBar from "../booksPage/SearchBar";
