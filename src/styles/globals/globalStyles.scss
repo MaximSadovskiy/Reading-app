@@ -35,6 +35,7 @@ input {
     --color-orange: hsl(25, 100%, 82%);
     --color-gray: hsl(0, 1%, 83%);
     --color-white: hsl(0, 0%, 100%); 
+    --color-white-read: hsl(42, 100%, 95%);
     --color-red: hsl(0, 89%, 31%);
     --color-bright-red: hsl(0, 100%, 39%);
     --color-light-red: hsl(0, 100%, 94%);
@@ -176,11 +177,14 @@ body {
     --carousel-card-gradient2: var(--color-bisque);
     --carousel-card-gradient3: var(--color-light-bisque);
     --carousel-card-border: var(--color-lightbrown);
+    
     --carousel-card-text: var(--color-darkbrown);
+    --carousel--title-text: var(--color-lightbrown);
+    --carousel-rating-text: var(--color-lightbrown-hover);
+
     --carousel-slideBtn-bg: var(--color-lightbrown);
     --carousel-slideBtn-hover: var(--color-lightbrown-hover);
     --carousel-slideBtn-color: var(--color-light-bisque);
-
 
     // forms
     --form-title-color: var(--color-lightbrown);
@@ -272,6 +276,17 @@ body {
     --tooltip-border: var(--color-lightbrown);
     --tooltip-shadow: var(--color-lightbrown-hover);
 
+    // READ page
+    --read-title: var(--color-darkbrown);
+    --read-author: var(--color-lightbrown)
+    --read-bg: var(--color-white-read);
+    --read-text: var(--color-darkbrown);
+    --read-pagination-border: var(--color-lightbrown);
+    --read-btn-hover: var(--color-white);
+    --read-btn-selected-bg: var(--color-lightbrown);
+    --read-btn-selected-border: var(--color-lightbrown);
+    --read-btn-selected-color: var(--color-white);
+
     // darkTheme colors
     &[data-dark='true'] {
         
@@ -323,7 +338,11 @@ body {
         --carousel-card-gradient2: var(--color-orange);
         --carousel-card-gradient3: var(--color-lightbrown) 50%;
         --carousel-card-border: var(--color-bisque);
+
         --carousel-card-text: var(--color-white);
+        --carousel--title-text: var(--color-orange);
+        --carousel-rating-text: var(--color-light-bisque);
+        
         --carousel-slideBtn-bg: var(--color-light-bisque);
         --carousel-slideBtn-hover: var(--color-white);
         --carousel-slideBtn-color: var(--color-darkbrown);
@@ -387,6 +406,17 @@ body {
         --tooltip-color: var(--color-darkbrown);
         --tooltip-border: var(--color-lightbrown-hover);
         --tooltip-shadow: var(--color-lightbrown-hover);
+
+        // READ page
+        --read-title: var(--color-orange);
+        --read-author: var(--color-light-bisque);
+        --read-bg: var(--color-darkbrown);
+        --read-text: var(--color-white-read);
+        --read-pagination-border: var(--color-orange);
+        --read-btn-hover: var(--color-lightbrown-hover);
+        --read-btn-selected-bg: var(--color-orange);
+        --read-btn-selected-border: var(--color-lightbrown);
+        --read-btn-selected-color: var(--color-lightbrown);
     };
 };
 

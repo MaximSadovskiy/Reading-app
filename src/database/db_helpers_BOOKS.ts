@@ -287,3 +287,31 @@ export const getBooksByGenre = (booksArray: LibraryBooksSuccess, genre: GenreLit
 
     return allBooksWithGenre;
 };
+
+
+// Read
+export const getBookDataRead = async (bookId: number) => {
+    const book = await db.book.findUnique({
+        where: { id: bookId },
+        select: { 
+            title: true,
+            thumbnail: true,
+            file: true,
+            author: {
+                select: { name: true }
+            } 
+        },
+    });
+    
+    if (!book) {
+        return null;
+    }
+
+
+    const resultBook = {
+        ...book,
+        authorName: book.author.name,
+    };
+
+    return resultBook;
+};

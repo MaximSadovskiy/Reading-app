@@ -1,5 +1,7 @@
 import { AuthorInterface } from '@/interfaces/storage/authorInterface';
 
+const BASE_PATH = '/src/booksStorage/srcs/books/';
+
 export const authorsData: AuthorInterface[] = [
     // TEMPLATE
     /* {
@@ -37,7 +39,7 @@ export const authorsData: AuthorInterface[] = [
                     "Любовь - это не только то, что мы чувствуем, но и то, как мы реагируем на любовь."
                 ],
                 thumbnail: "/thumbs/взгляниНаМеня.jpg",
-                file: "/src/booksStorage/srcs/books/взгляниНаМеня.txt"
+                file: `${BASE_PATH}/взгляниНаМеня.txt`
             }
         ]
     },
@@ -55,7 +57,7 @@ export const authorsData: AuthorInterface[] = [
                     "Я не могу спать. Я не могу, я не могу, я не могу."
                 ],
                 thumbnail: "/thumbs/дракула.jpg",
-                file: "/src/booksStorage/srcs/books/дракула.txt"
+                file: `${BASE_PATH}/дракула.txt`,
             }
         ]
     },
@@ -73,7 +75,7 @@ export const authorsData: AuthorInterface[] = [
                     "Мы должны стремиться к тому, чтобы стать лучше."
                 ],
                 thumbnail: "/thumbs/илонМаск.jpg",
-                file: "/src/booksStorage/srcs/books/илонМаск.txt"
+                file: `${BASE_PATH}/илонМаск.txt`,
             },
             {
                 title: 'Стив Джобс',
@@ -86,7 +88,7 @@ export const authorsData: AuthorInterface[] = [
                     'Сделайте то, что вы не можете не делать.'
                 ],
                 thumbnail: '/thumbs/стивДжобс.jpg',
-                file: '/src/booksStorage/srcs/books/стивДжобс.txt'
+                file: `${BASE_PATH}/стивДжобс.txt`,
             }
         ]
     },
@@ -104,7 +106,7 @@ export const authorsData: AuthorInterface[] = [
                     "Мы не знаем, кто мы, но мы знаем, кто мы не являемся."
                 ],
                 thumbnail: "/thumbs/мы.jpg",
-                file: "/src/booksStorage/srcs/books/мы.txt"
+                file: `${BASE_PATH}/мы.txt`,
             }
         ]
     },
@@ -122,7 +124,7 @@ export const authorsData: AuthorInterface[] = [
                     'Великий Брат всегда прав.'
                 ],
                 thumbnail: '/thumbs/1984.jpg',
-                file: '/src/booksStorage/srcs/books/1984.txt'
+                file: `${BASE_PATH}/1984.txt`,
             }
         ]
     },
@@ -140,7 +142,7 @@ export const authorsData: AuthorInterface[] = [
                     'Верить в то, что вы можете сделать, и потом делать это.'
                 ],
                 thumbnail: '/thumbs/распинатель.jpg',
-                file: '/src/booksStorage/srcs/books/распинатель.txt'
+                file: `${BASE_PATH}/распинатель.txt`,
             },
             {
                 title: 'Взгляд из темноты',
@@ -153,7 +155,7 @@ export const authorsData: AuthorInterface[] = [
                     'Верить в то, что вы можете сделать, и потом делать это.'
                 ],
                 thumbnail: '/thumbs/взглядИзТемноты.jpg',
-                file: '/src/booksStorage/srcs/books/взглядИзТемноты.txt'
+                file: `${BASE_PATH}/взглядИзТемноты.txt`,
             }
         ]
     }

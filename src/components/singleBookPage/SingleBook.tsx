@@ -7,7 +7,7 @@ import { Poll } from "./client/Poll";
 import { AddToLibrary } from "./client/AddToLibrary";
 import { Comments } from "./Comments";
 import { CommentsType } from "@/server_actions/books_actions"
-
+import { ReadBook } from "./client/ReadBook";
 
 type SingleBookProps = {
     book: NonNullable<ReturnGetBookByIdType>;
@@ -60,6 +60,9 @@ export const SingleBookSection = ({ book, user, ratingScore, isLibBookExist, com
                 <ul>
                     {renderingQuotes}
                 </ul>
+            </div>
+            <div className={styles.readTransition}>
+                <ReadBook bookId={id} />
             </div>
             <div className={styles.rating}>
                 <h3>Рейтинг книги: {rating}</h3>

@@ -46,7 +46,7 @@ $primaryAnimationDelay: 1.5s;
 
 // Genres
 .genres {
-    @include colFlex(flex-start, flex-start, pxIntoUnit($spacingSmall));
+    @include colFlex(center, flex-start, pxIntoUnit($spacingSmall));
 
 
     & > .genresTitle {

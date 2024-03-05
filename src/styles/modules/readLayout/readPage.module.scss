@@ -1,70 +1,91 @@
-.main {
-    //min-height: 100vh;
-    background-color: #faf6ed;
-    transition: background-color 300ms ease-in-out;
-    display: flex;
-    justify-content: center;
-}
-.title {
-    text-align: center;
-    margin-bottom: 0.45em;
-}
-.readerBlock {
-    // Временно
-    // Рамка
-    border: solid 2px #6b2e2e;
-    //
-    background-color: #f6ecda;
-    padding-top: 0.5em;
-    font-family: Roboto;
-    font-size: 1.25em;
-    box-sizing: border-box;
-    max-width: 900px;
-    font-weight: 400;
-    line-height: 140%;
-    overflow: hidden;
-}
-.img {
-    float: left;
-}
-.paragraphText {
-  padding-bottom: 0.4em;
-  margin-left: 0.35em;
-  margin-right: 0.35em;
-  tab-size: 0.2em;
-}
-.pagination {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 1em;
-  background: #6b2e2e;
-  align-items: flex-end;
-}
-.pagination a {
-  text-align: center;
-  font-size: 1em;
-  color: black;
-  float: left;
-  height: 3em;
-  width: 3.3em;
-  top: 50%;
-  left: 50%;
-  text-decoration: none;
-  transition: background-color .3s;
-  background: #f6ecda;
-  border: 2px solid #bd1818;
-  border-left: 1px solid #bd1818;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: clip;
-  user-select: none;
-}
-.pagination a:active {
-  transform: translateY(0.3em);
-}
-.pagination a:hover:not(.active) {background-color: #d46060;}
+@use "utils" as *;
 
-.selectedSection {
-  background-color: #bb1e38c9 !important;
+.main {
+	@include colFlex(center, flex-start);
+	@include colorTransition;
+
+	background-color: var(--main-bg);
+
+	padding-bottom: pxIntoUnit(80);
+	padding-inline: pxIntoUnit(80);
+}
+
+// main read section
+.readerBlock {
+	@include colFlex(flex-start, flex-start, pxIntoUnit(40));
+	@include colorTransition;
+
+	padding-top: pxIntoUnit(20);
+	background-color: var(--read-bg);
+	overflow: hidden;
+	max-width: pxIntoUnit(1200);
+}
+
+.title {
+	@include fontMarc(50);
+
+	align-self: center;
+	color: var(--read-title);
+}
+
+.author {
+	@include fontDefault(34, 700);
+
+	align-self: center;
+	color: var(--read-author);
+}
+
+.paragraphTitle {
+	@include fontDefault(34);
+
+	color: var(--read-title);
+	align-self: center;
+}
+
+.img {
+	align-self: center;
+	border-radius: pxIntoUnit(14);
+}
+
+.paragraphText {
+	@include fontDefault(21);
+	
+	line-height: 1.5;
+	color: var(--read-text);
+}
+
+.pagination {
+	@include flex;
+
+	margin-top: pxIntoUnit(50);
+	align-self: center;
+	overflow-y: visible;
+	padding-block: pxIntoUnit(10);
+}
+
+
+.pagination a {
+	@include fontDefault(20);
+	@include defaultBtn;
+	
+	border-radius: 0;
+	border: pxIntoUnit(3) solid var(--read-pagination-border);
+
+	&:hover {
+		transform: scale(1.18);
+		background-color: var(--read-btn-hover);
+
+		&[data-selected=true] {
+			border-color: var(--read-btn-selected-border);
+		}
+	}
+
+	&:active {
+		transform: scaleY(0.87);
+	}
+
+	&[data-selected=true] {
+		background-color: var(--read-btn-selected-bg);
+		color: var(--read-btn-selected-color);
+	}
 }

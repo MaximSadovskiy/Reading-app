@@ -1,14 +1,20 @@
 "use client";
+
 import styles from "@/styles/modules/readLayout/readPage.module.scss";
 import { Section } from "@/utils/FileUtil";
 import { useState } from "react";
 import { PaginationBlockComponent } from "@/components/readLayout/PaginationBlock";
 
+
 interface ReaderProp {
   text: string;
   title: string;
+  authorName: string;
   sections: Array<Section>;
+  thumbnailPath: string;
 }
+
+
 function readSection(prop: ReaderProp, section: Section) {
   let endIndex = 0;
   const nextSection = prop.sections[prop.sections.indexOf(section) + 1];
@@ -17,6 +23,8 @@ function readSection(prop: ReaderProp, section: Section) {
   //if (section == undefined) console.log(prop);
   return prop.text.substring(section.index + 6, endIndex);
 }
+
+
 function splitTextToParagraphs(text: string) {
   let startIndex = 0;
   let endIndex = text.indexOf("\n", 0);
@@ -39,7 +47,11 @@ function splitTextToParagraphs(text: string) {
   }
   return paragraphsArr;
 }
+
+
+
 function ReadBlockComponent(prop: ReaderProp) {
+
   function changeOne(isLeft: boolean) {
     let newIndex = sectionIndex;
     if (isLeft) newIndex -= 1;
@@ -49,6 +61,7 @@ function ReadBlockComponent(prop: ReaderProp) {
     setSectionIndex(newIndex);
     changeText(readSection(prop, prop.sections[newIndex]));
   }
+
   function change(sectionName: string) {
     let index = prop.sections.findIndex((elem) => elem.sectionName === sectionName);
     if (index === -1) {
@@ -70,9 +83,9 @@ function ReadBlockComponent(prop: ReaderProp) {
     const paragraphsElements = [];
     //push name of section at the top
     paragraphsElements.push(
-      <h1 key={0} className={styles.title}>
-        {"Страница: " + prop.sections[sectionIndex].sectionName}
-      </h1>
+      <h2 key={0} className={styles.paragraphTitle}>
+        {"Глава: " + prop.sections[sectionIndex].sectionName}
+      </h2>
     );
     for (let i = 0; i < paragraphsArr.length; ++i) {
       paragraphsElements.push(
@@ -91,17 +104,20 @@ function ReadBlockComponent(prop: ReaderProp) {
     // Only add title if it's starting page
     const header = [];
     if (sectionIndex === 0) {
-      header.push(<h1 className={styles.title}>{prop.title}</h1>);
-      header.push(<img
-        className={styles.img}
-        src="https://litmarket.ru/storage/books/89821_1704286953_65955ae918d16.jpg"
-        data-src="https://litmarket.ru/storage/books/89821_1704286953_65955ae918d16.jpg"
-        width="152"
-        height="238"
-        alt='обложка книги Иоганн Милтон "Идол с глиняного холма"'
-        title='обложка книги Иоганн Милтон "Идол с глиняного холма"'
-        data-was-processed="true"
-      ></img>);
+      header.push(<h1 className={styles.title}>"{prop.title}"</h1>);
+      header.push(<p className={styles.author}>{prop.authorName}</p>)
+      header.push(
+          <img
+            className={styles.img}
+            src={prop.thumbnailPath}
+            data-src={prop.thumbnailPath}
+            width={220}
+            height={280}
+            alt={`обложка книги ${prop.title}`}
+            title={`обложка книги ${prop.title}`}
+            data-was-processed="true"
+          />
+      );
     }
     return (
       <>
@@ -110,15 +126,15 @@ function ReadBlockComponent(prop: ReaderProp) {
         {paragraphsElements}
 
         <PaginationBlockComponent
-          list={sectionNames}
-          onClickFunction={(ev: any) => {
-            change(ev.target.outerText);
-          }}
-          onClickMoveOneFunction={(isLeft: boolean) => {
-            changeOne(isLeft);
-          }}
-          currentSectionIndex={sectionIndex}
-        ></PaginationBlockComponent>
+            list={sectionNames}
+            onClickFunction={(ev: any) => {
+              change(ev.target.outerText);
+            }}
+            onClickMoveOneFunction={(isLeft: boolean) => {
+              changeOne(isLeft);
+            }}
+            currentSectionIndex={sectionIndex}
+        />
       </>
     );
   } else {

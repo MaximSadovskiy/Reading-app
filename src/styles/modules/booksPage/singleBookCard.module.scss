@@ -4,29 +4,42 @@
     @include colorTransformTransition(150ms, 400ms, ease-out);
 
     background: linear-gradient(150deg, var(--carousel-card-gradient1), var(--carousel-card-gradient2), var(--carousel-card-gradient3)); 
-    height: 82%;
+    height: 86%;
     width: pxIntoUnit(230);
     border-radius: pxIntoUnit(18);
     border: pxIntoUnit(4) solid var(--carousel-card-border);
 }
 
 .link {
-    @include colFlex(center, center, pxIntoUnit(5));
+    @include colFlex(center, center, pxIntoUnit(10));
     
     padding-block: pxIntoUnit(13);
     padding-inline: pxIntoUnit(20);
     color: var(--carousel-card-text);
-    white-space: nowrap;
     width: 100%;
     height: 100%;
     cursor: pointer;
 
     & > p {
         @include fontDefault(20, 500);
+        text-align: center;
+        line-height: 0.85;
+        flex: 1 1 auto;
     }
 
+    // title
     & > p:first-of-type {
-        @include fontMarc(28);
+        @include fontMarc(30);
+        color: var(--carousel--title-text);
+    }
+
+    // rating
+    & > p:last-of-type {
+        color: var( --carousel-rating-text);
+
+        > span {
+            @include fontDefault(23, 700);
+        }
     }
 
     & > img {
