@@ -1,8 +1,38 @@
 @use 'utils' as *;
 
 .mainSection {
-    @include colFlex(center, flex-start, pxIntoUnit(120));
+    @include colFlex(center, flex-start);
 
     margin-top: pxIntoUnit(100);
     margin-bottom: pxIntoUnit(200);
+    // only for carousels
+    gap: pxIntoUnit(120);
+
+    &[data-empty=true] {
+        gap: 0;
+    }
+
+    & > p, a {
+        @include fontDefault(22);
+    }
+
+    & > p {
+        margin-top: pxIntoUnit(20);
+        margin-bottom: pxIntoUnit(15);
+    }
+
+    & > a {
+        @include linkWithUnderline;
+
+        color: var(--main-text-highlight);
+    }
+}
+
+.emptyTitleWrapper {
+    @include flex(center, center, pxIntoUnit(20));
+
+    & > h3 {
+        @include fontHeading(3);
+        color: var(--main-text-highlight);
+    }
 }

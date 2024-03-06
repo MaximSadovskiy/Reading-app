@@ -3,12 +3,17 @@ import { OpenBookSvg } from "@/components/shared/Svg";
 import styles from "@/styles/modules/singleBookPage/readBook.module.scss";
 import debounce from "@/utils/debounceDecorator";
 import { useState } from "react";
-import Link from "next/link";
+import { addCurrentBookAction } from "@/server_actions/books_actions";
+import type { UserType } from "@/hooks/useCurrentUser";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify"; 
 
+type ReadBookProps = { 
+    bookId: number;
+    user: UserType;
+};
 
-type ReadBookProps = { bookId: number };
-
-export const ReadBook = ({ bookId }: ReadBookProps) => {
+export const ReadBook = ({ bookId, user }: ReadBookProps) => {
 
     // SVG
     const [isActiveSvg, setIsActiveSvg] = useState(false);
@@ -32,21 +37,46 @@ export const ReadBook = ({ bookId }: ReadBookProps) => {
         }
     }
 
-
     // redirect path
     const redirectPath = `/read/${bookId}`;
+    const router = useRouter();
+
+    const handleRedirectClick = async () => {
+        if (user != null) {
+            const result = await addCurrentBookAction(user.id as string, bookId);
+            if (result.error) {
+                toast(result.error, {
+                    theme: 'colored',
+                    type: 'error',
+                });
+
+                return;
+            }
+            else {
+                toast(result.success, {
+                    theme: 'colored',
+                    type: 'success',
+                });
+                await new Promise(res => setTimeout(res, 500));
+                router.push(redirectPath);
+            }
+        } else {
+            // just redirect
+            router.push(redirectPath);
+        }
+    }
 
     return (
         <div className={styles.wrapper}>
-            <Link className={styles.btn}
+            <button className={styles.btn}
                 onMouseEnter={handleMouseEnter}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
-                href={redirectPath}
+                onClick={handleRedirectClick}
             >
                 <span>Читать</span>
                 <OpenBookSvg width={60} height={60} isActive={isActiveSvg} />
-            </Link>
+            </button>
         </div>
     )
 };

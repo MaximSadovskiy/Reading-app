@@ -44,7 +44,7 @@ async function main() {
     // for each book
     for await (const book of bookGenresAndIds) {
         // Rating
-        const ratingData = getRandomRatingScores([5, 10], userIds, book.id);
+        const ratingData = getRandomRatingScores([6.5, 10], userIds, book.id);
         await prisma.rating.createMany({
             data: ratingData,
         });

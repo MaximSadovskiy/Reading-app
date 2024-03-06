@@ -62,7 +62,10 @@ export const SingleBookSection = ({ book, user, ratingScore, isLibBookExist, com
                 </ul>
             </div>
             <div className={styles.readTransition}>
-                <ReadBook bookId={id} />
+                <ReadBook 
+                    bookId={id} 
+                    user={user}
+                />
             </div>
             <div className={styles.rating}>
                 <h3>Рейтинг книги: {rating}</h3>

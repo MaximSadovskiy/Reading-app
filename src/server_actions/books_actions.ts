@@ -487,3 +487,63 @@ export const getAllLibraryBooks = async (userId: string) => {
 
     return { success: booksData };
 };
+
+
+// Current Read book
+// add only if user authorized
+export const addCurrentBookAction = async (userId: string, bookId: number) => {
+    const user = await db.user.findUnique({
+        where: { id: userId },
+    });
+    if (!user) {
+        return { error: ErrorMessages.USER_NO_FOUND}
+    }
+
+    const book = await db.book.findUnique({
+        where: { id: bookId },
+        select: { title: true }
+    });
+    if (!book) {
+        return { error: ErrorMessages.BOOK_NO_FOUND }
+    }
+
+    // if exists already
+    const existingCurrentBook = await db.currentReadBook.findFirst({
+        where: { 
+            userId,
+        }
+    });
+    // delete it
+    if (existingCurrentBook) {
+        await db.currentReadBook.delete({
+            where: {
+                userId,
+            }
+        })
+    }
+
+    // create new
+    await db.currentReadBook.create({
+        data: {
+            userId,
+            bookId,
+        }
+    });
+
+    return { success: `Книга ${book.title} добавлена в "Читальный Зал"` }
+};
+
+
+// current read book
+export const getCurrentReadBookId = async (userId: string) => {
+    const book = await db.currentReadBook.findFirst({
+        where: { userId },
+        select: { bookId: true },
+    });
+
+    if (!book) {
+        return { error: 'Читаемая книга не выбрана, чтобы перейти - пожалуйста, выберите желаемую книгу на странице "Книги" этого сайта' };
+    }
+
+    return { success: book.bookId }
+};  
