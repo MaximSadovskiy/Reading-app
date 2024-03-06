@@ -10,45 +10,19 @@
     @include flex(space-between, center);
 
     background-color: var(--header-bg-blur);
-    height: pxIntoUnit(125);
-    padding-inline: 2rem;
+    height: var(--header-height);
     border-bottom: pxIntoUnit(2) solid var(--header-border);
     position: sticky;
     top: 0;
     // must be highest
     z-index: 1000;
-}
-
-
-.logo {
-    @include fontMarc(52, -1);
+    padding-inline: 0.5rem;
     
-    color: var(--logo-color);
-    padding-left: pxIntoUnit(90);
-    padding-bottom: pxIntoUnit(20);
-    padding-right: pxIntoUnit(20);
-    position: relative;
+    @include breakpointUp(500) {
+        padding-inline: 1.5rem;
+    }
 
-    &::before {
-        content: url('/book-2.svg');
-        color: var(--logo-color);
-        position: absolute;
-        left: 0;
-        top: 0;
-        transform: translateY(-5%) rotate(10deg);
-    };
-
-    & .span {
-        color: var(--logo-color-second);
-    };
-
-    & .subLogo {
-        @include fontDefault(16);
-
-        color: var(--sublogo-color);
-        display: inline-block;
-        position: absolute;
-        top: pxIntoUnit(60);
-        right: pxIntoUnit(10);
+    @include breakpointUp(1150) {
+        padding-inline: 2rem;
     }
 }

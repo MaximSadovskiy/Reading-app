@@ -25,6 +25,32 @@ export const listVariants: Variants = {
     }
 };
 
+// For mobile 
+export const listVariantsWithoutClipPath: Variants = {
+    initial: {
+        opacity: 0,
+        scale: 0,
+    },
+    animate: {
+        opacity: 1,
+        scale: 1,
+        transition: {
+            type: 'spring',
+            duration: 0.8,
+            delayChildren: 0.2,
+            staggerChildren: 0.15,
+        }
+    },
+    exit: {
+        opacity: 0,
+        scale: 0,
+        transition: {
+            type: 'spring',
+            duration: 0.65,
+        }
+    }
+};
+
 
 // list items
 

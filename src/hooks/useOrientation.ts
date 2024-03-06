@@ -1,39 +1,60 @@
 import { useState, useEffect } from 'react';
+import debounce from '@/utils/debounceDecorator';
 
 // window & document as arguments, чтобы обойти ошибки next js в связи с рендерингом на сервере (где они равны undefined)
-export const useOrientation = (window: Window, document: Document, widthCondition: number = 500) => {
-    const condition = `(max-width: ${widthCondition})`;
+export type OrientationType = 'mobile' | 'tablet' | 'desktop';
+export const BREAKPOINTS = {
+    tablet: 900,
+    desktop: 1150,
+}
+
+const getInitialOrientation = (): OrientationType => {
+    const windowWidth = document.documentElement.clientWidth;
+    if (windowWidth < BREAKPOINTS.tablet) {
+        return 'mobile';
+    }
+    else if (windowWidth < BREAKPOINTS.desktop) {
+        return 'tablet';
+    }
+    else {
+        return 'desktop';
+    }
+};
+
+export const useOrientation = (customBreakpoints?: typeof BREAKPOINTS) => {
+    // server guard
+    if (typeof window === 'undefined') {
+        return;
+    }
     
-    const [isMobile, setIsMobile] = useState(
-        window.matchMedia(condition).matches
+    const [orientation, setOrientation] = useState(
+        getInitialOrientation()
     );
 
+    // if user define custom BREAKPOINTs
+    const ACTIVE_BREAKPOINTS = customBreakpoints ?? BREAKPOINTS;
+
     useEffect(() => {
-        const checkCondition = () => {
+        const handleResize = debounce(() => {
             const windowWidth = document.documentElement.clientWidth;
-            if (windowWidth <= widthCondition && !isMobile) {
-                setIsMobile(true);
+            if (windowWidth < ACTIVE_BREAKPOINTS.tablet) {
+                setTimeout(() => setOrientation('mobile'), 0);
+            }
+            else if (windowWidth < ACTIVE_BREAKPOINTS.desktop) {
+                setTimeout(() => setOrientation('tablet'), 0);
             }
             else {
-                if (isMobile) {
-                    setIsMobile(false);
-                }
+                setTimeout(() => setOrientation('desktop'), 0);
             }
-        }
+        }, 50);
 
-        window
-            .matchMedia(condition)
-            .addEventListener('change', checkCondition);
-
+        window.addEventListener('resize', handleResize);
 
         return () => {
-            window  
-                .matchMedia(condition)
-                .removeEventListener('change', checkCondition);
+            window.removeEventListener('resize', handleResize);
         };
-
     }, []);
 
 
-    return isMobile;
+    return orientation;
 };

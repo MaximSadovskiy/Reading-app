@@ -13,7 +13,7 @@ type DivWithAnimateAttr = HTMLDivElement & { dataset: { animate: boolean } };
 
 export const TextBlock = ({ children, index }: TextBlockProps) => {
     
-    const divRef = useRef<DivWithAnimateAttr>(null);
+    const divRef = useRef<DivWithAnimateAttr | null>(null);
     const divWindowOffset = useRef(0);
     // min scroll value div need to appear
     const appearScrollOffset = useRef(0);
@@ -21,10 +21,12 @@ export const TextBlock = ({ children, index }: TextBlockProps) => {
     
     // first 2 divs appear instantly on the page
     useEffect(() => {
-        if (index === 0 || index === 1 && divRef.current !== null) {
-            (divRef.current as NonNullable<DivWithAnimateAttr>).dataset.animate = true;
+        if (index === 0 || index === 1) {
+            if (divRef.current !== null) {
+                divRef.current.dataset.animate = true;
+            }
         }
-    }, []);
+    }, [divRef.current]);
 
     // other divs
     useEffect(() => {
@@ -47,8 +49,9 @@ export const TextBlock = ({ children, index }: TextBlockProps) => {
             // if it is --> give it data-animate=true
             const handleAppearance = debounce(() => {
                 if (window.scrollY >= appearScrollOffset.current) {
-                    (divRef.current as NonNullable<DivWithAnimateAttr>)
-                        .dataset.animate = true;
+                    if (divRef.current !== null) {
+                        divRef.current.dataset.animate = true;
+                    }
                 }
             }, 100);
 

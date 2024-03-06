@@ -7,6 +7,7 @@ import { m, LazyMotion, domAnimation, AnimatePresence } from "framer-motion";
 import {
 	listVariants,
 	itemVariants,
+	listVariantsWithoutClipPath,
 } from "@/animation/variants/popupLists/popupListClipped";
 import { useState, useRef, useEffect, forwardRef, useCallback } from "react";
 import { closeIfOutsideClick } from "@/utils/clickOutsideCloseFunction";
@@ -14,7 +15,11 @@ import { logOutAction } from "@/server_actions/general_actions";
 import { useCurrentUserClient } from "@/hooks/useCurrentUser";
 
 
-const AccountEnter = () => {
+interface AccountProps {
+	styleMode: 'mobile' | 'desktop';
+}
+
+const AccountEnter = ({ styleMode }: AccountProps) => {
 	const [isListOpen, setIsListOpen] = useState(false);
 	const buttonRef = useRef<HTMLButtonElement>(null);
 	const listRef = useRef<HTMLUListElement>(null);
@@ -50,23 +55,45 @@ const AccountEnter = () => {
 	}, [isListOpen]);
 
 	return (
-		<div aria-labelledby="account-label" className={styles.outerContainer}>
-			<div className={styles.innerContainer}>
-				<button
-					className={styles.openBtn}
-					onClick={listOpenHandler}
-					data-open={isListOpen}
-					ref={buttonRef}
-				>
-					<img
-						src="/account-enter.svg"
-						alt=""
-						role="presentation"
-						width={35}
-						height={35}
-					/>
-					<p id="account-label">Аккаунт</p>
-				</button>
+		<div aria-labelledby="account-label" className={styles.outerContainer}
+			data-orientation={styleMode}
+		>
+			<div className={styles.innerContainer}
+				data-orientation={styleMode}
+			>
+				<LazyMotion features={domAnimation}>
+					<m.button
+						className={styles.openBtn}
+						onClick={listOpenHandler}
+						data-open={isListOpen}
+						ref={buttonRef}
+						data-orientation={styleMode}
+						variants={styleMode === 'mobile' ? itemVariants : listVariantsWithoutClipPath}
+					>
+						<img
+							src="/account-enter.svg"
+							alt=""
+							role="presentation"
+							width={35}
+							height={35}
+						/>
+						<p id="account-label">Аккаунт</p>
+					</m.button>
+					{styleMode === 'desktop' && (
+							<AnimatePresence>
+								{isListOpen && (
+									<PopupList
+										ref={listRef}
+										closePopupList={closePopupList}
+										isAuthorized={isAuthorized}
+										orientation={styleMode}
+									/>
+								)}
+							</AnimatePresence>
+					)}
+				</LazyMotion>
+			</div>
+			{styleMode === 'mobile' && (
 				<LazyMotion features={domAnimation}>
 					<AnimatePresence>
 						{isListOpen && (
@@ -74,11 +101,12 @@ const AccountEnter = () => {
 								ref={listRef}
 								closePopupList={closePopupList}
 								isAuthorized={isAuthorized}
+								orientation={styleMode}
 							/>
 						)}
 					</AnimatePresence>
 				</LazyMotion>
-			</div>
+			)}					
 		</div>
 	);
 };
@@ -88,10 +116,11 @@ export default AccountEnter;
 type PopupProps = {
 	isAuthorized: boolean;
 	closePopupList: () => void;
+	orientation: 'mobile' | 'desktop';
 };
 
 const PopupList = forwardRef(
-	({ isAuthorized, closePopupList }: PopupProps, ref: React.Ref<HTMLUListElement>) => {
+	({ isAuthorized, closePopupList, orientation }: PopupProps, ref: React.Ref<HTMLUListElement>) => {
 		const handleLogoutClick = async () => {
 			await logOutAction('/');
 			closePopupList();
@@ -105,7 +134,7 @@ const PopupList = forwardRef(
 			<>
 				<m.ul
 					className={styles.popupList}
-					variants={listVariants}
+					variants={orientation === 'desktop' ? listVariants : listVariantsWithoutClipPath}
 					exit="exit"
 					initial="initial"
 					animate="animate"
@@ -114,6 +143,7 @@ const PopupList = forwardRef(
 					aria-labelledby="account-info"
 					role="listbox"
 					ref={ref}
+					data-orientation={orientation}
 				>
 					{isAuthorized == false && (
 						<>

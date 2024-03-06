@@ -1,5 +1,4 @@
 import styles from '@/styles/modules/rootPage/mainPage.module.scss';
-import BookRedirect from '../components/readLayout/BookRedirect';
 import Image from 'next/image';
 import SlidingLogo from '../components/rootPage/server/SlidingLogo';
 import TextSection from '@/components/rootPage/client/TextSection';
@@ -42,7 +41,6 @@ export default function RootPage() {
 				{/* big sliding text */}
 				<SlidingLogo />
 				<TextSection textData={textData} />
-				<BookRedirect />
 			</section>
 			<AsideWithImages imgSrcs={asideImages1} />
 			<AsideWithImages imgSrcs={asideImages2} />

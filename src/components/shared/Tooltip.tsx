@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState, useEffect, useRef} from "react";
+import { useLayoutEffect, useState, useRef} from "react";
 import styles from "@/styles/modules/shared/tooltip.module.scss";
 import { getTooltipPositioned } from "@/utils/tooltip/tooltip";
 import { m, LazyMotion, domAnimation, Variants } from 'framer-motion';

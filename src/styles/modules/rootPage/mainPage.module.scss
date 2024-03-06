@@ -7,11 +7,15 @@
     background-color: var(--main-bg);
 
     display: grid;
-    grid-template-columns: 22vw 1fr 22vw;
-    grid-template-areas: 
-        '. text .'
-    ;
-    justify-items: center;
+    grid-template-columns: 1fr;
+
+    @include breakpointUp(1150) {
+        grid-template-columns: 22vw 1fr 22vw;
+        grid-template-areas: 
+            '. text .'
+        ;
+        justify-items: center;
+    }
 };
 
 .textSection {
@@ -25,6 +29,10 @@
 
 // asides
 .aside {
+    @include breakpointDown(1150) {
+        display: none;
+    }
+
     @include colFlex(center, space-between);
     width: 100%;
 

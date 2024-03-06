@@ -10,12 +10,15 @@ $primaryAnimationDelay: 1.5s;
 
     padding-top: pxIntoUnit(30);
     padding-inline: pxIntoUnit(30);
-    margin-inline: auto;
-    width: clamp(pxIntoUnit(200), 70vw, pxIntoUnit(1000));
     min-height: calc(150vh - var(--header-height) + pxIntoUnit(2000));
-    border-inline: pxIntoUnit(3) solid var(--book-section-border);
-    box-shadow: 0 0 5px 2px var(--book-section-shadow);
     padding-bottom: pxIntoUnit(200);
+
+    @include breakpointUp(1150) {
+        margin-inline: auto;
+        width: clamp(pxIntoUnit(200), 70vw, pxIntoUnit(1000));
+        border-inline: pxIntoUnit(3) solid var(--book-section-border);
+        box-shadow: 0 0 5px 2px var(--book-section-shadow);
+    }
 }
 
 // Title, Author, year

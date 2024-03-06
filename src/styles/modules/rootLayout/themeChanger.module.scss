@@ -3,12 +3,23 @@
 .outerContainer {
     margin-left: auto;
     margin-right: clamp(pxIntoUnit(10), 2.5vw, pxIntoUnit(25));
+
+    // mobile styles
+    &[data-orientation='mobile'] {
+        margin-right: 0;
+        overflow: visible;
+    }
 }
 
 $themeInnerContainerWidth: 150;
 .innerContainer {
     position: relative;
     width: pxIntoUnit($themeInnerContainerWidth);
+    
+    // mobile styles
+    &[data-orientation='mobile'] {
+        overflow: visible;
+    }
 }
 
 .button {
@@ -19,28 +30,55 @@ $themeInnerContainerWidth: 150;
     cursor: pointer;
     width: pxIntoUnit($themeInnerContainerWidth);
     height: pxIntoUnit(50);
-    border-radius: pxIntoUnit(15);
     background-color: var(--theme-btn-bg);
     border: pxIntoUnit(2) solid var(--theme-btn-border);
     position: relative;
+    border-radius: pxIntoUnit(15);
 
+    
     &:hover {
         background-color: var(--theme-btn-bg-hover);
     }
-
-    ::after {
-        @include transition(transform);
-
-        content: url('/arrow.svg');
-        position: absolute;
-        top: 50%;
-        right: 8px;
-        transform: translateY(-50%);
-        transform-origin: 80% 30%;
+    
+    // svg on desktop
+    &[data-orientation='desktop'] {
+        ::after {
+            @include transition(transform);
+            
+            content: url('/arrow.svg');
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            transform-origin: 80% 30%;
+            right: 8px;
+        }
     }
-
+    
     &[data-open='true'] ::after {
         transform: rotate(90deg);
+    }
+
+    // svg on mobile orientation
+    &[data-orientation='mobile'] {
+        justify-content: flex-end;
+        border-radius: 0;
+        border: none;
+
+        ::after {
+            @include transition(transform);
+            
+            content: url('/arrow.svg');
+            position: absolute;
+            top: 50%;
+            left: 3px;
+            transform: rotate(180deg) translateY(6px) translateX(15px);
+            transform-origin: 80% 30%;
+        }
+
+
+        &[data-open='true'] ::after {
+            transform: rotate(90deg);
+        }
     }
 }
 
@@ -51,21 +89,38 @@ $themeInnerContainerWidth: 150;
     color: var(--theme-btn-text);
 }
 
-$themeListWidth: 200;
+$themeListWidth: 180;
 .list {
     @include flex(flex-start, center, pxIntoUnit(3), column);
     $leftOffset: calcXOffsetToPositionLargerElement($themeListWidth, $themeInnerContainerWidth);
 
     list-style: none;
-    position: absolute;
-    top: pxIntoUnit(60);
-    left: -#{$leftOffset};
     width: pxIntoUnit($themeListWidth);
     z-index: 10;
     background-color: var(--theme-list-bg);
     border-radius: pxIntoUnit(15);
     border: pxIntoUnit(2) solid var(--theme-list-border);
     overflow-x: hidden;
+
+    // desktop position
+    position: absolute;
+    top: pxIntoUnit(60);
+    &[data-orientation='desktop'] {
+        left: -#{$leftOffset};
+    }
+
+    // Mobile styling
+    &[data-orientation='mobile'] {
+        clip-path: none;
+        position: fixed;
+        z-index: 20;
+        top: calc(var(--header-height) + 110px);
+        right: pxIntoUnit(170);
+
+        @include breakpointUp(500) {
+            right: pxIntoUnit(190);
+        }
+    }
 }
 
 .li {

@@ -4,7 +4,7 @@ import styles from '@/styles/modules/rootLayout/themeChanger.module.scss';
 import React, { useState, useEffect, useRef, forwardRef } from 'react';
 // framer
 import { m, LazyMotion, domAnimation, AnimatePresence } from 'framer-motion';
-import { listVariants, itemVariants } from "@/animation/variants/popupLists/popupListClipped";
+import { listVariants, itemVariants, listVariantsWithoutClipPath } from "@/animation/variants/popupLists/popupListClipped";
 import { getPreferedTheme } from "@/hooks/useTheme";
 import type { SetThemeType, ThemeType } from "@/hooks/useTheme";
 import { closeIfOutsideClick } from "@/utils/clickOutsideCloseFunction";
@@ -20,8 +20,13 @@ const getSvgPath: GetSvgPath = (theme: CustomThemeType) => {
     return theme === 'dark' ? '/moon.svg' : theme === 'light' ? '/sun.svg' : '/computer.svg';
 };
 
+interface ThemeChangerProps {
+    styleMode: 'mobile' | 'desktop';
+}
+
+type OrientationType = 'mobile' | 'desktop';
 // main component
-const ThemeChanger = () => {
+const ThemeChanger = ({ styleMode }: ThemeChangerProps) => {
     const { theme, setTheme } = useGlobalContext();
     const [isOpen, setIsOpen] = useState(false);
     const [svgPath, setSvgPath] = useState<SvgPathType>(() => {
@@ -53,19 +58,44 @@ const ThemeChanger = () => {
     }, []);
 
     return (
-        <div className={styles.outerContainer}>
+        <div className={styles.outerContainer}
+            data-orientation={styleMode}
+        >
             <div className={styles.innerContainer}>
-                <button 
-                    className={styles.button} 
-                    data-open={isOpen}
-                    onClick={() => setIsOpen(o => !o)}
-                    aria-controls="open-list"
-                    aria-expanded={isOpen}
-                    ref={buttonRef}
-                >
-                    <span className={styles.buttonText}>тема: </span>
-                    <img src={svgPath} alt='' role="presentation" width={35} height={35} />
-                </button>
+                <LazyMotion features={domAnimation} strict>
+                    <m.button 
+                        className={styles.button} 
+                        onClick={() => setIsOpen(o => !o)}
+                        aria-controls="open-list"
+                        aria-expanded={isOpen}
+                        ref={buttonRef}
+                        data-open={isOpen}
+                        // for styling
+                        data-orientation={styleMode}
+                        variants={styleMode === 'mobile' ? itemVariants : listVariantsWithoutClipPath}
+                    >
+                        <span className={styles.buttonText}>тема: </span>
+                        <img src={svgPath} alt='' role="presentation" width={35} height={35} />
+                    </m.button>
+                    {styleMode === 'desktop' && (
+                            <AnimatePresence>
+                                {isOpen && (
+                                    <PopupThemeList 
+                                        setTheme={setTheme} 
+                                        systemTheme={systemThemeRef.current} 
+                                        setSvgPath={setSvgPath} 
+                                        closeList={() => setIsOpen(false)} 
+                                        svgPath={svgPath} 
+                                        ref={listRef}
+                                        // for styling 
+                                        orientation={styleMode} 
+                                    />
+                                )}
+                            </AnimatePresence>
+                    )}
+                </LazyMotion>
+            </div>
+            {styleMode === 'mobile' && (
                 <LazyMotion features={domAnimation} strict>
                     <AnimatePresence>
                         {isOpen && (
@@ -75,12 +105,14 @@ const ThemeChanger = () => {
                                 setSvgPath={setSvgPath} 
                                 closeList={() => setIsOpen(false)} 
                                 svgPath={svgPath} 
-                                ref={listRef} 
+                                ref={listRef}
+                                // for styling 
+                                orientation={styleMode} 
                             />
                         )}
                     </AnimatePresence>
                 </LazyMotion>
-            </div>
+            )}
         </div>
     )
 };
@@ -94,12 +126,13 @@ interface ListProps {
     setSvgPath: React.Dispatch<React.SetStateAction<SvgPathType>>
     closeList: () => void;
     svgPath: SvgPathType;
+    orientation: OrientationType;
 }
 
 type ButtonCustomEvent = React.MouseEvent<HTMLButtonElement & { name: 'light' | 'dark' | 'system' }> ;
 
 
-const PopupThemeList = forwardRef(({ setTheme, systemTheme, setSvgPath, closeList, svgPath }: ListProps, ref: React.Ref<HTMLUListElement>) => {
+const PopupThemeList = forwardRef(({ setTheme, systemTheme, setSvgPath, closeList, svgPath, orientation }: ListProps, ref: React.Ref<HTMLUListElement>) => {
 
     const handleChangeThemeClick = (e: ButtonCustomEvent) => {
         const { name } = e.currentTarget;
@@ -124,7 +157,7 @@ const PopupThemeList = forwardRef(({ setTheme, systemTheme, setSvgPath, closeLis
     return (
         <>
             <m.ul className={styles.list}
-                variants={listVariants}
+                variants={orientation === 'desktop' ? listVariants : listVariantsWithoutClipPath}
                 exit='exit'
                 initial='initial'
                 animate='animate'
@@ -135,6 +168,8 @@ const PopupThemeList = forwardRef(({ setTheme, systemTheme, setSvgPath, closeLis
                 role="listbox"
                 
                 ref={ref}
+                // for styling
+                data-orientation={orientation}
             >
                 <m.li role="option" variants={itemVariants} className={styles.li}>
                     <button 

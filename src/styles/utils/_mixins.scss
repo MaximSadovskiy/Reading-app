@@ -160,6 +160,21 @@
     }
 }
 
+// can be reversed
+@mixin animationFadeOut ($duration: 1.25s, $timingFunction: linear, $direction: normal) {
+    animation: fadeOut $duration $timingFunction forwards $direction;
+
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+            transform: scale(1);
+        }
+        to {
+            opacity: 0;
+            transform: scale(0);
+        }
+    }
+}
 
 // Cancel / Success Btn hover states
 @mixin successHoverBtn {

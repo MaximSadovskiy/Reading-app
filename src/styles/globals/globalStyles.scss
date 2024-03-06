@@ -86,6 +86,11 @@ body {
     --link-active: var(--color-orange);
     --link-header-underline: var(--color-orange);
 
+    // menuBtn
+    --menu-btn-bg: var(--color-darkbrown);
+    --menu-btn-bg-hover: var(--color-lightbrown);
+    --menu-btn-border: var(--color-white);
+
     // themeChanger
     --theme-btn-bg: var(--color-darkbrown);
     --theme-btn-bg-hover: var(--color-lightbrown);
@@ -308,6 +313,10 @@ body {
 
         // rootPage
         --header-border: var(--color-orange);
+        // stripe menu (only on modal & tablet)
+        --menu-stripe-bg: var(--color-white);
+        --menu-stripe-bg-active: var(--color-orange);
+
         --main-bg: var(--color-darkbrown);
         --main-text: var(--color-white);
         --main-text-highlight: var(--color-orange);

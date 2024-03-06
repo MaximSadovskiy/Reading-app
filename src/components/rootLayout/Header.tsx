@@ -1,23 +1,43 @@
+'use client';
+
 import styles from '@/styles/modules/rootLayout/header.module.scss';
 // components
-import Link from 'next/link';
 import Navbar from './Navbar';
 import ThemeChanger from './ThemeChanger';
 import AccountEnter from './AccountEnter';
+import Logo from './Logo';
+import { MenuList } from './MenuList';
+import { useOrientation } from '@/hooks/useOrientation';
+
 
 const Header = () => {
 
+    const orientation = useOrientation();
+
     return (
         <header className={styles.header}>
-            <Link href='/'>
-                <h1 className={styles.logo}>
-                    Бук<span className={styles.span}>Лайф</span>
-                    <span className={styles.subLogo}>электронная библиотека</span>
-                </h1>
-            </Link>
-            <Navbar />
-            <ThemeChanger />
-            <AccountEnter />
+            {orientation === 'mobile' && (
+                <>
+                    <Logo />
+                    <MenuList isTextPresented={false} orientation='mobile' />
+                </>
+            )}
+            {orientation === 'tablet' && (
+                <>
+                    <Logo />
+                    <MenuList isTextPresented={true} orientation='tablet' />
+                    <ThemeChanger styleMode='desktop' />
+                    <AccountEnter styleMode='desktop' />
+                </>
+            )}
+            {orientation === 'desktop' && (
+                <>
+                    <Logo />
+                    <Navbar />
+                    <ThemeChanger styleMode='desktop' />
+                    <AccountEnter styleMode='desktop' />
+                </>
+            )}
         </header>
     )
 };

@@ -9,7 +9,6 @@ import { getScrollDistanceOnBreakpoint, getCurrentVisibleDistance, getMaxScrollD
 import { useState, useRef, useEffect } from "react";
 // type ob Book
 import type { CarouselBooks } from "@/server_actions/books_actions";
-import debounce from "@/utils/debounceDecorator";
 
 // types
 interface CarouselProps {
