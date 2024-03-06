@@ -1,0 +1,48 @@
+@use 'utils' as *;
+
+.main {
+    @include colFlex(center, flex-start, pxIntoUnit(30));
+    @include colorTransition;
+    @include fontDefault(22);
+
+    background-color: var(--main-bg);
+    color: var(--main-text);
+    min-height: 200vh;
+
+    padding-top: pxIntoUnit(60);
+    padding-bottom: pxIntoUnit(200);
+    padding-inline: pxIntoUnit(80);
+
+    & h2 {
+        @include fontHeading(2);
+        @include animationSlideInBlur(1.2s, -200, linear, Y);
+
+        color: var(--main-highlight);
+
+        // logo
+        > span {
+            @include fontMarc(50);
+
+            &:nth-child(1) {
+                color: var(--logo-color);
+            }
+
+            &:nth-child(2) {
+                color: var(--logo-color-second);
+            }
+        }
+    }
+}
+
+.textSection {
+    @include colFlex;
+
+    gap: pxIntoUnit(80);
+    margin-inline: auto;
+    width: max(pxIntoUnit(700), 40vw);
+
+    & p {
+        line-height: 1.5;
+        letter-spacing: 1.7px;
+    }
+}

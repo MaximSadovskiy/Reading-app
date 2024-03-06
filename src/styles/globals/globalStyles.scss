@@ -13,6 +13,7 @@ a {
 button {
     cursor: pointer;
     border: none;
+    background-color: inherit;
 }
 
 button, input {
@@ -35,6 +36,7 @@ input {
     --color-orange: hsl(25, 100%, 82%);
     --color-gray: hsl(0, 1%, 83%);
     --color-white: hsl(0, 0%, 100%); 
+    --color-white-read: hsl(42, 100%, 95%);
     --color-red: hsl(0, 89%, 31%);
     --color-bright-red: hsl(0, 100%, 39%);
     --color-light-red: hsl(0, 100%, 94%);
@@ -61,10 +63,17 @@ body {
     --gen-btn-border-hover: var(--color-lightbrown-hover);
     --gen-btn-color: var(--color-lightbrown);
     --gen-btn-color-hover: var(--color-lightbrown-hover);
+    // cancel & success states
     --gen-btn-bg-cancel: var(--color-red);
+    --gen-btn-color-cancel: var(--color-white);
+    --gen-btn-border-cancel: var(--color-lightbrown);
     --gen-btn-bg-success: var(--color-green);
-
-
+    --gen-btn-color-success: var(--color-white);
+    --gen-btn-border-success: var(--color-lightbrown);
+    // shadow
+    --gen-shadow: var(--color-lightbrown-hover);
+    // modal
+    --gen-modal-color: var(--color-white);
     /* SPECIFIC */
     // header
     --header-height: 125px;
@@ -77,6 +86,11 @@ body {
     --link-color: var(--color-white);
     --link-active: var(--color-orange);
     --link-header-underline: var(--color-orange);
+
+    // menuBtn
+    --menu-btn-bg: var(--color-darkbrown);
+    --menu-btn-bg-hover: var(--color-lightbrown);
+    --menu-btn-border: var(--color-white);
 
     // themeChanger
     --theme-btn-bg: var(--color-darkbrown);
@@ -169,11 +183,14 @@ body {
     --carousel-card-gradient2: var(--color-bisque);
     --carousel-card-gradient3: var(--color-light-bisque);
     --carousel-card-border: var(--color-lightbrown);
+    
     --carousel-card-text: var(--color-darkbrown);
+    --carousel--title-text: var(--color-lightbrown);
+    --carousel-rating-text: var(--color-lightbrown-hover);
+
     --carousel-slideBtn-bg: var(--color-lightbrown);
     --carousel-slideBtn-hover: var(--color-lightbrown-hover);
     --carousel-slideBtn-color: var(--color-light-bisque);
-
 
     // forms
     --form-title-color: var(--color-lightbrown);
@@ -228,10 +245,11 @@ body {
     --book-section-border: var(--color-lightbrown);
     --book-section-shadow: var(--color-lightbrown-hover);
     --title-text: var(--color-lightbrown);
+
     --svg-fill-passive: var(--color-light-bisque);
-    --svg-fill-active: var(--color-lightbrown-hover);
-    --svg-stroke-passive: var(--color-lightbrown);
-    --svg-stroke-active: var(--color-orange);
+    --svg-fill-active: var(--color-orange);
+    --svg-stroke-passive: var(--color-lightbrown-hover);
+    --svg-stroke-active: var(--color-lightbrown-hover);
 
     --rating-description-text: var(--color-darkbrown);
     --library-wrapper-bg: var(--color-white);
@@ -243,6 +261,37 @@ body {
     // comments
     --comments-textarea-border: var(--color-lightbrown);
     --comments-textarea-border-hover: var(--color-orange);
+    --comments-list-bg: var(--color-white);
+    --comments-list-border: var(--color-lightbrown);
+    --comments-likesvg-color-active: var(--color-lightbrown);
+    --comments-likesvg-color-passive: var(--color-orange);
+    --comments-comment-bg: var(--color-light-bisque);
+    --comments-comment-border: var(--color-darkbrown);
+    --comment-authorname-color: var(--color-darkbrown);
+    --comment-content-bg: var(--color-white);
+
+    // pagination btns
+    --comment-btn-active-bg: var(--color-lightbrown);
+    --comment-btn-active-color: var(--color-white);
+    --comment-btn-hover-bg: var(--color-darkbrown);
+    --comment-btn-hover-color: var(--color-white);
+
+    // tooltip
+    --tooltip-bg: var(--color-light-bisque);
+    --tooltip-color: var(--color-darkbrown);
+    --tooltip-border: var(--color-lightbrown);
+    --tooltip-shadow: var(--color-lightbrown-hover);
+
+    // READ page
+    --read-title: var(--color-darkbrown);
+    --read-author: var(--color-lightbrown)
+    --read-bg: var(--color-white-read);
+    --read-text: var(--color-darkbrown);
+    --read-pagination-border: var(--color-lightbrown);
+    --read-btn-hover: var(--color-white);
+    --read-btn-selected-bg: var(--color-lightbrown);
+    --read-btn-selected-border: var(--color-lightbrown);
+    --read-btn-selected-color: var(--color-white);
 
     // darkTheme colors
     &[data-dark='true'] {
@@ -257,9 +306,18 @@ body {
         --gen-btn-border-hover: var(--color-orange);
         --gen-btn-color: var(--color-white);
         --gen-btn-color-hover: var(--color-orange);
+        --gen-shadow: var(--color-light-bisque);
+
+        // cancel & success states
+        --gen-btn-border-cancel: var(--color-white);
+        --gen-btn-border-success: var(--color-white);
 
         // rootPage
         --header-border: var(--color-orange);
+        // stripe menu (only on modal & tablet)
+        --menu-stripe-bg: var(--color-white);
+        --menu-stripe-bg-active: var(--color-orange);
+
         --main-bg: var(--color-darkbrown);
         --main-text: var(--color-white);
         --main-text-highlight: var(--color-orange);
@@ -290,7 +348,11 @@ body {
         --carousel-card-gradient2: var(--color-orange);
         --carousel-card-gradient3: var(--color-lightbrown) 50%;
         --carousel-card-border: var(--color-bisque);
+
         --carousel-card-text: var(--color-white);
+        --carousel--title-text: var(--color-orange);
+        --carousel-rating-text: var(--color-light-bisque);
+        
         --carousel-slideBtn-bg: var(--color-light-bisque);
         --carousel-slideBtn-hover: var(--color-white);
         --carousel-slideBtn-color: var(--color-darkbrown);
@@ -343,6 +405,28 @@ body {
         --comments-comment-border: var(--color-bisque);
         --comment-authorname-color: var(--color-orange);
         --comment-content-bg: var(--color-darkbrown);
+        // pagination btns
+        --comment-btn-active-bg: var(--color-light-bisque);
+        --comment-btn-active-color: var(--color-lightbrown);
+        --comment-btn-hover-bg: var(--color-white);
+        --comment-btn-hover-color: var(--color-orange);
+
+        // tooltip
+        --tooltip-bg: var(--color-light-bisque);
+        --tooltip-color: var(--color-darkbrown);
+        --tooltip-border: var(--color-lightbrown-hover);
+        --tooltip-shadow: var(--color-lightbrown-hover);
+
+        // READ page
+        --read-title: var(--color-orange);
+        --read-author: var(--color-light-bisque);
+        --read-bg: var(--color-darkbrown);
+        --read-text: var(--color-white-read);
+        --read-pagination-border: var(--color-orange);
+        --read-btn-hover: var(--color-lightbrown-hover);
+        --read-btn-selected-bg: var(--color-orange);
+        --read-btn-selected-border: var(--color-lightbrown);
+        --read-btn-selected-color: var(--color-lightbrown);
     };
 };
 

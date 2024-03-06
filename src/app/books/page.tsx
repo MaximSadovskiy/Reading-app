@@ -8,7 +8,8 @@ import { useCurrentUserServer } from "@/hooks/useCurrentUser";
 import { getFavouriteGenres, getRandomGenres } from "@/database/db_helpers_BOOKS";
 import { GenreLiterals } from "@/interfaces/storage/bookInterface";
 import Link from "next/link";
-import { genreDescriptions } from "@/booksStorage/usage/genresDescription";
+import { genreDescriptions } from "@/booksStorage/textData/genresDescription";
+import { SEARCH_ALL_BOOKS_URL } from "@/apiUrls";
 
 // lazy loading
 const BookCarousel = lazy(
@@ -78,7 +79,9 @@ export default async function BooksPage() {
 					<li>Посмотрите интересные подборки и рекомендации, подобранные на основе ваших интересов</li>
 				</ul>
 			</div>
-			<SearchBar />
+			<SearchBar 
+				baseApiUrl={SEARCH_ALL_BOOKS_URL}
+			/>
 			<Suspense fallback={<Spinner sizing='medium' />}>
 				<BookCarousel
 					title='Популярные книги :'

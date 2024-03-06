@@ -5,7 +5,7 @@ import SlideBtn from "./SlideBtn";
 import styles from '@/styles/modules/booksPage/bookCarousel.module.scss';
 // animation
 import { useAnimate, useMotionValue, useMotionValueEvent, m, LazyMotion, domAnimation } from "framer-motion";
-import { getScrollDistanceOnBreakpoint, getCurrentVisibleDistance, getMaxScrollDistance, getPerspectiveOriginCenter } from "@/utils/carouselUtils";
+import { getScrollDistanceOnBreakpoint, getCurrentVisibleDistance, getMaxScrollDistance, getPerspectiveOriginCenter, isShouldScroll } from "@/utils/carouselUtils";
 import { useState, useRef, useEffect } from "react";
 // type ob Book
 import type { CarouselBooks } from "@/server_actions/books_actions";
@@ -16,6 +16,8 @@ interface CarouselProps {
     books: CarouselBooks;
     genreDescription: string;
 }
+
+type TimerType = ReturnType<typeof setTimeout>
 
 // server component
 const BookCarousel = ({ title, books, genreDescription }: CarouselProps) => {
@@ -59,6 +61,62 @@ const BookCarousel = ({ title, books, genreDescription }: CarouselProps) => {
     const [isNextBtnDisabled, setIsNextBtnDisabled] = useState(false);
 
     const [scope, animate] = useAnimate<HTMLUListElement>();
+
+    const resizeTimerRef = useRef<TimerType | null>(null);
+
+    // resize init effect (set NEXT to disable if needed)
+    // resize listener (set NEXT to disable if needed)
+    useEffect(() => {
+        if (resizeTimerRef.current !== null) {
+            clearTimeout(resizeTimerRef.current);
+            resizeTimerRef.current = null;
+        }
+
+        resizeTimerRef.current = setTimeout(() => {
+
+            const windowWidth = document.documentElement.clientWidth;
+            const shouldScroll = isShouldScroll(windowWidth, cardCount);
+
+            if (!shouldScroll) {
+                setTimeout(() => setIsNextBtnDisabled(true), 0);
+            }
+            else {
+                setTimeout(() => setIsNextBtnDisabled(false), 0);
+            }
+        }, 200);
+    }, []);
+
+    useEffect(() => {
+        const isShouldScrollHandler = () => {
+            if (resizeTimerRef.current !== null) {
+                clearTimeout(resizeTimerRef.current);
+                resizeTimerRef.current = null;
+            }
+
+            resizeTimerRef.current = setTimeout(() => {
+
+                const windowWidth = document.documentElement.clientWidth;
+                const shouldScroll = isShouldScroll(windowWidth, cardCount);
+
+                if (!shouldScroll) {
+                    setTimeout(() => setIsNextBtnDisabled(true), 0);
+                }
+                else {
+                    setTimeout(() => setIsNextBtnDisabled(false), 0);
+                }
+            }, 200);
+        };
+        
+
+        window.addEventListener('resize', isShouldScrollHandler);
+
+        return () => {
+            window.removeEventListener('resize', isShouldScrollHandler);
+        }
+
+    }, []);
+
+
 
     /* Event for perspective update */
     useMotionValueEvent(currentScrollValue, 'animationComplete', () => {
@@ -132,6 +190,13 @@ const BookCarousel = ({ title, books, genreDescription }: CarouselProps) => {
 
     const handleNextClick = () => {
         const windowWidth = document.documentElement.clientWidth;
+        
+        // should we scroll?
+        const shouldScroll = isShouldScroll(windowWidth, cardCount);
+        
+        if (!shouldScroll) {
+            return;
+        }
 
         const gapCount = cardCount - 1;
 

@@ -1,0 +1,17 @@
+@use 'utils' as *;
+
+
+.textBlock {
+    @include colFlex;
+
+    gap: pxIntoUnit(10);
+    // initial props
+    opacity: 0;
+    filter: blur(5px);
+    transform: translate(pxIntoUnit(-600));
+
+    &[data-animate=true] {
+        @include animationSlideInBlur(1s, -600);
+        @include animationDelayOnChildren(2, 0, 0.5);
+    }
+}

@@ -1,7 +1,7 @@
 @use 'utils' as *;
 
 .nav {
-    width: clamp(pxIntoUnit(350), 35vw, pxIntoUnit(650));
+    width: clamp(pxIntoUnit(350), 25vw, pxIntoUnit(650));
     margin-left: auto;
     flex-grow: 1 1 auto;;
 };

@@ -5,11 +5,12 @@ import '@/styles/globals/globalStyles.scss';
 import { marckScriptFont, ptRootVariableFont } from '@/fonts/fonts';
 // components
 import ContextWrapper from '@/components/rootLayout/ContextWrapper';
-import Header from '@/components/rootLayout/Header';
 // auth session
 import { SessionProvider } from 'next-auth/react';
 import { auth } from '$/auth';
+import dynamic from 'next/dynamic';
 
+const Header = dynamic(() => import('@/components/rootLayout/Header'), { ssr: false });
 
 export const metadata: Metadata = {
 	title: 'Create Next App',

@@ -31,22 +31,20 @@ function PaginationBlockComponent(prop: PaginatingProp) {
   for (let i = start; i < end; ++i) {
       tempArr.push(
           <a  key={i}
-              className={prop.currentSectionIndex === i ? styles.selectedSection : ""}
+              data-selected={prop.currentSectionIndex === i ? true : false}
               onClick={PropFuncCall}
               href="#">
                 {prop.list[i]}
           </a>
       );
   }
-  if (end < prop.list.length) {
+  /* if (end < prop.list.length) {
       tempArr.push(<a>...</a>);
-  }
+  } */
   tempArr.push(<a onClick={right} href="#">❯</a>);
   
   return (
-    <>
-      <div className={styles.pagination}>{tempArr}</div>
-    </>
+    <div className={styles.pagination}>{tempArr}</div>
   );
 }
 export { PaginationBlockComponent };

@@ -6,8 +6,8 @@ import type { UserType } from "@/hooks/useCurrentUser";
 import { Poll } from "./client/Poll";
 import { AddToLibrary } from "./client/AddToLibrary";
 import { Comments } from "./Comments";
-import type { CommentsType } from "@/database/db_helpers_BOOKS";
-
+import { CommentsType } from "@/server_actions/books_actions"
+import { ReadBook } from "./client/ReadBook";
 
 type SingleBookProps = {
     book: NonNullable<ReturnGetBookByIdType>;
@@ -15,9 +15,10 @@ type SingleBookProps = {
     ratingScore: number | null;
     isLibBookExist: boolean;
     comments: CommentsType;
+    numberOfComments: number;
 }
 
-export const SingleBookSection = ({ book, user, ratingScore, isLibBookExist, comments }: SingleBookProps) => {
+export const SingleBookSection = ({ book, user, ratingScore, isLibBookExist, comments, numberOfComments }: SingleBookProps) => {
 
     const { id, title, author, year, genres, description, quotes, rating } = book;
     const authorName = author.name;
@@ -60,6 +61,12 @@ export const SingleBookSection = ({ book, user, ratingScore, isLibBookExist, com
                     {renderingQuotes}
                 </ul>
             </div>
+            <div className={styles.readTransition}>
+                <ReadBook 
+                    bookId={id} 
+                    user={user}
+                />
+            </div>
             <div className={styles.rating}>
                 <h3>Рейтинг книги: {rating}</h3>
                 <Poll 
@@ -77,6 +84,7 @@ export const SingleBookSection = ({ book, user, ratingScore, isLibBookExist, com
                     bookTitle={title}
                     bookId={id}
                     user={user}
+                    numberOfComments={numberOfComments}
                 />
             </div>
         </section>

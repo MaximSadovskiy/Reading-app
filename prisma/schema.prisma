@@ -18,7 +18,7 @@ enum UserRole {
 model User {
     id                    String                 @id @default(cuid())
     username              String
-    email                 String                @unique
+    email                 String                 @unique
     password              String
     role                  UserRole               @default(USER)
     emailVerified         DateTime?
@@ -31,6 +31,8 @@ model User {
     ratedBooks            Rating[]
     // книги добавленные пользователем в библиотеку
     libraryBooks          LibraryBook[]
+    // книгу которую пользователь сейчас читает (Читальный зал)
+    currentReadBook       CurrentReadBook?
     comments              Comment[]
     likes                 Like[]
 
@@ -38,20 +40,21 @@ model User {
 }
 
 model Book {
-    id           Int           @id @default(autoincrement())
-    title        String
-    author       Author        @relation(fields: [authorId], references: [id])
+    id           Int               @id @default(autoincrement())
+    title        String            @unique
+    author       Author            @relation(fields: [authorId], references: [id])
     authorId     Int
     genres       String[]
     year         String
     description  String
     quotes       String[]
-    rating       Float         @default(7.5)
+    rating       Float             @default(7.5)
     thumbnail    String
     picture      String?
-    file         Bytes
+    file         String
     ratingScores Rating[]
     libraryBooks LibraryBook[]
+    currentBooks CurrentReadBook[]
     comments     Comment[]
     likes        Like[]
 
@@ -79,9 +82,19 @@ model LibraryBook {
     @@id(name: "libraryBookId", [userId, bookId])
 }
 
+// Current readed book by user
+model CurrentReadBook {
+    userId String @unique
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    bookId Int
+    book   Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
+
+    @@id(name: "currentBookId", [userId, bookId])
+}
+
 model Author {
     id      Int     @id @default(autoincrement())
-    name    String
+    name    String  @unique
     books   Book[]
     picture String?
 
@@ -90,15 +103,16 @@ model Author {
 
 // Comments & Likes
 model Comment {
-    id         String @id @default(cuid())
+    id         String   @id @default(cuid())
     content    String
-    author     User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+    author     User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
     authorId   String
     authorName String
-    book       Book   @relation(fields: [bookId], references: [id], onDelete: Cascade)
+    book       Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
     bookId     Int
     likes      Like[]
-    createdAt DateTime
+    likesCount Int      @default(0)
+    createdAt  DateTime
 
     @@unique(name: "commentId", [authorId, bookId, createdAt])
 }

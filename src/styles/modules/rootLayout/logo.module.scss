@@ -1,0 +1,50 @@
+@use 'utils' as *;
+
+.logo {
+    @include fontMarc(40, -1);
+    
+    color: var(--logo-color);
+    position: relative;
+    padding-bottom: pxIntoUnit(20);
+
+    @include breakpointUp(650) {
+        @include fontMarc(52, -1);
+
+        padding-left: pxIntoUnit(90);
+        padding-right: pxIntoUnit(20);
+    }
+
+    &::before {
+        // book img
+        @include breakpointUp(650) {
+            content: url('/book-2.svg');
+            color: var(--logo-color);
+            position: absolute;
+            left: 0;
+            top: 0;
+            transform: translateY(-5%) rotate(10deg);
+        }
+    };
+
+    & .span {
+        color: var(--logo-color-second);
+    };
+    
+    & .subLogo {
+        @include fontDefault(16);
+        
+        white-space: nowrap;
+        color: var(--sublogo-color);
+        display: inline-block;
+        position: absolute;
+        
+        @include breakpointDown(650) {
+            top: pxIntoUnit(50);
+            left: 0;
+        }
+        @include breakpointUp(650) {
+            top: pxIntoUnit(60);
+            right: pxIntoUnit(10);
+        }
+    }
+}

@@ -1,0 +1,25 @@
+@use 'utils' as *;
+
+
+.wrapper {
+    flex-grow: 1 1 auto;
+}
+
+.btn {
+    @include defaultBtn;
+
+    & > svg {
+        @include transition(transform, 500ms);
+
+        fill: var(--svg-fill-passive);
+        stroke: var(--svg-stroke-passive);
+
+        &[data-active=true] {
+            transform: scale(1.3);
+        }
+
+        &[data-active=false] {
+            transform: scale(1);
+        }
+    }
+}

@@ -1,5 +1,4 @@
 import styles from '@/styles/modules/rootPage/mainPage.module.scss';
-import BookRedirect from '../components/readLayout/BookRedirect';
 import Image from 'next/image';
 import SlidingLogo from '../components/rootPage/server/SlidingLogo';
 import TextSection from '@/components/rootPage/client/TextSection';
@@ -14,13 +13,13 @@ export default function RootPage() {
 	const textBeforeLinkToBooks = 'На нашем сайте представлен большой ассортимент книг от ваших любимых авторов по разным жанрам, найдите в нём книгу подходящую именно Вам: '; 
 	const textOfLinkToBooks = 'Каталог Книг';
 
-	const textBeforeLinkToLC = 'Если вы посещаете нас впервые, то мы рекомендуем Вам зарегистрироваться в личном кабинете, это позволит удобно отслеживать прогресс чтения и добавлять новые книги в раздел Желаемое: ';
-	const textOfLinkLC = 'Личный Кабинет';
+	const textBeforeLinkToLC = 'Если вы посещаете нас впервые, то мы рекомендуем Вам зарегистрироваться, это позволит добавлять понравившиеся книги в вашу персональную Библиотеку: ';
+	const textOfLinkLC = 'Регистрация';
 
-	const textBeforeLinkToRead = 'Если вы уже посещали наш сайт, и выбрали нужную книгу, можете перейти на страницу чтения: ';
-	const textOfLinkToRead = 'Страница для Чтения';
+	const textBeforeLinkToRead = 'Если вы уже посещали наш сайт, и читали книгу, можете перейти на страницу чтения: ';
+	const textOfLinkToRead = 'Читальный зал';
 
-	const textBeforeLinkToInfo = 'Если вас интересует информация о нашем сайте: ';
+	const textBeforeLinkToInfo = 'Если вы хотите больше узнать о нашем сайте: ';
 	const textOfLinkToInfo = 'Информация о Сайте';
 
 
@@ -42,7 +41,6 @@ export default function RootPage() {
 				{/* big sliding text */}
 				<SlidingLogo />
 				<TextSection textData={textData} />
-				<BookRedirect />
 			</section>
 			<AsideWithImages imgSrcs={asideImages1} />
 			<AsideWithImages imgSrcs={asideImages2} />

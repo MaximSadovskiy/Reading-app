@@ -1,13 +1,27 @@
 @use 'utils' as *;
 
 .outerContainer {
-    margin-right: pxIntoUnit(80);
+    margin-right: pxIntoUnit(20);
+    @include breakpointUp(1150) {
+        margin-right: pxIntoUnit(80);
+    }
+
+    &[data-orientation='mobile'] {
+        margin-inline: 0;
+        width: 100%;
+        overflow: visible;
+    }
 }
 
 $accInnerContainerWidth: 100;
 .innerContainer {
     position: relative;
     width: pxIntoUnit($accInnerContainerWidth);
+
+    &[data-orientation='mobile'] {
+        width: 100%;
+        overflow: visible;
+    }
 }
 
 .openBtn {
@@ -33,19 +47,45 @@ $accInnerContainerWidth: 100;
 
 
     // arrow rotating
-    ::before {
-        @include transition(transform);
-
-        content: url('/arrow.svg');
-        position: absolute;
-        top: 50%;
-        right: 3px;
-        transform: translateY(-50%);
-        transform-origin: 80% 30%;
+    // svg on desktop
+    &[data-orientation='desktop'] {
+        ::after {
+            @include transition(transform);
+            
+            content: url('/arrow.svg');
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            transform-origin: 80% 30%;
+            right: 8px;
+        }
+    }
+    
+    &[data-open='true'] ::after {
+        transform: rotate(90deg);
     }
 
-    &[data-open='true'] ::before {
-        transform: rotate(90deg);
+    // svg on mobile orientation
+    &[data-orientation='mobile'] {
+        width: 100%;
+        border-radius: 0;
+        border: none;
+
+        ::after {
+            @include transition(transform);
+            
+            content: url('/arrow.svg');
+            position: absolute;
+            top: 50%;
+            left: 3px;
+            transform: rotate(180deg) translateY(6px) translateX(15px);
+            transform-origin: 80% 30%;
+        }
+
+
+        &[data-open='true'] ::after {
+            transform: rotate(90deg);
+        }
     }
 };
 
@@ -56,15 +96,32 @@ $accListWidth: 185;
     $leftOffset: calcXOffsetToPositionLargerElement($accListWidth, $accInnerContainerWidth);
 
     list-style: none;
-    position: absolute;
-    top: pxIntoUnit(95);
-    left: -#{$leftOffset};
-    width: pxIntoUnit($accListWidth);
     z-index: 10;
     background-color: var(--theme-list-bg);
     border-radius: pxIntoUnit(15);
     border: pxIntoUnit(2) solid var(--theme-list-border);
     overflow-x: hidden;
+
+    position: absolute;
+    top: pxIntoUnit(95);
+    width: pxIntoUnit($accListWidth);
+
+    &[data-orientation='desktop'] {
+        left: -#{$leftOffset};
+    }
+
+    // Mobile styling
+    &[data-orientation='mobile'] {
+        clip-path: none;
+        position: fixed;
+        z-index: 20;
+        top: calc(var(--header-height) + 110px);
+        right: pxIntoUnit(170);
+
+        @include breakpointUp(500) {
+            right: pxIntoUnit(190);
+        }
+    }
 }
 
 .popupListItem {

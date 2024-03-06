@@ -2,9 +2,13 @@
 
 import Link from 'next/link';
 import styles from '@/styles/modules/rootPage/textSection.module.scss';
-import { textVariants, linkVariants, ulVariants } from '@/animation/variants/textMainPage/textMainPageVariants';
+import { textVariants, ulVariants } from '@/animation/variants/textMainPage/textMainPageVariants';
 import { m, LazyMotion, domAnimation, useScroll, useMotionValueEvent } from 'framer-motion';
 import { useState, useEffect } from 'react';
+import { useCurrentUserClient } from '@/hooks/useCurrentUser';
+import { getCurrentReadBookId } from '@/server_actions/books_actions';
+import { useRouter } from 'next/navigation';
+import { toast } from "react-toastify";
 
 
 interface TextSectionProps {
@@ -88,6 +92,28 @@ const TextSection = ({ textData }: TextSectionProps) => {
     });
 
 
+    // to current Reading book
+    const user = useCurrentUserClient();
+	const router = useRouter();
+
+	const handleCurrentBookTransition = async () => {
+		if (user?.id) {
+			const result = await getCurrentReadBookId(user.id);
+			if (result.error) {
+				toast(result.error, {
+					theme: 'colored',
+					type: 'error',
+				});
+				return;
+			}
+			else {
+				// if have book --> redirect
+				router.push(`/read/${result.success}`);
+			}
+		}
+	};
+
+
     return (
         <LazyMotion features={domAnimation}>
             <m.h2 className={styles.h2}
@@ -132,7 +158,7 @@ const TextSection = ({ textData }: TextSectionProps) => {
                     animate={animationState.secondUl ? 'animate' : ''}
                 >
                     <m.li className={styles.listItem}
-                        variants={linkVariants}
+                        variants={textVariants}
                     >
                         <TextWithLink
                             href='/books'
@@ -141,32 +167,32 @@ const TextSection = ({ textData }: TextSectionProps) => {
                         />
                     </m.li>
                     <m.li className={styles.listItem}
-                        variants={linkVariants}
+                        variants={textVariants}
                     >
                         <TextWithLink
-                            href='/lc'
+                            href='/auth/register'
                             parText={textBeforeLinkToLC}
                             linkText={textOfLinkLC}
                         />
                     </m.li>
                     <m.li className={styles.listItem}
-                        variants={linkVariants}
+                        variants={textVariants}
                         initial='initial'
                         animate={animationState.links ? 'animate' : ''}
                     >
-                        <TextWithLink
-                            href='/read'
+                        <BtnWithLink
+                            clickHandler={handleCurrentBookTransition}
                             parText={textBeforeLinkToRead}
                             linkText={textOfLinkToRead}
                         />
                     </m.li>
                     <m.li className={styles.listItem}
-                        variants={linkVariants}
+                        variants={textVariants}
                         initial='initial'
                         animate={animationState.links ? 'animate' : ''}
                     >
                         <TextWithLink
-                            href='/info'
+                            href='/about'
                             parText={textBeforeLinkToInfo}
                             linkText={textOfLinkToInfo}
                         />
@@ -202,6 +228,23 @@ const TextWithLink = (props: LinkProps) => {
             <Link className={styles.link} href={props.href}>
                 {props.linkText}
             </Link>
+        </>
+	)
+}
+
+interface BtnProps {
+    parText: string;
+	linkText: string;
+    clickHandler: () => void;
+}
+
+const BtnWithLink = (props: BtnProps) => {
+    return (
+        <>
+            <p>{props.parText}</p>
+            <button className={styles.link} onClick={props.clickHandler}>
+                {props.linkText}
+            </button>
         </>
 	)
 }

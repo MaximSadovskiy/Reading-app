@@ -83,7 +83,12 @@
         to {
             opacity: 1;
             filter: blur(0px);
-            transform: translateX(0px),
+            @if ($direction == X) {
+                transform: translateX(0);
+            }
+            @else {
+                transform: translateY(0); 
+            }
         }   
     }
 }
@@ -117,7 +122,7 @@
 
         // visual
         44% {
-            filter: blur(0px);
+            filter: blur(7px);
         }
 
         50% {
@@ -125,6 +130,7 @@
         }
         68% {
             transform: translateY(0);
+            filter: blur(3px);
         }
         85% {
             transform: translateY($thirdUpPointPx);
@@ -154,18 +160,33 @@
     }
 }
 
+// can be reversed
+@mixin animationFadeOut ($duration: 1.25s, $timingFunction: linear, $direction: normal) {
+    animation: fadeOut $duration $timingFunction forwards $direction;
+
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+            transform: scale(1);
+        }
+        to {
+            opacity: 0;
+            transform: scale(0);
+        }
+    }
+}
 
 // Cancel / Success Btn hover states
 @mixin successHoverBtn {
     background-color: var(--gen-btn-bg-success);
-    color: var(--color-white);
-    border-color: var(--color-white);
+    color: var(--gen-btn-color-success);
+    border-color: var(--gen-btn-border-success);
 }
 
 @mixin cancelHoverBtn {
     background-color: var(--gen-btn-bg-cancel);
-    color: var(--color-white);
-    border-color: var(--color-white);
+    color: var(--gen-btn-color-cancel);
+    border-color: var(--gen-btn-border-cancel);
 }
 
 // padding, margin

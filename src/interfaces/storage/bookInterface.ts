@@ -10,8 +10,8 @@ export interface BookInterface {
     // url для карточки в контейнере
     thumbnail: string;
     // url для страницы этой книги
-    picture: string;
-    file: Buffer | string; // изначально путь, затем файл - seed.ts
+    picture?: string;
+    file: string; // путь до файла 
 }
 
 

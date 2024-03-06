@@ -141,7 +141,7 @@ const BookCard = memo(({ book, perspectiveOriginValue, currentScrollValue, cardW
                     <Image src={thumbnail} alt={`иллюстрация из книги "${title}"`} width={180} height={215} />
                     <p>"{title}"</p>
                     <p>{authorDisplayName}</p>
-                    <p>{rating}</p>
+                    <p>Рейтинг: <span>{rating}</span></p>
                 </Link>
             </m.li>
         </LazyMotion>

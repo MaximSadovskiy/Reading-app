@@ -3,7 +3,7 @@ import db from "@/database/db";
 import { PromiseValueType } from "@/interfaces/promiseValueTypeUtil";
 import { GenreLiterals } from "@/interfaces/storage/bookInterface";
 import { getUserById } from "@/database/db_helpers";
-import { getBookById, getCommentById, updateBookRating } from "@/database/db_helpers_BOOKS";
+import { getBookById, getCommentById, updateBookRating, updateLikesCountOfComment } from "@/database/db_helpers_BOOKS";
 import { revalidatePath } from "next/cache";
 import { auth } from "$/auth";
 
@@ -21,22 +21,31 @@ enum ErrorMessages {
 }
 
 export const getPopularBooksAction = async (limit: number) => {
-    const books = await db.book.findMany({
+    const booksOnGenre = await db.book.findMany({
         take: limit,
         orderBy: { rating: 'desc' },
-        include: { author: true },
+        select: {
+            id: true,
+            title: true,
+            thumbnail: true,
+            rating: true,
+            author: {
+                select: {
+                    name: true,
+                }
+            }
+        }
     });
 
     // id, title, author, rating, thumbnail
-    const popularBooks = books.map(book => {
+    const recomendationBooks = booksOnGenre.map(book => {
+        const { id, title, author, thumbnail, rating } = book;
 
-        const { id, title, thumbnail, rating, author } = book;
-        const { name } = author;
-
-        return { id, title, authorName: name, thumbnail, rating };
+        return { id, title, authorName: author.name, thumbnail, rating}
     });
 
-    return popularBooks;
+
+    return recomendationBooks;
 };
 
 
@@ -46,16 +55,24 @@ export const getBookRecomendationsByGenre = async (genre: GenreLiterals, limit: 
         where: { genres: { has: genre }},
         take: limit,
         orderBy: { rating: 'desc' },
-        include: { author: true },
+        select: {
+            id: true,
+            title: true,
+            thumbnail: true,
+            rating: true,
+            author: {
+                select: {
+                    name: true,
+                }
+            }
+        }
     });
 
     // id, title, author, rating, thumbnail
     const recomendationBooks = booksOnGenre.map(book => {
+        const { id, title, author, thumbnail, rating } = book;
 
-        const { id, title, thumbnail, rating, author } = book;
-        const { name } = author;
-
-        return { id, title, authorName: name, thumbnail, rating };
+        return { id, title, authorName: author.name, thumbnail, rating}
     });
 
 
@@ -228,6 +245,8 @@ export const deleteFromLibraryAction = async (userId: string, bookId: number) =>
         }
     });
 
+    revalidatePath('/my_library');
+
     return { success: 'Книга удалена из вашей библиотеки!' }
 }
 
@@ -263,6 +282,42 @@ export const getLibraryBookAction = async (userId: string, bookId: number) => {
 
 
 // COMMENTS & LIKES
+
+// get comments of book, paginated
+type GetBookCommentsPromise = ReturnType<typeof getCommentsOfBookById>;
+type GetBookComments = PromiseValueType<GetBookCommentsPromise>;
+export type CommentsType = NonNullable<GetBookComments>['success'];
+
+export const getCommentsOfBookById = async (bookId: number, offset: number, countToTake: number) => {
+    const comments = await db.comment.findMany({
+        where: { bookId },
+        // test
+        include: { likes: true },
+        // по популярности
+        orderBy: { likesCount: 'desc' },
+        // pagination
+        take: countToTake,
+        skip: offset,
+    });
+    if (!comments) {
+        return null;
+    }
+
+    return { success: comments }
+}
+
+// get how many comments book have (length)
+export const getNumberOfAllComments = async (bookId: number) => {
+    const allComments = await db.comment.findMany({
+        where: { bookId },
+    });
+
+    const numberOfComments = allComments.length;
+    
+    return numberOfComments; 
+}
+
+
 // Add comment
 export const addCommentAction = async (content: string, userId: string, bookId: number) => {
     const user = await getUserById(userId);
@@ -281,15 +336,18 @@ export const addCommentAction = async (content: string, userId: string, bookId: 
             authorName: user.username,
             bookId,
             createdAt: new Date(),
+            likesCount: 0,
         }
     });
+
+    revalidatePath(`/books/${bookId}`);
 
     return { success: 'Комментарий успешно добавлен! Чтобы увидеть изменение - перезагрузите страницу:)' }
 }
 
 
 // Delete Comment
-export const deleteCommentAction = async (commentId: string) => {
+export const deleteCommentAction = async (commentId: string, bookId: number) => {
     // check if it exist first
     const existingComment = await db.comment.findUnique({
         where: { id: commentId }
@@ -303,6 +361,8 @@ export const deleteCommentAction = async (commentId: string) => {
             id: commentId,
         }
     });
+
+    revalidatePath(`/books/${bookId}`);
 
     return { success: 'Комментарий успешно удалён! Чтобы увидеть изменение - перезагрузите страницу:)' }
 }
@@ -343,6 +403,10 @@ export const addLikeAction = async (authorId: string, bookId: number, commentId:
         }
     });
 
+
+    // update like count of comment
+    await updateLikesCountOfComment(commentId);
+
     // revalidate
     revalidatePath(`/books/${bookId}`);
 
@@ -373,8 +437,113 @@ export const removeLikeAction = async (authorId: string, bookId: number, comment
         }}
     });
 
+    // update like count of comment
+    await updateLikesCountOfComment(commentId);
+
     // revalidate
     revalidatePath(`/books/${bookId}`);
 
     return { success: 'Действие успешно отменено!' }
 }
+
+
+// MY_LIBRARY
+type LibraryBooksPromise = ReturnType<typeof getAllLibraryBooks>;
+export type LibraryBooks = PromiseValueType<LibraryBooksPromise>;
+export type LibraryBooksSuccess = NonNullable<LibraryBooks['success']>;
+
+export const getAllLibraryBooks = async (userId: string) => {
+    const libraryBooks = await db.libraryBook.findMany({
+        where: { userId },
+        select: {
+            book: {
+                select: {
+                    id: true,
+                    title: true,
+                    thumbnail: true,
+                    rating: true,
+                    genres: true,
+                    author: {
+                        select: {
+                            name: true,
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // check if length === 0 - должно проходить через ошибку
+    if (libraryBooks === null) {
+        return { error: 'no books' };
+    }
+
+    const booksData = libraryBooks.map((libBook) => {
+
+        const { id, title, author, thumbnail, rating, genres } = libBook.book;
+
+        return { id, title, thumbnail, rating, authorName: author.name, genres }
+    });
+
+    return { success: booksData };
+};
+
+
+// Current Read book
+// add only if user authorized
+export const addCurrentBookAction = async (userId: string, bookId: number) => {
+    const user = await db.user.findUnique({
+        where: { id: userId },
+    });
+    if (!user) {
+        return { error: ErrorMessages.USER_NO_FOUND}
+    }
+
+    const book = await db.book.findUnique({
+        where: { id: bookId },
+        select: { title: true }
+    });
+    if (!book) {
+        return { error: ErrorMessages.BOOK_NO_FOUND }
+    }
+
+    // if exists already
+    const existingCurrentBook = await db.currentReadBook.findFirst({
+        where: { 
+            userId,
+        }
+    });
+    // delete it
+    if (existingCurrentBook) {
+        await db.currentReadBook.delete({
+            where: {
+                userId,
+            }
+        })
+    }
+
+    // create new
+    await db.currentReadBook.create({
+        data: {
+            userId,
+            bookId,
+        }
+    });
+
+    return { success: `Книга ${book.title} добавлена в "Читальный Зал"` }
+};
+
+
+// current read book
+export const getCurrentReadBookId = async (userId: string) => {
+    const book = await db.currentReadBook.findFirst({
+        where: { userId },
+        select: { bookId: true },
+    });
+
+    if (!book) {
+        return { error: 'Читаемая книга не выбрана, чтобы перейти - пожалуйста, выберите желаемую книгу на странице "Книги" этого сайта' };
+    }
+
+    return { success: book.bookId }
+};  
