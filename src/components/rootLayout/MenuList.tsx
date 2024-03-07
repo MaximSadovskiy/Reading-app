@@ -44,7 +44,7 @@ export const MenuList = ({ isTextPresented, orientation }: MenuProps) => {
             const menuCoords = containerRef.current.getBoundingClientRect();
             setTimeout(() => setMenuCoords(menuCoords), 0);
         }
-    }, [containerRef.current]);
+    }, [containerRef.current, menuCoords]);
 
     // tooltip handlers
     const handleMouseEnter = () => {
@@ -82,7 +82,7 @@ export const MenuList = ({ isTextPresented, orientation }: MenuProps) => {
             document.removeEventListener('click', handleClickOutside);
         }
         
-    }, []);
+    }, [closeCallback]);
 
     return (
         <>
@@ -135,12 +135,12 @@ interface PopupListProps {
     orientation: 'mobile' | 'tablet';
 }
 
-const PopupNavList = forwardRef((
+const PopupNavList = forwardRef(function PopupNavList(
 
         { currentPath, closeCallback, orientation }: PopupListProps, 
         listRef: React.ForwardedRef<HTMLUListElement>,
 
-    ) => {
+    ) {
 
     return (
         <LazyMotion features={domAnimation}>

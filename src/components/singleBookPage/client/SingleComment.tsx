@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useEffect, useState } from "react";
+import { memo, useState } from "react";
 import styles from "@/styles/modules/singleBookPage/singleComment.module.scss";
 import { LikeSvg, DeleteSvg } from "@/components/shared/Svg";
 import {
@@ -67,7 +67,7 @@ interface SingleCommentProps {
 }
 
 // COMPONENT
-export const SingleComment = memo(({
+export const SingleComment = memo(function SingleComment({
 	content,
 	likesCount,
 	authorName,
@@ -77,7 +77,7 @@ export const SingleComment = memo(({
 	hasLikedbyUser,
 	authorNameDirection,
 	isCreatedByUser,
-}: SingleCommentProps) => {
+}: SingleCommentProps) {
 
 	const [isSvgLiked, setIsSvgLiked] = useState(hasLikedbyUser);
 

@@ -34,13 +34,13 @@ export const SingleBookSection = ({ book, user, ratingScore, isLibBookExist, com
 
     //quotes  
     const renderingQuotes = quotes.map(quote => (
-        <li key={quote}>"{' '}{quote}{' '}"</li>
+        <li key={quote}>&quot;{' '}{quote}{' '}&quot;</li>
     ));
 
     return (
         <section className={styles.bookSection}>
             <div className={styles.generalInfoWrapper}>
-                <h2 className={styles.title}>"{title}"</h2>
+                <h2 className={styles.title}>&quot;{title}&quot;</h2>
                 <p className={styles.author}>{authorFormattedName}</p>
                 <p className={styles.year}>{year}</p>
             </div>

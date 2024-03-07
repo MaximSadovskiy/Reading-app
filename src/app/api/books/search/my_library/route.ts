@@ -1,5 +1,5 @@
 import { searchMyLibraryBooksByAuthor, searchMyLibraryBooksByTitle } from "@/database/db_helpers_BOOKS";
-import { useCurrentUserServer } from "@/hooks/useCurrentUser";
+import { getCurrentUserServer } from "@/hooks/useCurrentUser";
 import { NextRequest, NextResponse } from "next/server";
 import { SEARCH_MY_LIBRARY_BOOKS_URL } from "@/apiUrls";
 
@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
         const searchParams = request.nextUrl.searchParams;
 
         // get user
-        const user = await useCurrentUserServer();
+        const user = await getCurrentUserServer();
 
         if (!user) return NextResponse.json({ error: 'Пользователь не был найден' });
 

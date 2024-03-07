@@ -163,7 +163,7 @@ const SearchModal = ({ isModalOpen, closeModal, baseApiUrl }: SearchModalProps) 
                 // call request
                 doSearch();
         }
-    }, [query, searchMode]);
+    }, [query, searchMode, baseApiUrl]);
 
     return (
         <>
@@ -265,7 +265,7 @@ const SearchResults = (props: SearchResultsProps) => {
             <Link href={`/books/${searchResult.id}`} className={styles.resultsWrapperUnderP}>
                 <p className={styles.resultsAuthor}>{searchResult.authorDisplayName}</p>
                 <p className={styles.resultsDash}>&#8212;</p>
-                <p className={styles.resultsTitle}>"{searchResult.title}"</p>
+                <p className={styles.resultsTitle}>&quot;{searchResult.title}&quot;</p>
                 <p className={styles.resultsRating}>{searchResult.rating}</p>
             </Link>
         </li>

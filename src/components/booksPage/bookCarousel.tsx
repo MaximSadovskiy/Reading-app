@@ -40,7 +40,7 @@ const BookCarousel = ({ title, books, genreDescription }: CarouselProps) => {
 
         perspectiveOriginValue.set(initialPerspectiveValue);
     
-    }, []);
+    }, [perspectiveOriginValue, currentScrollValue]);
 
     const renderBooks = books.map(book => (
         <BookCard key={book.id} 
@@ -84,7 +84,7 @@ const BookCarousel = ({ title, books, genreDescription }: CarouselProps) => {
                 setTimeout(() => setIsNextBtnDisabled(false), 0);
             }
         }, 200);
-    }, []);
+    }, [cardCount]);
 
     useEffect(() => {
         const isShouldScrollHandler = () => {
@@ -114,7 +114,7 @@ const BookCarousel = ({ title, books, genreDescription }: CarouselProps) => {
             window.removeEventListener('resize', isShouldScrollHandler);
         }
 
-    }, []);
+    }, [cardCount]);
 
 
 

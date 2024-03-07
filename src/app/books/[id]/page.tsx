@@ -3,13 +3,13 @@ import { SingleBookSection } from "@/components/singleBookPage/SingleBook";
 import styles from "@/styles/modules/singleBookPage/page.module.scss";
 import type { ReturnGetBookByIdType } from "@/database/db_helpers_BOOKS";
 import { getCommentsOfBookById, getNumberOfAllComments } from "@/server_actions/books_actions";
-import { useCurrentUserServer } from "@/hooks/useCurrentUser";
+import { getCurrentUserServer } from "@/hooks/useCurrentUser";
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/ReactToastify.css';
 import { getRatingScoreAction, getLibraryBookAction } from "@/server_actions/books_actions";
 import type { GetRatingScore } from "@/server_actions/books_actions";
 import { CommentsType } from "@/server_actions/books_actions"
-
+import Image from "next/image";
 
 type SingleBookProps = {
     params: { id: string },
@@ -24,7 +24,7 @@ const SingleBookPage = async ({ params, searchParams }: SingleBookProps) => {
 
     // get Book Data (rating score) by user
     // get rating score of book by user
-    const user = await useCurrentUserServer();
+    const user = await getCurrentUserServer();
 	let ratingScore: number | null = null;
     if (user) {
         const rating: GetRatingScore = await getRatingScoreAction(user.id as string, book.id);
@@ -40,7 +40,7 @@ const SingleBookPage = async ({ params, searchParams }: SingleBookProps) => {
                 <h2>
                     Сожалеем, но данная книга не была найдена, попробуйте перезагрузить страницу или обратиться в поддержку сайта :(
                 </h2>
-                <img src='/emotions/sad.svg' width={150} height={150} />
+                <Image src='/emotions/sad.svg' width={150} height={150} alt="грустный смайлик" />
             </main>
         )
     }

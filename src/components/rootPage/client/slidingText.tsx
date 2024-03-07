@@ -92,10 +92,10 @@ interface ForwardedMethods {
     setTop: (val: number) => void | undefined;
 }
 
-const Circle = forwardRef((
+const Circle = forwardRef(function Circle(
         props: CircleProps, 
         ref: React.ForwardedRef<ForwardedMethods>
-    ) => {
+    ) {
 
     const { width, height } = props;
 

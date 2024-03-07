@@ -83,7 +83,7 @@ export const ResetForm = () => {
 				type: 'error',
 			});
 		}
-	}, [result]);
+	}, [result, router]);
 
 
 	return (

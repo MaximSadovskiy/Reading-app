@@ -69,7 +69,7 @@ export const AddComment = ({ bookTitle, user, bookId }: AddCommentProps) => {
 
     return (
         <div className={styles.addComment}>
-            <p>Как вам книга "{bookTitle}" ?</p>
+            <p>Как вам книга &quot;{bookTitle}&quot; ?</p>
             <div className={styles.inputContainer}>
                 <textarea 
                     value={commentText}

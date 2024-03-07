@@ -19,6 +19,8 @@ import { toast } from "react-toastify";
 import { ConfirmModal } from "@/components/shared/ConfirmModal";
 import { useRouter } from "next/navigation";
 import type { UserType, UserNoNullType } from "@/hooks/useCurrentUser";
+import Image from "next/image";
+
 
 type IsHoveredState = {
 	[ind: number | string]: boolean;
@@ -366,7 +368,7 @@ const RateDescription = ({ itemIndex }: RateDescriptionProps) => {
 			exit="exit"
 		>
 			<p>{rateText}</p>
-			<img src={rateEmojiSrc} width={70} height={70} />
+			<Image alt="смайлик" src={rateEmojiSrc} width={70} height={70} />
 		</m.div>
 	);
 };

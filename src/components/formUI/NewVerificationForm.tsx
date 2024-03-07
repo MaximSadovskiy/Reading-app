@@ -42,12 +42,12 @@ export const NewVerificationForm = () => {
 	const searchParams = useSearchParams();
 	const token = searchParams.get("token");
 	const { theme } = useGlobalContext();
-	const isMobile = useOrientation(window, document, 500);
+	const orientation = useOrientation();
 
 	// status of verification
 	const [status, setStatus] = useState<StatusState>({
 		type: "pending",
-		message: LABEL_PENDING_TEXTS[isMobile ? "mobile" : "desktop"],
+		message: LABEL_PENDING_TEXTS[orientation === 'mobile' ? "mobile" : "desktop"],
 	});
 
 	const router = useRouter();
@@ -91,13 +91,13 @@ export const NewVerificationForm = () => {
 		if (status.type === 'success') {
 			router.push('/auth/login');
 		}
-	}, [status]);
+	}, [status, router]);
 
 	// spinner props
-	const spinnerSize = isMobile ? SPINNER_SIZES.mobile : SPINNER_SIZES.desktop;
+	const spinnerSize = orientation === 'mobile' ? SPINNER_SIZES.mobile : SPINNER_SIZES.desktop;
 	const spinnerColor =
 		theme == "dark" ? "hsl(0, 100%, 97%)" : "hsl(0, 38%, 19%)";
-	const spinnerCss = isMobile
+	const spinnerCss = orientation === 'mobile'
 		? SPINNER_CSS_PROPS.mobile
 		: SPINNER_CSS_PROPS.desktop;
 

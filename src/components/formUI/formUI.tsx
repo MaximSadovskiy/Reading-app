@@ -124,7 +124,7 @@ export const Select = ({
 	// эффект чтобы передать актуальное состояние в hook-form
 	useEffect(() => {
 		onChange(selectedOptions);
-	}, [selectedOptions]);
+	}, [selectedOptions, onChange]);
 
 	// event handlers
 	const deleteOptionFromPanel = (e: React.MouseEvent) => {

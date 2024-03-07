@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import 'react-toastify/dist/ReactToastify.css';
 import { toast, ToastContainer } from "react-toastify";
 import { ErrorMessages, SuccessMessages } from '@/interfaces/formMessages';
-
+import Image from "next/image";
 
 
 interface ClickableImage extends HTMLImageElement {
@@ -98,7 +98,7 @@ export const RegisterForm = () => {
                 type: 'error',
             });
         }
-    }, [result]);
+    }, [result, router]);
 
 	const selectOptions = [...genreLiterals];
 
@@ -164,8 +164,9 @@ export const RegisterForm = () => {
                         data-invalid={errors.password ? true : false}
                         placeholder="*********"
                     />
-                    <img
+                    <Image
                         title="показать/скрыть пароль"
+                        alt="показать/скрыть пароль"
                         width={30}
                         height={30}
                         src={
@@ -194,8 +195,9 @@ export const RegisterForm = () => {
                         data-invalid={errors.confirmPassword ? true : false}
                         placeholder="*********"
                     />
-                    <img
+                    <Image
                         title="показать/скрыть пароль"
+                        alt="показать/скрыть пароль"
                         width={30}
                         height={30}
                         src={

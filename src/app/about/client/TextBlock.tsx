@@ -28,7 +28,7 @@ export const TextBlock = ({ children, index }: TextBlockProps) => {
                 divRef.current.dataset.animate = true;
             }
         }
-    }, [divRef.current]);
+    }, [index, divRef.current]);
 
     // other divs
     useEffect(() => {
@@ -64,7 +64,7 @@ export const TextBlock = ({ children, index }: TextBlockProps) => {
                 document.removeEventListener('scroll', handleAppearance);
             }
         }
-    }, []);
+    }, [orientation]);
 
     return (
         <div className={styles.textBlock}
