@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useState } from "react";
+import { memo, useCallback, useState } from "react";
 import styles from "@/styles/modules/singleBookPage/singleComment.module.scss";
 import { LikeSvg, DeleteSvg } from "@/components/shared/Svg";
 import {
@@ -204,11 +204,11 @@ export const SingleComment = memo(function SingleComment({
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [modalMode, setModalMode] = useState<ModalMods>('AUTHORIZE');
 
-	const closeCallback = () => {
+	const closeCallback = useCallback(() => {
 		if (isModalOpen) {
-			setIsModalOpen(false);
+			setTimeout(() => setIsModalOpen(false), 0);
 		}
-	};
+	}, [isModalOpen]);
 	// redirect modal callback
 	const router = useRouter();
 	const redirectCallback = () => {

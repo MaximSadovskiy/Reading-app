@@ -62,6 +62,7 @@ export const ReadBook = ({ bookId, user }: ReadBookProps) => {
             }
         } else {
             // just redirect
+            console.log('redirecting to ' + redirectPath);
             router.push(redirectPath);
         }
     }

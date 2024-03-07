@@ -25,6 +25,6 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ success: libraryBooks });
         }
     } catch (err) {
-        console.log(`Error on endpoint: ${SEARCH_MY_LIBRARY_BOOKS_URL}`);
+        return NextResponse.json({ error: `Error on endpoint: ${SEARCH_MY_LIBRARY_BOOKS_URL}` });
     }
 }

@@ -43,7 +43,6 @@ export const NewVerificationForm = () => {
 	const token = searchParams.get("token");
 	const { theme } = useGlobalContext();
 	const orientation = useOrientation();
-
 	// status of verification
 	const [status, setStatus] = useState<StatusState>({
 		type: "pending",

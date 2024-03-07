@@ -33,8 +33,8 @@ export const SingleBookSection = ({ book, user, ratingScore, isLibBookExist, com
     ));
 
     //quotes  
-    const renderingQuotes = quotes.map(quote => (
-        <li key={quote}>&quot;{' '}{quote}{' '}&quot;</li>
+    const renderingQuotes = quotes.map((quote, index) => (
+        <li key={`${quote}${index}`}>&quot;{' '}{quote}{' '}&quot;</li>
     ));
 
     return (

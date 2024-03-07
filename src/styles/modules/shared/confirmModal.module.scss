@@ -5,15 +5,21 @@
     @include colFlex(center, space-around, pxIntoUnit(20));
     @include colorTransition;
 
-    // positioning
-    $clampWidth: clamp(320px, 30vw, 400px);
     $height: pxIntoUnit(240);
-    width: $clampWidth;
+
+    width: pxIntoUnit(320);
     position: fixed;
     top: calc(50vh - $height / 2);
-    right: calc(50vw - $clampWidth);
-    transform: translateX(-50%);
-
+    right: calc((100vw - 320px) / 2);
+    
+    @include breakpointUp(600) {
+        // positioning
+        $clampWidth: clamp(pxIntoUnit(340), 30vw, pxIntoUnit(400));
+        width: $clampWidth;
+        right: calc(50vw - $clampWidth);
+        transform: translateX(-50%);
+    }
+    
     height: $height;
     z-index: var(--modal-zindex);
     background-color: var(--search-modal-bg);
@@ -35,7 +41,11 @@
 }
 
 .btnWrapper {
-    @include flex(center, center, pxIntoUnit(30));
+    @include flex(center, center, pxIntoUnit(15));
+
+    @include breakpointUp(650) {
+        gap: pxIntoUnit(30);
+    }
 
     // buttons
     & button {

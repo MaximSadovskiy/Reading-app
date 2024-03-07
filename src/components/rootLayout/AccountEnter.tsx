@@ -122,7 +122,7 @@ type PopupProps = {
 };
 
 const PopupList = forwardRef(
-	({ user, closePopupList, orientation }: PopupProps, ref: React.Ref<HTMLUListElement>) => {
+	function PopupList({ user, closePopupList, orientation }: PopupProps, ref: React.Ref<HTMLUListElement>) {
 
 	const handleLogoutClick = async () => {
 		await logOutAction('/');

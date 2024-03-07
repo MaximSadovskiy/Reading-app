@@ -151,7 +151,7 @@ const BookCard = memo(
                         width={180} 
                         height={215} 
                     />
-                    <p>"{title}"</p>
+                    <p>&quot;{title}&quot;</p>
                     <p>{authorDisplayName}</p>
                     <p>Рейтинг: <span>{rating}</span></p>
                 </Link>

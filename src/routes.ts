@@ -3,7 +3,7 @@
  * They do not require authentication
  * @type {string[]}
  */
-export const publicRoutes = ['/', '/books', '/books/:id', '/about', '/auth/new-verification'];
+export const publicRoutes = ['/', '/books', '/books/:id', '/about', '/auth/new-verification', '/read/:id'];
 
 
 /**

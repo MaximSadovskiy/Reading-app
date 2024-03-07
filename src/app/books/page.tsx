@@ -28,9 +28,9 @@ export default async function BooksPage() {
 	let userFavouriteGenres: GenreLiterals[] | null = [];
 	if (isAuthenticated) {
 		userFavouriteGenres = await getFavouriteGenres(user?.id as string);
-		if (userFavouriteGenres == null) {
-			userFavouriteGenres = getRandomGenres();
-		}
+	}
+	if (!isAuthenticated || userFavouriteGenres == null) {
+		userFavouriteGenres = getRandomGenres();
 	}
 
 	// storing Recomendation Carousels

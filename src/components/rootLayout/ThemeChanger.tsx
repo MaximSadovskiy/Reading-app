@@ -133,7 +133,7 @@ interface ListProps {
 type ButtonCustomEvent = React.MouseEvent<HTMLButtonElement & { name: 'light' | 'dark' | 'system' }> ;
 
 
-const PopupThemeList = forwardRef(({ setTheme, systemTheme, setSvgPath, closeList, svgPath, orientation }: ListProps, ref: React.Ref<HTMLUListElement>) => {
+const PopupThemeList = forwardRef(function PopupThemeList({ setTheme, systemTheme, setSvgPath, closeList, svgPath, orientation }: ListProps, ref: React.Ref<HTMLUListElement>) {
 
     const handleChangeThemeClick = (e: ButtonCustomEvent) => {
         const { name } = e.currentTarget;

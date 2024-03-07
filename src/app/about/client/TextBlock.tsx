@@ -28,7 +28,7 @@ export const TextBlock = ({ children, index }: TextBlockProps) => {
                 divRef.current.dataset.animate = true;
             }
         }
-    }, [index, divRef.current]);
+    }, [index]);
 
     // other divs
     useEffect(() => {

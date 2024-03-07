@@ -23,9 +23,9 @@ export async function GET(request: NextRequest) {
 
             const formattedBooks = booksByTitle.map(book => {
                 const { id, title, author, rating } = book;
-                const authorName = getAuthorDisplayName(author.name, false);
+                const authorDisplayName = getAuthorDisplayName(author.name, false);
                 
-                return { id, title, rating, authorName };
+                return { id, title, rating, authorDisplayName };
             });
             
             
@@ -39,9 +39,9 @@ export async function GET(request: NextRequest) {
             }
             const formattedBooks = authorOfBooks.books.map(book => {
                 const { id, title, rating } = book;
-                const authorName = getAuthorDisplayName(authorOfBooks.name, false)
+                const authorDisplayName = getAuthorDisplayName(authorOfBooks.name, false)
                 
-                return { id, title, rating, authorName };
+                return { id, title, rating, authorDisplayName };
             });
 
             return NextResponse.json({ success: formattedBooks });

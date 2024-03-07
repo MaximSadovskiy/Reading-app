@@ -24,11 +24,7 @@ const getInitialOrientation = (): OrientationType => {
 };
 
 export const useOrientation = (customBreakpoints?: typeof BREAKPOINTS) => {
-    // server guard
-    if (typeof window === 'undefined') {
-        return;
-    }
-    
+
     const [orientation, setOrientation] = useState(
         getInitialOrientation()
     );
