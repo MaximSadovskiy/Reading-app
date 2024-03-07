@@ -7,6 +7,11 @@
     width: 130%;
     position: absolute;
     top: pxIntoUnit(500);
+
+    @include breakpointDown(800) {
+        top: pxIntoUnit(580);
+        max-width: 88vw;
+    } 
     
     // title
     & > h2 {
@@ -37,6 +42,10 @@
     width: calc(clamp(pxIntoUnit(200), 70vw, pxIntoUnit(1000)) - 40px);
     background-color: var(--book-section-border);
     box-shadow: 0 0 3px 2px var(--book-section-shadow);
+
+    @include breakpointDown(1150) {
+        width: 90vw;
+    }
 }
 
 // if no comments this rendered

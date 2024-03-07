@@ -8,6 +8,10 @@ $wrapperMinWidth: $btnMinWidth * 5;
     min-width: pxIntoUnit($wrapperMinWidth);
     margin-top: pxIntoUnit(50);
 
+    @include breakpointDown(800) {
+        margin-top: pxIntoUnit(10);
+    }
+
     & > ul {
         display: grid;
         grid-template-columns: repeat(4, minmax(pxIntoUnit(60), auto));

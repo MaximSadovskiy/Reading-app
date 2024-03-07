@@ -115,7 +115,7 @@ $accListWidth: 185;
         clip-path: none;
         position: fixed;
         z-index: 20;
-        top: calc(var(--header-height) + 110px);
+        top: calc(var(--header-height) + 180px);
         right: pxIntoUnit(170);
 
         @include breakpointUp(500) {

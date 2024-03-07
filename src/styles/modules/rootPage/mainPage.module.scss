@@ -8,6 +8,7 @@
 
     display: grid;
     grid-template-columns: 1fr;
+    justify-content: start;
 
     @include breakpointUp(1150) {
         grid-template-columns: 22vw 1fr 22vw;
@@ -19,11 +20,22 @@
 };
 
 .textSection {
-    grid-area: text;
     margin-top: pxIntoUnit(20);
+    margin-inline: auto;
     color: var(--main-text);
+    padding-inline: pxIntoUnit(35);
+    
+    @include breakpointDown(700) {
+        max-width: 85vw;
+    }
 
-    padding-inline: pxIntoUnit(35); 
+    @include breakpointUp(750) {
+        padding-inline: pxIntoUnit(80);
+    }
+    
+    @include breakpointUp(1150) {
+        grid-area: text;
+    }
 };
 
 

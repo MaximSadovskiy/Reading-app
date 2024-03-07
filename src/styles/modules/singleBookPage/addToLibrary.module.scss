@@ -10,6 +10,10 @@ $containerHeight: pxIntoUnit(100);
     min-height: $containerHeight;
     border-radius: pxIntoUnit(15);
     width: $containerWidth;
+
+    @include breakpointDown(600) {
+        top: pxIntoUnit(380);
+    } 
     
     & > button {
         @include fontDefault(22);

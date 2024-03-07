@@ -3,6 +3,11 @@
 .h2 {
     @include fontHeading(2);
 
+    @include breakpointDown(650) {
+        text-align: start;
+        margin-top: pxIntoUnit(50);
+    }
+
     > strong {
         @include fontMarc(52, 0);
         color: var(--main-text-highlight);
@@ -15,7 +20,11 @@
 
 .h3 {
     @include fontHeading(3);
-    margin-block: pxIntoUnit(25);
+    margin-block: pxIntoUnit(50);
+
+    @include breakpointDown(650) {
+        text-align: start;
+    }
 
     > strong {
         color: var(--main-text-highlight-logo);
@@ -24,7 +33,7 @@
 }
 
 .list {
-    @include flex(center, stretch, pxIntoUnit(8), column);
+    @include flex(flex-start, stretch, pxIntoUnit(8), column);
 
     list-style: none;
     margin-top: pxIntoUnit(15);

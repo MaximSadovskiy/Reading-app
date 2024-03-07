@@ -19,6 +19,10 @@
 	background-color: var(--read-bg);
 	overflow: hidden;
 	max-width: pxIntoUnit(1200);
+
+	@include breakpointDown(600) {
+		max-width: 92vw;
+	}
 }
 
 .title {

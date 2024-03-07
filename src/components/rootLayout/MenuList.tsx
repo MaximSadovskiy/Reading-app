@@ -61,7 +61,7 @@ export const MenuList = ({ isTextPresented, orientation }: MenuProps) => {
 
     const handleMouseLeave = () => {
         if (isTooltipOpen) {
-            setTimeout(() => setIsTooltipOpen(false), 0);
+            setTimeout(() => setIsTooltipOpen(false), 200);
         }
     }
 

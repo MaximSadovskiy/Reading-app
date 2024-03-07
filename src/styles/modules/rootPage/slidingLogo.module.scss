@@ -3,6 +3,11 @@
 .slidingBigText {
     @include colFlex(center, center, pxIntoUnit(20));
 
+    // do not display on mobiles
+    @include breakpointDown(650) {
+        display: none;
+    }
+
     text-align: center;
     min-height: 50vh;
     margin-bottom: pxIntoUnit(50);

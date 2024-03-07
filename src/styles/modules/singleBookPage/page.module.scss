@@ -8,6 +8,10 @@
     background-color: var(--main-bg);
     color: var(--main-text);
 
+    @include breakpointDown(650) {
+        min-height: 500vh;
+    }
+
     // if no books
     &[data-empty=true] {
         @include colFlex(center, center);

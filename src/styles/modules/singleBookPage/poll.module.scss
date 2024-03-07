@@ -9,6 +9,10 @@ $containerWidth: 590;
     width: pxIntoUnit($containerWidth);
     min-height: pxIntoUnit($containerHeight);
 
+    @include breakpointDown(600) {
+        max-width: 88vw;
+    } 
+
     & > p {
         @include fontDefault(24);
         align-self: center;
@@ -20,6 +24,11 @@ $containerWidth: 590;
         list-style: none;
         width: pxIntoUnit($containerWidth);
         min-height: pxIntoUnit($containerHeight);
+
+        @include breakpointDown(600) {
+            flex-wrap: wrap;
+            max-width: 88vw;
+        } 
 
         > li {
             display: inline-block;
