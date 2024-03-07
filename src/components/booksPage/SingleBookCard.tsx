@@ -25,7 +25,15 @@ interface BookCardProps {
     timerRef: React.MutableRefObject<number | null>;
 }
 
-const BookCard = memo(({ book, perspectiveOriginValue, currentScrollValue, cardWidth, gapWidth, timerRef }: BookCardProps) => {
+const BookCard = memo(
+    function BookCard(
+        {   book, 
+            perspectiveOriginValue, 
+            currentScrollValue, 
+            cardWidth, 
+            gapWidth, 
+            timerRef }: BookCardProps) {
+
     const { id, title, authorName, rating, thumbnail } = book;
     const authorDisplayName = getAuthorDisplayName(authorName, true);
 
@@ -138,8 +146,12 @@ const BookCard = memo(({ book, perspectiveOriginValue, currentScrollValue, cardW
                 ref={scope}
             >
                 <Link href={`/books/${id}`} className={styles.link}>
-                    <Image src={thumbnail} alt={`иллюстрация из книги "${title}"`} width={180} height={215} />
-                    <p>"{title}"</p>
+                    <Image src={thumbnail} 
+                        alt={`иллюстрация из книги &quot;${title}&quot;`} 
+                        width={180} 
+                        height={215} 
+                    />
+                    <p>&quot;{title}&quot;</p>
                     <p>{authorDisplayName}</p>
                     <p>Рейтинг: <span>{rating}</span></p>
                 </Link>

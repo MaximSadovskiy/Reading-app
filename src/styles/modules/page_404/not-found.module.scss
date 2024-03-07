@@ -1,0 +1,44 @@
+@use 'utils' as *;
+
+.main {
+    @include colFlex(center, center);
+    @include colorTransition;
+
+    background-color: var(--main-bg);
+    color: var(--main-text);
+    min-height: calc(100vh - var(--header-height));
+}
+
+.titleWrapper {
+    @include colFlex(center, center, pxIntoUnit(20));
+
+    & p {
+        @include fontMarc(50);
+        @include animationSlideInBlur(1.3s, -700);
+        animation-delay: 0.5s;
+
+        color: var(--main-text-highlight);
+    }
+
+    & > .textWithSvg {
+        @include flex; 
+        gap: pxIntoUnit(30);
+
+        & > p {
+            color: var(--main-text);
+            animation-delay: 1s;
+        }
+
+        & img {
+            @include animationTrippleFallFromTop(1.7s);
+            animation-delay: 2.8s;
+        }
+    }
+
+    & > a {
+        @include animationAppear;
+        @include linkWithUnderline(600, var(--link-underline), true);
+        animation-delay: 1.8s;
+        color: var(--main-link);
+    }
+}

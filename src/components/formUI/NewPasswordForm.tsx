@@ -17,7 +17,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { useSearchParams } from "next/navigation";
-
+import Image from "next/image";
 
 interface ClickableImage extends HTMLImageElement {
 	dataset: {
@@ -95,7 +95,7 @@ export const NewPasswordForm = () => {
 				type: 'error',
 			});
 		}
-	}, [result]);
+	}, [result, router]);
 
 	// hiding / showing passwords
 	const [isShowPassword, setIsShowPassword] = useState({
@@ -133,8 +133,9 @@ export const NewPasswordForm = () => {
                         data-invalid={errors.password ? true : false}
                         placeholder="*********"
                     />
-                    <img
+                    <Image
                         title="показать/скрыть пароль"
+                        alt="показать/скрыть пароль"
                         width={30}
                         height={30}
                         src={
@@ -163,8 +164,9 @@ export const NewPasswordForm = () => {
                         data-invalid={errors.confirmPassword ? true : false}
                         placeholder="*********"
                     />
-                    <img
+                    <Image
                         title="показать/скрыть пароль"
+                        alt="показать/скрыть пароль"
                         width={30}
                         height={30}
                         src={

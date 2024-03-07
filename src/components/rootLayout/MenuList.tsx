@@ -4,7 +4,6 @@ import styles from "@/styles/modules/rootLayout/menuList.module.scss";
 import { forwardRef, useEffect, useRef, useState, useCallback } from "react";
 import { Tooltip } from "../shared/Tooltip";
 import { AnimatePresence } from "framer-motion";
-import debounce from "@/utils/debounceDecorator";
 import Link from "next/link";
 import { m, LazyMotion, domAnimation } from "framer-motion";
 import { itemVariants, listVariantsWithoutClipPath } from "@/animation/variants/popupLists/popupListClipped";
@@ -20,6 +19,8 @@ interface MenuProps {
     orientation: 'mobile' | 'tablet';
 }
 
+type TimerType = ReturnType<typeof setTimeout>;
+
 export const MenuList = ({ isTextPresented, orientation }: MenuProps) => {
     
     // open menu state
@@ -29,41 +30,93 @@ export const MenuList = ({ isTextPresented, orientation }: MenuProps) => {
         setIsOpen(!isOpen);
     };
 
-    const closeCallback = useCallback(() => setIsOpen(false), []);
-
+    
     // Tooltip
     const tooltipMessage = `${isOpen ? 'закрыть' : 'открыть'} меню`;
     const containerRef = useRef<HTMLDivElement | null>(null);
+    // for mouse move --> cancel opening of tooltip 
+    const timerRef = useRef<TimerType | null>(null);
     // states
     const [isTooltipOpen, setIsTooltipOpen] = useState(false);
     const [menuCoords, setMenuCoords] = useState<DOMRect | null>(null);
-
+    
+    const closeCallback = useCallback(() => {
+        setIsOpen(false);
+        setIsTooltipOpen(false);
+    }, []);
     // set coords on mount
     useEffect(() => {
         if (containerRef.current && menuCoords === null) {
             const menuCoords = containerRef.current.getBoundingClientRect();
             setTimeout(() => setMenuCoords(menuCoords), 0);
         }
-    }, [containerRef.current]);
-
+    }, [menuCoords]);
+    
     // tooltip handlers
-    const handleMouseEnter = () => {
+    const handlePointerEnter = (e: React.PointerEvent) => {
+        if (e.pointerType !== 'mouse') {
+            return;
+        }
+
         if (menuCoords !== null && isTooltipOpen === false) {
-            setIsTooltipOpen(true)
+            setIsTooltipOpen(true);
         }
     };
 
-    const handleMouseMove = debounce(() => {
-        if (menuCoords !== null && isTooltipOpen === false) {
-            setIsTooltipOpen(true)
+    const handlePointerMove = (e: React.PointerEvent) => {
+        if (e.pointerType !== 'mouse') {
+            return;
         }
-    }, 150);
 
-    const handleMouseLeave = () => {
+        if (menuCoords !== null && isTooltipOpen === false) {
+            if (timerRef.current != null) {
+                clearTimeout(timerRef.current);
+                timerRef.current = null;
+            }
+
+            timerRef.current = setTimeout(() => setIsTooltipOpen(true), 800);
+        }
+    };
+
+    const handlePointerLeave = (e: React.PointerEvent) => {
+
+        if (timerRef.current != null) {
+            clearTimeout(timerRef.current);
+            timerRef.current = null;
+        }
+
+        if (e.pointerType !== 'mouse') {
+            return;
+        }
+
         if (isTooltipOpen) {
-            setTimeout(() => setIsTooltipOpen(false), 0);
+            // if was timer on 'open' --> clear it
+            setTimeout(() => {
+                setIsTooltipOpen(false)
+            }, 350);
         }
     }
+
+    const handlePointerUp = (e: React.PointerEvent) => {
+        if (e.pointerType !== 'mouse') {
+            return;
+        }
+
+        if (isTooltipOpen) {
+            // if was timer on 'open' --> clear it
+            if (timerRef.current != null) {
+                clearTimeout(timerRef.current);
+                timerRef.current = null;
+            }
+            setTimeout(() => setIsTooltipOpen(false), 200);
+        }
+    };
+
+    useEffect(() => {
+        if (isOpen && isTooltipOpen) {
+            setTimeout(() => setIsTooltipOpen(false), 200);
+        }
+    }, [isOpen]);
 
     // NAV --> popup list
     const popupRef = useRef<HTMLUListElement | null>(null);
@@ -82,7 +135,7 @@ export const MenuList = ({ isTextPresented, orientation }: MenuProps) => {
             document.removeEventListener('click', handleClickOutside);
         }
         
-    }, []);
+    }, [closeCallback]);
 
     return (
         <>
@@ -101,9 +154,10 @@ export const MenuList = ({ isTextPresented, orientation }: MenuProps) => {
                     data-active={isOpen}
                     ref={containerRef}
                     onClick={handleClick}
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
-                    onMouseMove={handleMouseMove}
+                    onPointerEnter={handlePointerEnter}
+                    onPointerLeave={handlePointerLeave}
+                    onPointerMove={handlePointerMove}
+                    onPointerUp={handlePointerUp}
                     >
                     <div></div>
                     <div></div>
@@ -135,12 +189,12 @@ interface PopupListProps {
     orientation: 'mobile' | 'tablet';
 }
 
-const PopupNavList = forwardRef((
+const PopupNavList = forwardRef(function PopupNavList(
 
         { currentPath, closeCallback, orientation }: PopupListProps, 
         listRef: React.ForwardedRef<HTMLUListElement>,
 
-    ) => {
+    ) {
 
     return (
         <LazyMotion features={domAnimation}>

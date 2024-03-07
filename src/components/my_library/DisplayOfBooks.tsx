@@ -6,7 +6,7 @@ import BookCarousel from "../booksPage/bookCarousel";
 import SearchBar from "../booksPage/SearchBar";
 import { SEARCH_MY_LIBRARY_BOOKS_URL } from "@/apiUrls";
 import Link from "next/link";
-
+import Image from "next/image";
 
 type MapOfBooks = Map<GenreLiterals[number], LibraryBooksSuccess>;
 
@@ -23,7 +23,7 @@ export const DisplayOfBooks = ({ booksByGenre, isEmpty }: DisplayOfBooksProps) =
             <section className={styles.mainSection} data-empty={true}>
                 <div className={styles.emptyTitleWrapper}>
                     <h3>К сожалению, Вы ещё не добавляли книг</h3>
-                    <img src="/emotions/sad.svg" width={100} height={100} alt="грустный смайлик" />
+                    <Image src="/emotions/sad.svg" width={100} height={100} alt="грустный смайлик" />
                 </div>
                 <p>Добавить их можно здесь: </p>
                 <Link href='/books'>Смотреть все книги</Link>

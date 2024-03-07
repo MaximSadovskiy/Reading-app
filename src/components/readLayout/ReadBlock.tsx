@@ -4,7 +4,7 @@ import styles from "@/styles/modules/readLayout/readPage.module.scss";
 import { Section } from "@/utils/FileUtil";
 import { useState } from "react";
 import { PaginationBlockComponent } from "@/components/readLayout/PaginationBlock";
-
+import Image from "next/image";
 
 interface ReaderProp {
   text: string;
@@ -104,17 +104,17 @@ function ReadBlockComponent(prop: ReaderProp) {
     // Only add title if it's starting page
     const header = [];
     if (sectionIndex === 0) {
-      header.push(<h1 className={styles.title}>"{prop.title}"</h1>);
+      header.push(<h1 className={styles.title}>&quot;{prop.title}&quot;</h1>);
       header.push(<p className={styles.author}>{prop.authorName}</p>)
       header.push(
-          <img
+          <Image
             className={styles.img}
             src={prop.thumbnailPath}
             data-src={prop.thumbnailPath}
             width={220}
             height={280}
-            alt={`обложка книги ${prop.title}`}
-            title={`обложка книги ${prop.title}`}
+            alt={`обложка книги &quot;${prop.title}&quot;`}
+            title={`обложка книги &quot;${prop.title}&quot;`}
             data-was-processed="true"
           />
       );

@@ -1,7 +1,9 @@
+'use client';
+
 import { useState, useEffect } from 'react';
 import debounce from '@/utils/debounceDecorator';
 
-// window & document as arguments, чтобы обойти ошибки next js в связи с рендерингом на сервере (где они равны undefined)
+
 export type OrientationType = 'mobile' | 'tablet' | 'desktop';
 export const BREAKPOINTS = {
     tablet: 900,
@@ -22,11 +24,7 @@ const getInitialOrientation = (): OrientationType => {
 };
 
 export const useOrientation = (customBreakpoints?: typeof BREAKPOINTS) => {
-    // server guard
-    if (typeof window === 'undefined') {
-        return;
-    }
-    
+
     const [orientation, setOrientation] = useState(
         getInitialOrientation()
     );

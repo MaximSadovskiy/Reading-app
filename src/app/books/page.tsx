@@ -4,7 +4,7 @@ import SearchBar from "@/components/booksPage/SearchBar";
 import { Suspense, lazy } from "react";
 import { Spinner } from "@/components/shared/Spinner";
 import { CarouselBooks, getBookRecomendationsByGenre, getPopularBooksAction } from "@/server_actions/books_actions";
-import { useCurrentUserServer } from "@/hooks/useCurrentUser";
+import { getCurrentUserServer } from "@/hooks/useCurrentUser";
 import { getFavouriteGenres, getRandomGenres } from "@/database/db_helpers_BOOKS";
 import { GenreLiterals } from "@/interfaces/storage/bookInterface";
 import Link from "next/link";
@@ -23,14 +23,14 @@ export default async function BooksPage() {
 	
 	// Recomended Books
 	// check if user authorized
-	const user = await useCurrentUserServer();
+	const user = await getCurrentUserServer();
 	const isAuthenticated = (user && user.id) ? true : false;
 	let userFavouriteGenres: GenreLiterals[] | null = [];
 	if (isAuthenticated) {
 		userFavouriteGenres = await getFavouriteGenres(user?.id as string);
-		if (userFavouriteGenres == null) {
-			userFavouriteGenres = getRandomGenres();
-		}
+	}
+	if (!isAuthenticated || userFavouriteGenres == null) {
+		userFavouriteGenres = getRandomGenres();
 	}
 
 	// storing Recomendation Carousels
@@ -53,9 +53,9 @@ export default async function BooksPage() {
 		}
 
 		return (
-			<Suspense fallback={<Spinner sizing='medium' />}>
+			<Suspense fallback={<Spinner sizing='medium' />} key={currentCarouselGenre}>
 				<BookCarousel 
-					title={`Рекомендации по жанру: ${(userFavouriteGenres!)[index]}`}
+					title={`Рекомендации по жанру: ${currentCarouselGenre}`}
 					books={booksArray}
 					genreDescription={genreDescription}
 				/>

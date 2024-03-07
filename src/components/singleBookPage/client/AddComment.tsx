@@ -1,13 +1,13 @@
 'use client';
 
 import styles from "@/styles/modules/singleBookPage/addComment.module.scss";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { addCommentAction } from "@/server_actions/books_actions";
 import { toast } from "react-toastify";
 import type { UserType } from "@/hooks/useCurrentUser";
 import { useRouter } from "next/navigation";
 import { ConfirmModal } from "@/components/shared/ConfirmModal";
-
+import { AnimatePresence } from "framer-motion";
 
 interface AddCommentProps {
     bookTitle: string;
@@ -34,33 +34,34 @@ export const AddComment = ({ bookTitle, user, bookId }: AddCommentProps) => {
             return;
         }
         // check if user authorized
-        if (!user) {
+        if (!user && isModalOpen == false) {
             setIsModalOpen(true);
             return;
         }
-        
-        const result = await addCommentAction(commentText, user.id as string, bookId);
-        if (result.error) {
-            toast(result.error, {
-                theme: 'colored',
-                type: 'error',
-            });
+        else if (user) {
+            const result = await addCommentAction(commentText, user.id as string, bookId);
+            if (result.error) {
+                toast(result.error, {
+                    theme: 'colored',
+                    type: 'error',
+                });
+            }
+            else if (result.success) {
+                toast(result.success, {
+                    theme: 'colored',
+                    type: 'success',
+                });
+            }
+    
+            // reset input
+            setCommentText('');
         }
-        else if (result.success) {
-            toast(result.success, {
-                theme: 'colored',
-                type: 'success',
-            });
-        }
-
-        // reset input
-        setCommentText('');
     };
 
     // Modal state
     const [isModalOpen, setIsModalOpen] = useState(false);
     // close modal callback
-    const closeCallback = () => isModalOpen && setIsModalOpen(false);
+    const closeCallback = useCallback(() => isModalOpen && setTimeout(() => setIsModalOpen(false), 0), [isModalOpen]);
     // redirect callback
     const router = useRouter();
     const redirectCallback = () => {
@@ -69,7 +70,7 @@ export const AddComment = ({ bookTitle, user, bookId }: AddCommentProps) => {
 
     return (
         <div className={styles.addComment}>
-            <p>Как вам книга "{bookTitle}" ?</p>
+            <p>Как вам книга &quot;{bookTitle}&quot; ?</p>
             <div className={styles.inputContainer}>
                 <textarea 
                     value={commentText}
@@ -79,15 +80,18 @@ export const AddComment = ({ bookTitle, user, bookId }: AddCommentProps) => {
                     onClick={handleAddComment}
                 >Добавить</button>
             </div>
-            {isModalOpen && (
-                <ConfirmModal 
-                    title="Требуется авторизацяи, перейти?"
-                    activeBtnText="Перейти"
-                    modalState={isModalOpen}
-                    closeCallback={closeCallback}
-                    activeCallback={redirectCallback}
-                />
-            )}
+            <AnimatePresence>
+                {isModalOpen && (
+                    <ConfirmModal
+                        key="confirm_Modal_add_comment" 
+                        title="Требуется авторизацяи, перейти?"
+                        activeBtnText="Перейти"
+                        modalState={isModalOpen}
+                        closeCallback={closeCallback}
+                        activeCallback={redirectCallback}
+                    />
+                )}
+            </AnimatePresence>
         </div>
     )
 };

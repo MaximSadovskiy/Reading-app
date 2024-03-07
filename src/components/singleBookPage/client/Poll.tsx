@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { StarSvg } from "@/components/shared/Svg";
 import styles from "@/styles/modules/singleBookPage/poll.module.scss";
 import debounce from "@/utils/debounceDecorator";
@@ -19,6 +19,8 @@ import { toast } from "react-toastify";
 import { ConfirmModal } from "@/components/shared/ConfirmModal";
 import { useRouter } from "next/navigation";
 import type { UserType, UserNoNullType } from "@/hooks/useCurrentUser";
+import Image from "next/image";
+
 
 type IsHoveredState = {
 	[ind: number | string]: boolean;
@@ -161,11 +163,7 @@ export const Poll = ({ bookId, user, ratingScore }: PollProps) => {
 	// modal state, to adress user to login page if !authorized
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	// modal close callback
-	const closeModal = () => {
-		if (isModalOpen) {
-			setIsModalOpen(false);
-		}
-	};
+	const closeCallback = useCallback(() => isModalOpen && setTimeout(() => setIsModalOpen(false), 0), [isModalOpen]);
 	// redirect for modal
 	const router = useRouter()
 	const redirectCallback = () => {
@@ -175,7 +173,7 @@ export const Poll = ({ bookId, user, ratingScore }: PollProps) => {
 	// Click handler when user Rates book
 	const handleRateClick = async (itemIndex: number) => {
 		// if no user authorized --> open modal
-		if (!user) {
+		if (!user && !isModalOpen) {
 			setIsModalOpen(true);
 			return;
 		}
@@ -184,7 +182,7 @@ export const Poll = ({ bookId, user, ratingScore }: PollProps) => {
 			return;
 		}
 		// user authorized --> do rate action
-		else {
+		else if (user) {
 			const ratingScore = itemIndex + 1;
 			const result = await rateBookAction(
 				ratingScore,
@@ -281,9 +279,10 @@ export const Poll = ({ bookId, user, ratingScore }: PollProps) => {
 					)}
 					{isModalOpen && (
 						<ConfirmModal
+							key="confirm_Modal"
 							title='Требуется авторизация, продолжить?'
 							modalState={isModalOpen}
-							closeCallback={closeModal}
+							closeCallback={closeCallback}
 							activeCallback={redirectCallback}
 							activeBtnText="Перейти"
 						/>
@@ -366,7 +365,7 @@ const RateDescription = ({ itemIndex }: RateDescriptionProps) => {
 			exit="exit"
 		>
 			<p>{rateText}</p>
-			<img src={rateEmojiSrc} width={70} height={70} />
+			<Image alt="смайлик" src={rateEmojiSrc} width={70} height={70} />
 		</m.div>
 	);
 };

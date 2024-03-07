@@ -1,12 +1,13 @@
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+const DOMAIN_URL = process.env.DOMAIN_URL;
+
 // will be changed on Production
-const BASE_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : '';
 
 // email-Verification token
 export const sendVerificationEmail = async (email: string, token: string) => {
-    const confirmLink = `${BASE_URL}/auth/new-verification?token=${token}`;
+    const confirmLink = `${DOMAIN_URL}/auth/new-verification?token=${token}`;
 
     await resend.emails.send({
         from: 'onboarding@resend.dev',
@@ -20,7 +21,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
 
 // Password reset token
 export const sendPasswordResetToken = async (email: string, token: string) => {
-    const resetLink = `${BASE_URL}/auth/new-password?token=${token}`;
+    const resetLink = `${DOMAIN_URL}/auth/new-password?token=${token}`;
 
     await resend.emails.send({
         from: 'onboarding@resend.dev',

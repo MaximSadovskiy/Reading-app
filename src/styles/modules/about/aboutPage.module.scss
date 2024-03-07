@@ -17,6 +17,10 @@
         @include fontHeading(2);
         @include animationSlideInBlur(1.2s, -200, linear, Y);
 
+        @include breakpointDown(650) {
+            text-align: left;
+        }
+
         color: var(--main-highlight);
 
         // logo
@@ -35,11 +39,15 @@
 }
 
 .textSection {
-    @include colFlex;
+    @include colFlex(center);
 
     gap: pxIntoUnit(80);
     margin-inline: auto;
-    width: max(pxIntoUnit(700), 40vw);
+    max-width: 80vw;
+
+    @include breakpointUp(650) {
+        width: max(pxIntoUnit(700), 40vw);
+    }
 
     & p {
         line-height: 1.5;

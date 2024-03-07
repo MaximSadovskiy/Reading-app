@@ -16,7 +16,7 @@ import { UserType, useCurrentUserClient } from "@/hooks/useCurrentUser";
 import { getCurrentReadBookId } from "@/server_actions/books_actions";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-
+import Image from "next/image";
 
 interface AccountProps {
 	styleMode: 'mobile' | 'desktop';
@@ -72,7 +72,7 @@ const AccountEnter = ({ styleMode }: AccountProps) => {
 						data-orientation={styleMode}
 						variants={styleMode === 'mobile' ? itemVariants : listVariantsWithoutClipPath}
 					>
-						<img
+						<Image
 							src="/account-enter.svg"
 							alt=""
 							role="presentation"
@@ -122,7 +122,7 @@ type PopupProps = {
 };
 
 const PopupList = forwardRef(
-	({ user, closePopupList, orientation }: PopupProps, ref: React.Ref<HTMLUListElement>) => {
+	function PopupList({ user, closePopupList, orientation }: PopupProps, ref: React.Ref<HTMLUListElement>) {
 
 	const handleLogoutClick = async () => {
 		await logOutAction('/');

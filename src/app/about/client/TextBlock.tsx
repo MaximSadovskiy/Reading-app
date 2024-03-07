@@ -3,6 +3,7 @@ import styles from "@/styles/modules/about/textBlock.module.scss";
 import { useEffect, useRef } from "react";
 import debounce from "@/utils/debounceDecorator";
 import { getWindowTopOffset } from "@/utils/coordinates/findOffset";
+import { useOrientation } from "@/hooks/useOrientation";
 
 type TextBlockProps = { 
     children: React.ReactNode;
@@ -17,6 +18,7 @@ export const TextBlock = ({ children, index }: TextBlockProps) => {
     const divWindowOffset = useRef(0);
     // min scroll value div need to appear
     const appearScrollOffset = useRef(0);
+    const orientation = useOrientation();
      
     
     // first 2 divs appear instantly on the page
@@ -26,7 +28,7 @@ export const TextBlock = ({ children, index }: TextBlockProps) => {
                 divRef.current.dataset.animate = true;
             }
         }
-    }, [divRef.current]);
+    }, [index]);
 
     // other divs
     useEffect(() => {
@@ -35,7 +37,7 @@ export const TextBlock = ({ children, index }: TextBlockProps) => {
             if (divWindowOffset.current === 0 || appearScrollOffset.current === 0) {
                 const divCoords = divRef.current.getBoundingClientRect();
                 const windowHeight = document.documentElement.clientHeight;
-                const addedOffset = 400; // элемент появится раньше на 200 px
+                const addedOffset = orientation === 'mobile' ? 700 : 400; // элемент появится раньше на X px
 
                 divWindowOffset.current = getWindowTopOffset(
                     divCoords.height, windowHeight, addedOffset,  
@@ -62,7 +64,7 @@ export const TextBlock = ({ children, index }: TextBlockProps) => {
                 document.removeEventListener('scroll', handleAppearance);
             }
         }
-    }, []);
+    }, [orientation]);
 
     return (
         <div className={styles.textBlock}

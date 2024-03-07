@@ -9,7 +9,7 @@ export const useCurrentUserClient = () => {
     return session.data?.user;
 };
 
-export const useCurrentUserServer = async () => {
+export const getCurrentUserServer = async () => {
     const session = await auth();
     return session?.user;
 };

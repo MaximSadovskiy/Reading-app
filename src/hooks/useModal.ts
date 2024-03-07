@@ -33,7 +33,7 @@ const useModal = (modalRef: ModalRefArg, closeCallback: () => void, modalState: 
                 document.removeEventListener('click', handleClick);
             }
         }
-    }, [modalState, modalRef]);
+    }, [modalState, modalRef, closeCallback]);
 };
 
 

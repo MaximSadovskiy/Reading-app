@@ -40,7 +40,7 @@ export const Tooltip = ({ message, relativeElCoords }: TooltipProps) => {
             getTooltipPositioned(relativeElCoords, tooltipRef.current);
             setIsPositioned(true);
         }
-    }, [tooltipRef.current]);
+    }, [relativeElCoords]);
 
     return (
         <LazyMotion features={domAnimation}>

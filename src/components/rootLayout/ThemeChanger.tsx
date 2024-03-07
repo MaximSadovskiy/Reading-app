@@ -8,6 +8,7 @@ import { listVariants, itemVariants, listVariantsWithoutClipPath } from "@/anima
 import { getPreferedTheme } from "@/hooks/useTheme";
 import type { SetThemeType, ThemeType } from "@/hooks/useTheme";
 import { closeIfOutsideClick } from "@/utils/clickOutsideCloseFunction";
+import Image from "next/image";
 
 // types & helpers
 type CustomThemeType = ThemeType | 'system';
@@ -75,7 +76,7 @@ const ThemeChanger = ({ styleMode }: ThemeChangerProps) => {
                         variants={styleMode === 'mobile' ? itemVariants : listVariantsWithoutClipPath}
                     >
                         <span className={styles.buttonText}>тема: </span>
-                        <img src={svgPath} alt='' role="presentation" width={35} height={35} />
+                        <Image src={svgPath} alt='' role="presentation" width={35} height={35} />
                     </m.button>
                     {styleMode === 'desktop' && (
                             <AnimatePresence>
@@ -132,7 +133,7 @@ interface ListProps {
 type ButtonCustomEvent = React.MouseEvent<HTMLButtonElement & { name: 'light' | 'dark' | 'system' }> ;
 
 
-const PopupThemeList = forwardRef(({ setTheme, systemTheme, setSvgPath, closeList, svgPath, orientation }: ListProps, ref: React.Ref<HTMLUListElement>) => {
+const PopupThemeList = forwardRef(function PopupThemeList({ setTheme, systemTheme, setSvgPath, closeList, svgPath, orientation }: ListProps, ref: React.Ref<HTMLUListElement>) {
 
     const handleChangeThemeClick = (e: ButtonCustomEvent) => {
         const { name } = e.currentTarget;
@@ -176,10 +177,10 @@ const PopupThemeList = forwardRef(({ setTheme, systemTheme, setSvgPath, closeLis
                         onClick={handleChangeThemeClick} data-first 
                         className={styles.buttonOption} name="light"
                     >
-                        <img src='/sun.svg' alt="" role="presentation" width={25}  height={25}/>
+                        <Image src='/sun.svg' alt="" role="presentation" width={25}  height={25}/>
                         <span className={styles.optionText}>Светлая</span>
                         {svgPath === '/sun.svg' && (
-                            <img src='/checked.svg' alt='' role="presentation" width={25} height={25} />
+                            <Image src='/checked.svg' alt='' role="presentation" width={25} height={25} />
                         )}
                     </button>
                 </m.li>
@@ -188,10 +189,10 @@ const PopupThemeList = forwardRef(({ setTheme, systemTheme, setSvgPath, closeLis
                         onClick={handleChangeThemeClick} 
                         className={styles.buttonOption} name="dark"
                     >
-                        <img src='/moon.svg' alt="" role="presentation" width={25}  height={25}/>
+                        <Image src='/moon.svg' alt="" role="presentation" width={25}  height={25}/>
                         <span className={styles.optionText}>Тёмная</span>
                         {svgPath === '/moon.svg' && (
-                            <img src='/checked.svg' alt='' role="presentation" width={25} height={25} />
+                            <Image src='/checked.svg' alt='' role="presentation" width={25} height={25} />
                         )}
                     </button>
                 </m.li>
@@ -200,10 +201,10 @@ const PopupThemeList = forwardRef(({ setTheme, systemTheme, setSvgPath, closeLis
                         onClick={handleChangeThemeClick} data-last 
                         className={styles.buttonOption} name="system"
                     >
-                        <img src='/computer.svg' alt="" role="presentation" width={25}  height={25}/>
+                        <Image src='/computer.svg' alt="" role="presentation" width={25}  height={25}/>
                         <span className={styles.optionText}>Системная</span>
                         {svgPath === '/computer.svg' && (
-                            <img src='/checked.svg' alt='' role="presentation" width={25} height={25} />
+                            <Image src='/checked.svg' alt='' role="presentation" width={25} height={25} />
                         )}
                     </button>
                 </m.li>

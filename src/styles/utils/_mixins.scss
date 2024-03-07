@@ -67,28 +67,36 @@
 
     opacity: 0;
     filter: blur(10px);
-    animation: slideInWithBlur $duration $timingFunction forwards;
+    @if ($direction == X) {
+        animation: slideInWithBlurX $duration $timingFunction forwards;
+    }
+    @else {
+        animation: slideInWithBlurY $duration $timingFunction forwards;
+    }
 
-    @keyframes slideInWithBlur {
+    @keyframes slideInWithBlurX {
         from {
             opacity: 0;
             filter: blur(10px);
-            @if ($direction == X) {
-                transform: translateX($translateValuePx);
-            }
-            @else {
-                transform: translateY($translateValuePx); 
-            }
+            transform: translateX($translateValuePx);
         }
         to {
             opacity: 1;
             filter: blur(0px);
-            @if ($direction == X) {
-                transform: translateX(0);
-            }
-            @else {
-                transform: translateY(0); 
-            }
+            transform: translateX(0);
+        }   
+    }
+
+    @keyframes slideInWithBlurY {
+        from {
+            opacity: 0;
+            filter: blur(10px);
+            transform: translateY($translateValuePx); 
+        }
+        to {
+            opacity: 1;
+            filter: blur(0px);
+            transform: translateY(0); 
         }   
     }
 }
@@ -172,6 +180,24 @@
         to {
             opacity: 0;
             transform: scale(0);
+        }
+    }
+}
+
+@mixin animationAppear($duration: 1.25s, $timingFunction: linear) {
+
+    animation: appear $duration $timingFunction forwards;
+    opacity: 0;
+    filter: blur(10px);
+
+    @keyframes appear {
+        from {
+            opacity: 0;
+            filter: blur(10px);
+        }
+        to {
+            opacity: 1;
+            filter: blur(0);
         }
     }
 }

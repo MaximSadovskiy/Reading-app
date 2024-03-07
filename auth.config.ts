@@ -5,6 +5,7 @@ import { LoginSchema } from "@/schemas/zod/loginSchemas";
 import { getUserByEmail } from "@/database/db_helpers";
 import bcrypt from "bcryptjs";
 
+export const runtime = 'nodejs';
 
 export default {
 	providers: [

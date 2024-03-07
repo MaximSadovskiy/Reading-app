@@ -55,19 +55,20 @@ export const registerAction = async (data: z.infer<typeof RegisterSchema>) => {
         data: {
             username,
             email,
+            // TEMP
+            emailVerified: new Date(),
             password: hashedPassword,
             favouriteGenres
         }
     });
 
     // Create & Send verification token on email
-    const verificationToken = await generateVerificationToken(email);
+    /* const verificationToken = await generateVerificationToken(email);
 
     await sendVerificationEmail(
         verificationToken.email,
         verificationToken.token,
-    );
-
+    ); */
     return { success: SuccessMessages.REGISTER_SUCCESS };
 };
 
@@ -94,7 +95,8 @@ export const loginAction = async (data: z.infer<typeof LoginSchema>) => {
     }
 
     // If email doesn't verified yet
-    if (!existingUser?.emailVerified) {
+    // TEMP
+    /* if (!existingUser?.emailVerified) {
         const verificationToken = await generateVerificationToken(existingUser.email);
 
         await sendVerificationEmail(
@@ -106,7 +108,7 @@ export const loginAction = async (data: z.infer<typeof LoginSchema>) => {
             type: LoginSuccessTypes.EMAIL_SENT,
             message: SuccessMessages.EMAIL_SENT,
         } };
-    }
+    } */
 
     // Two-Factor verification
     if (existingUser.isTwoFactorEnabled && existingUser.email) {
@@ -169,7 +171,6 @@ export const loginAction = async (data: z.infer<typeof LoginSchema>) => {
     }
 
     try {
-
         // COMPLETE SUCCESS ON LOGING IN USER
         await signIn('credentials', {
             username,
