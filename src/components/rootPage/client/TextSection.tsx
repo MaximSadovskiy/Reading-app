@@ -10,6 +10,7 @@ import { getCurrentReadBookId } from '@/server_actions/books_actions';
 import { useRouter } from 'next/navigation';
 import { toast } from "react-toastify";
 import { SlideArrowSvg } from '@/components/shared/Svg';
+import { useOrientation } from '@/hooks/useOrientation';
 
 
 interface TextSectionProps {
@@ -22,6 +23,26 @@ interface TextSectionProps {
 		textOfLinkToRead: string;
 		textBeforeLinkToInfo: string;
 		textOfLinkToInfo: string;    
+    }
+}
+
+// пороги для анимации (height of scroll)
+const BREAKPOINTS = {
+    mobile: {
+        secondH3: 200,
+        lastH3: 400,
+        secondUl: 550,
+        // second pair of links
+        links: 680,
+    },
+    desktop: {
+        firstH3: 100,
+        firstUl: 250,
+        secondH3: 450,
+        lastH3: 630,
+        secondUl: 700,
+        // second pair of links
+        links: 800,
     }
 }
 
@@ -44,46 +65,54 @@ const TextSection = ({ textData }: TextSectionProps) => {
     });
 
     // animate welcome text without need to scroll
-    /* useEffect(() => {
-        setAnimationState({
-            ...animationState,
-            firstH3: true,
-        });
-    }, []); */
+    const orientation = useOrientation() === 'mobile' ? 'mobile' : 'desktop';
+    
 
-    // manipulating state with scroll
-    useMotionValueEvent(scrollY, 'change', (latestValue) => {
-        if (latestValue > 100 && !animationState.firstH3) {
+    useEffect(() => {
+        if (orientation === 'mobile') {
             setAnimationState({
                 ...animationState,
                 firstH3: true,
-            });
-        }
-        else if (latestValue > 250 && !animationState.firstUl) {
-            setAnimationState({
-                ...animationState,
                 firstUl: true,
             });
         }
-        else if (latestValue > 420 && !animationState.secondH3) {
+    }, [orientation]);
+
+    // manipulating state with scroll
+    useMotionValueEvent(scrollY, 'change', (latestValue) => {
+        if (orientation !== 'mobile') {
+            if (latestValue > BREAKPOINTS[orientation].firstH3 && !animationState.firstH3) {
+                setAnimationState({
+                    ...animationState,
+                    firstH3: true,
+                });
+            }
+            else if (latestValue > BREAKPOINTS[orientation].firstUl && !animationState.firstUl) {
+                setAnimationState({
+                    ...animationState,
+                    firstUl: true,
+                });
+            }
+        }
+        if (latestValue > BREAKPOINTS[orientation].secondH3 && !animationState.secondH3) {
             setAnimationState({
                 ...animationState,
                 secondH3: true,
             });
         }
-        else if (latestValue > 750 && !animationState.secondUl) {
+        if (latestValue > BREAKPOINTS[orientation].secondUl && !animationState.secondUl) {
             setAnimationState({
                 ...animationState,
                 secondUl: true,
             });
         }
-        else if (latestValue > 900 && !animationState.links) {
+        if (latestValue > BREAKPOINTS[orientation].links && !animationState.links) {
             setAnimationState({
                 ...animationState,
                 links: true,
             });
         }
-        else if (latestValue > 1050 && !animationState.lastH3) {
+        if (latestValue > BREAKPOINTS[orientation].lastH3 && !animationState.lastH3) {
             setAnimationState({
                 ...animationState,
                 lastH3: true,
@@ -178,23 +207,26 @@ const TextSection = ({ textData }: TextSectionProps) => {
                         initial='initial'
                         animate={animationState.links ? 'animate' : ''}
                     >
-                        <BtnWithLink
-                            clickHandler={handleCurrentBookTransition}
-                            parText={textBeforeLinkToRead}
-                            linkText={textOfLinkToRead}
-                        />
-                    </m.li>
-                    <m.li className={styles.listItem}
-                        variants={textVariants}
-                        initial='initial'
-                        animate={animationState.links ? 'animate' : ''}
-                    >
                         <TextWithLink
                             href='/about'
                             parText={textBeforeLinkToInfo}
                             linkText={textOfLinkToInfo}
                         />
                     </m.li>
+                    {user != null && (
+                        /* читальный зал только для авторизаванных */
+                        <m.li className={styles.listItem}
+                            variants={textVariants}
+                            initial='initial'
+                            animate={animationState.links ? 'animate' : ''}
+                        >
+                            <BtnWithLink
+                                clickHandler={handleCurrentBookTransition}
+                                parText={textBeforeLinkToRead}
+                                linkText={textOfLinkToRead}
+                            />
+                        </m.li>
+                    )}
                 </m.ul>
             </section>
             <m.h3 className={styles.h3}

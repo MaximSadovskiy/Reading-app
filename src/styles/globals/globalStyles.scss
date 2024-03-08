@@ -45,10 +45,9 @@ input {
 }
 
 body {
-    min-height: 100vh;
-    overflow-x: hidden;
-
     /* GENERAL */
+    // body
+    --body-bg: var(--color-white);
     // z-index
     --modal-zindex: 99;
     --backdrop-zindex: 98;
@@ -296,6 +295,8 @@ body {
     // darkTheme colors
     &[data-dark='true'] {
         
+        // body
+        --body-bg: var(--color-darkbrown);
         /* GENERAL */
         // link
         --link-underline: var(--color-orange);
@@ -427,8 +428,12 @@ body {
         --read-btn-selected-bg: var(--color-orange);
         --read-btn-selected-border: var(--color-lightbrown);
         --read-btn-selected-color: var(--color-lightbrown);
-    };
-};
+    }
+
+    background-color: var(--body-bg);
+    min-height: 120vh;
+    overflow-x: hidden; 
+}
 
 // screen-reader only class
 .sr-only {

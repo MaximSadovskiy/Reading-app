@@ -1,6 +1,6 @@
 import { AuthorInterface } from '@/interfaces/storage/authorInterface';
 
-const BASE_PATH = '/src/booksStorage/srcs/books/';
+const BASE_PATH = '/src/booksStorage/srcs/books';
 
 export const authorsData: AuthorInterface[] = [
     // TEMPLATE

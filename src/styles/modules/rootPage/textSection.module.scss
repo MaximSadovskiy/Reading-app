@@ -9,10 +9,18 @@
     @include linkWithUnderline;
     @include fontMarc(47, 0);
 
-    animation-delay: 2s;
-    align-self: center;
+    animation-delay: 1.35s;
+    text-align: center;
     color: var(--main-text-highlight);
     margin-bottom: pxIntoUnit(30);
+
+    @include breakpointDown(650) {
+        margin-top: pxIntoUnit(40);
+        margin-bottom: pxIntoUnit(10);
+        text-align: left;
+        align-self: flex-start;
+        animation-delay: 0.4s;
+    }
 
     &:hover {
         & > svg {

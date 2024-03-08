@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, SetStateAction, Suspense } from "react";
+import { useState, useRef, useEffect, SetStateAction } from "react";
 import useModal from "@/hooks/useModal";
 import debounce from "@/utils/debounceDecorator";
 import styles from '@/styles/modules/booksPage/searchBar.module.scss';
@@ -127,6 +127,7 @@ const SearchModal = ({ isModalOpen, closeModal, baseApiUrl }: SearchModalProps) 
                 // declare request (try catch - for aborting)
                 const doSearch = debounce(async () => {
                     try {
+                        /* const baseUrl = 'http//localhost:3000/api/books/search/allbooks'; */
                         const encodedQuery = encodeURIComponent(query);
                         const searchParams = `?mode=${searchMode}&query=${encodedQuery}`;
                         const apiURL = new URL(`${baseApiUrl}${searchParams}`);
@@ -138,7 +139,6 @@ const SearchModal = ({ isModalOpen, closeModal, baseApiUrl }: SearchModalProps) 
                             },
                             // abort signal
                             signal,
-                            // caching behaviour
                             next: {
                                 // 1 hour
                                 revalidate: 3600,
@@ -147,6 +147,9 @@ const SearchModal = ({ isModalOpen, closeModal, baseApiUrl }: SearchModalProps) 
 
                         // RESULT
                         const searchResultObject: SearchResult = await response.json();
+
+                        console.log('search result: ', searchResultObject);
+
                         if (!searchResultObject || 'error' in searchResultObject || searchResultObject.success.length === 0) {
                             setIsLoading(false);
                             setIsNoResults(true);

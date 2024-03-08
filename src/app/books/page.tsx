@@ -1,7 +1,7 @@
 import styles from "@/styles/modules/booksPage/booksPage.module.scss";
 //components
 import SearchBar from "@/components/booksPage/SearchBar";
-import { Suspense, lazy } from "react";
+import { Suspense } from "react";
 import { Spinner } from "@/components/shared/Spinner";
 import { CarouselBooks, getBookRecomendationsByGenre, getPopularBooksAction } from "@/server_actions/books_actions";
 import { getCurrentUserServer } from "@/hooks/useCurrentUser";
@@ -10,11 +10,12 @@ import { GenreLiterals } from "@/interfaces/storage/bookInterface";
 import Link from "next/link";
 import { genreDescriptions } from "@/booksStorage/textData/genresDescription";
 import { SEARCH_ALL_BOOKS_URL } from "@/apiUrls";
+import BookCarousel from "@/components/booksPage/bookCarousel";
 
 // lazy loading
-const BookCarousel = lazy(
+/* const BookCarousel = lazy(
 	() => import("@/components/booksPage/bookCarousel")
-);
+); */
 
 export default async function BooksPage() {
 

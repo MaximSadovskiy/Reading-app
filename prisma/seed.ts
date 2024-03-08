@@ -44,7 +44,7 @@ async function main() {
     // for each book
     for await (const book of bookGenresAndIds) {
         // Rating
-        const ratingData = getRandomRatingScores([6.5, 10], userIds, book.id);
+        const ratingData = getRandomRatingScores([7, 10], userIds, book.id);
         await prisma.rating.createMany({
             data: ratingData,
         });
@@ -54,7 +54,7 @@ async function main() {
 
         // Comments
         // get random comments of length 'limit'
-        const commentRecordsData = await getRandomCommentRecordsData([5, 15], book.id, book.genres as GenreLiterals[], userIds);
+        const commentRecordsData = await getRandomCommentRecordsData([5, 8], book.id, book.genres as GenreLiterals[], userIds);
         
         const commentIds = commentRecordsData.map(data => data.id);
 
@@ -65,7 +65,7 @@ async function main() {
         // Likes
         // ids of the current book
         for await (const commentId of commentIds) {
-            const likesData = getLikesDataForComment([3, 10], book.id, userIds, commentId);
+            const likesData = getLikesDataForComment([3, 5], book.id, userIds, commentId);
 
             await prisma.like.createMany({
                 data: likesData,
@@ -241,8 +241,8 @@ function getRandomRatingScores([minCount, maxCount]: Tuple2, userIds: string[], 
         const userId = getRandomUserId(userIds);
         // uniqueness checking
         if (!alreadyUsedIds.includes(userId)) {
-             // from 5 to 10
-            const ratingScore = Math.floor(Math.random() * 5) + 5;
+             // from 7 to 10
+            const ratingScore = Math.floor(Math.random() * 3) + 7;
             // random userId
             alreadyUsedIds.push(userId);
 
