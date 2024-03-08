@@ -4,6 +4,7 @@ import styles from "@/styles/modules/readLayout/readPage.module.scss";
 import { Section } from "@/utils/FileUtil";
 import { useState } from "react";
 import { PaginationBlockComponent } from "@/components/readLayout/PaginationBlock";
+import Image from "next/image";
 
 interface ReaderProp {
     text: string;
@@ -56,15 +57,18 @@ function createHeader(sectionIndex: number, prop: ReaderProp) {
             {prop.authorName}
         </p>,
 
-        <img
-            key={"header_img"}
+//<<<<<<< HEAD
+//        <img
+//            key={"header_img"}
+          <Image
+//>>>>>>> 6caf17e7aafc1bd521e2362a29a8647b7fb7e9ba
             className={styles.img}
             src={prop.thumbnailPath}
             data-src={prop.thumbnailPath}
             width={220}
             height={280}
-            alt={`обложка книги ${prop.title}`}
-            title={`обложка книги ${prop.title}`}
+            alt={`обложка книги &quot;${prop.title}&quot;`}
+            title={`обложка книги &quot;${prop.title}&quot;`}
             data-was-processed="true"
         />,
     ];

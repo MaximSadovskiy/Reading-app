@@ -1,7 +1,7 @@
 import styles from "@/styles/modules/(protected)/myLibraryPage/myLibraryPage.module.scss";
 import { DisplayOfBooks } from "@/components/my_library/DisplayOfBooks";
 import { getAllLibraryBooks } from "@/server_actions/books_actions";
-import { useCurrentUserServer } from "@/hooks/useCurrentUser";
+import { getCurrentUserServer } from "@/hooks/useCurrentUser";
 import { LibraryBooksSuccess } from "@/server_actions/books_actions";
 import { GenreLiterals, GenreValues } from "@/interfaces/storage/bookInterface";
 import { getBooksByGenre } from "@/database/db_helpers_BOOKS";
@@ -9,7 +9,7 @@ import { getBooksByGenre } from "@/database/db_helpers_BOOKS";
 
 
 const MyLibraryPage = async () => {
-	const user = await useCurrentUserServer();
+	const user = await getCurrentUserServer();
 	if (!user) {
 		return (
 			<main className={styles.main}>

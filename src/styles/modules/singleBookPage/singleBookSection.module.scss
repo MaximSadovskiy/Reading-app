@@ -13,6 +13,14 @@ $primaryAnimationDelay: 1.5s;
     min-height: calc(150vh - var(--header-height) + pxIntoUnit(2000));
     padding-bottom: pxIntoUnit(200);
 
+    // mobile
+    @include breakpointDown(650) {
+        max-width: 85vw;
+        position: relative;
+        top: 0;
+        bottom: 0;
+    }
+
     @include breakpointUp(1150) {
         margin-inline: auto;
         width: clamp(pxIntoUnit(200), 70vw, pxIntoUnit(1000));
@@ -34,29 +42,35 @@ $primaryAnimationDelay: 1.5s;
     & > .title {
         @include fontMarc(55);
         color: var(--title-text);
+        text-align: center;
     }
 
     & > .author {
         @include fontDefault(28, 600);
         color: var(--author-text);
+        text-align: center;
     }
 
     & > .year {
         @include fontDefault(30, 600);
         color: var(--year-text);
+        text-align: center;
     }
 }
 
 // Genres
 .genres {
     @include colFlex(center, flex-start, pxIntoUnit($spacingSmall));
-
-
+    @include breakpointDown(400) {
+        gap: pxIntoUnit(35);
+    }
+    
     & > .genresTitle {
         @include fontDefault(26, 600);
         @include animationSlideInBlur(1.15s, -500);
         animation-delay: $primaryAnimationDelay;
 
+        text-align: center;
         align-self: center;
         color: var(--title-text);
     }
@@ -65,6 +79,11 @@ $primaryAnimationDelay: 1.5s;
         @include flex(center, center, pxIntoUnit(35));
         flex-wrap: wrap;
         list-style: none;
+
+        @include breakpointDown(400) {
+            justify-content: flex-start;
+            margin-left: 20vw;
+        }
     }
 
     & li {
@@ -92,6 +111,10 @@ $primaryAnimationDelay: 1.5s;
         @include colFlex(flex-start, center, pxIntoUnit($spacingSmall));
         @include animationSlideInBlur;
         animation-delay: $primaryAnimationDelay;
+
+        @include breakpointDown(600) {
+            gap: pxIntoUnit(35);
+        } 
     }
 
     & p {
@@ -116,6 +139,10 @@ $primaryAnimationDelay: 1.5s;
     & > ul {
         @include colFlex(flex-start, center, pxIntoUnit($spacingSmall));
         list-style: none;
+
+        @include breakpointDown(600) {
+            gap: pxIntoUnit(35);
+        } 
     }
 
     & li {

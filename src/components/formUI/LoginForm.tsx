@@ -18,6 +18,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { LoginSuccessTypes } from "@/interfaces/formMessages";
+import Image from "next/image";
 
 
 // two-factor --> changes in UI
@@ -132,7 +133,7 @@ export const LoginForm = () => {
 				type: 'error',
 			});
 		}
-	}, [resultState]);
+	}, [resultState, reset, router]);
 
 	// hiding / showing passwords
 	const [isShowPassword, setIsShowPassword] = useState({
@@ -210,8 +211,9 @@ export const LoginForm = () => {
 								data-invalid={errors.password ? true : false}
 								placeholder="*********"
 							/>
-							<img
+							<Image
 								title="показать/скрыть пароль"
+								alt="показать/скрыть пароль"
 								width={30}
 								height={30}
 								src={
@@ -239,8 +241,9 @@ export const LoginForm = () => {
 								data-invalid={errors.confirmPassword ? true : false}
 								placeholder="*********"
 							/>
-							<img
+							<Image
 								title="показать/скрыть пароль"
+								alt="показать/скрыть пароль"
 								width={30}
 								height={30}
 								src={

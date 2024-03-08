@@ -4,7 +4,11 @@
 .textBlock {
     @include colFlex;
 
-    gap: pxIntoUnit(10);
+    gap: pxIntoUnit(50);
+    @include breakpointUp(700) {
+        gap: pxIntoUnit(10);
+    }
+
     // initial props
     opacity: 0;
     filter: blur(5px);

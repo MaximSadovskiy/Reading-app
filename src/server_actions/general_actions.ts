@@ -1,12 +1,10 @@
 'use server';
 import { signOut } from "$/auth";
-import { useCurrentUserServer } from "@/hooks/useCurrentUser";
-/* import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache"; */
+import { getCurrentUserServer } from "@/hooks/useCurrentUser";
 
 // SignOut
 export const logOutAction = async (redirectUrl: string) => {
-    const user = await useCurrentUserServer();
+    const user = await getCurrentUserServer();
     if (user) {
         await signOut({ redirectTo: redirectUrl });
     }
