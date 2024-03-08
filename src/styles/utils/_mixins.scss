@@ -35,7 +35,7 @@
 };
 
 @mixin svgTransition($duration: 150ms) {
-    transition: fill $duration ease-in-out, transform $duration ease-in-out;
+    transition: fill $duration ease-in-out, stroke $duration ease-in-out, transform $duration ease-in-out;
 };
 
 @mixin colorTransformTransition($colorDur: 150ms, $transformDur: 150ms, $ease: ease-in-out) {

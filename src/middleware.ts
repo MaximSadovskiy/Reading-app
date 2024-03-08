@@ -15,9 +15,6 @@ export default auth((req) => {
     const { nextUrl } = req;
     const isLoggedIn = !!req.auth;
 
-    console.log('Route is: ', nextUrl.pathname);
-    console.log('is tested by reg: ', readRegex.test(nextUrl.pathname));
-
     const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname) || bookIdRegex.test(nextUrl.pathname) || readRegex.test(nextUrl.pathname);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);

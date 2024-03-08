@@ -116,7 +116,9 @@ export const searchMyLibraryBooksByTitle = async (title: string, userId: string)
     const returnBooks = allMyLibBooks.map(dataWrapper => {
         const { id, title, author, rating } = dataWrapper.book;
 
-        const authorDisplayName = getAuthorDisplayName(author.name, false);
+        //if author name > 10 symbols --> truncate it
+        const shouldTruncate = author.name.length > 10;
+        const authorDisplayName = getAuthorDisplayName(author.name, shouldTruncate);
 
         return { id, title, authorDisplayName, rating };
     });
@@ -154,7 +156,9 @@ export const searchMyLibraryBooksByAuthor = async (authorName: string, userId: s
     const returnBooks = allBooksWithAuthorName.map(wrapperObject => {
         const { id, title, rating, author} = wrapperObject.book;
 
-        const authorDisplayName = getAuthorDisplayName(author.name, false);
+        //if author name > 10 symbols --> truncate it
+        const shouldTruncate = author.name.length > 10;
+        const authorDisplayName = getAuthorDisplayName(author.name, shouldTruncate);
 
         return { id, title, authorDisplayName, rating };
     });

@@ -38,6 +38,9 @@ export default function RootPage() {
 	return (
 		<main className={styles.main}>
 			<section className={styles.textSection}>
+				<h2 className={styles.h2}>
+					Добро пожаловать на <strong>Бук<span>Лайф</span></strong>!
+				</h2>
 				{/* big sliding text */}
 				<SlidingLogo />
 				<TextSection textData={textData} />

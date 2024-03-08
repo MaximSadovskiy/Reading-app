@@ -12,7 +12,7 @@ const textVariants: Variants = {
         opacity: 1,
         x: 0,
         transition: {
-            duration: 0.55
+            duration: 0.85
         }
     }
 };

@@ -17,7 +17,7 @@ type SingleBookProps = {
 }
 
 // how many comments to take for page
-const takeCommentsLimit = 4;
+const takeCommentsLimit = 3;
 
 const SingleBookPage = async ({ params, searchParams }: SingleBookProps) => {
     const book = await getBookById(parseInt(params.id)) as NonNullable<ReturnGetBookByIdType>;
@@ -57,8 +57,6 @@ const SingleBookPage = async ({ params, searchParams }: SingleBookProps) => {
     // get first 5 comments for book with pagination
     const pageNumber = searchParams?.page ? parseInt(searchParams.page) : 1;
     const offset = (pageNumber - 1) * takeCommentsLimit;
-    // log
-    console.log('pageNumber: ' + pageNumber + 'offset: ' + offset);
 
     const commentsResult = await getCommentsOfBookById(book.id, offset, takeCommentsLimit);
 
