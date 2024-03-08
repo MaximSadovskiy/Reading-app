@@ -23,7 +23,10 @@ export async function GET(request: NextRequest) {
 
             const formattedBooks = booksByTitle.map(book => {
                 const { id, title, author, rating } = book;
-                const authorDisplayName = getAuthorDisplayName(author.name, false);
+
+                //if author name > 10 symbols --> truncate it
+                const shouldTruncate = author.name.length > 10;
+                const authorDisplayName = getAuthorDisplayName(author.name, shouldTruncate);
                 
                 return { id, title, rating, authorDisplayName };
             });
@@ -39,7 +42,10 @@ export async function GET(request: NextRequest) {
             }
             const formattedBooks = authorOfBooks.books.map(book => {
                 const { id, title, rating } = book;
-                const authorDisplayName = getAuthorDisplayName(authorOfBooks.name, false)
+
+                //if author name > 10 symbols --> truncate it
+                const shouldTruncate = authorOfBooks.name.length > 10;
+                const authorDisplayName = getAuthorDisplayName(authorOfBooks.name, shouldTruncate);
                 
                 return { id, title, rating, authorDisplayName };
             });

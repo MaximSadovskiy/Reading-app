@@ -9,6 +9,7 @@ import { useCurrentUserClient } from '@/hooks/useCurrentUser';
 import { getCurrentReadBookId } from '@/server_actions/books_actions';
 import { useRouter } from 'next/navigation';
 import { toast } from "react-toastify";
+import { SlideArrowSvg } from '@/components/shared/Svg';
 
 
 interface TextSectionProps {
@@ -33,7 +34,6 @@ const TextSection = ({ textData }: TextSectionProps) => {
     const { scrollY } = useScroll();
 
     const [animationState, setAnimationState] = useState({
-        h2: false,
         firstH3: false,
         firstUl: false,
         secondH3: false,
@@ -44,12 +44,12 @@ const TextSection = ({ textData }: TextSectionProps) => {
     });
 
     // animate welcome text without need to scroll
-    useEffect(() => {
+    /* useEffect(() => {
         setAnimationState({
             ...animationState,
-            h2: true,
+            firstH3: true,
         });
-    }, []);
+    }, []); */
 
     // manipulating state with scroll
     useMotionValueEvent(scrollY, 'change', (latestValue) => {
@@ -59,31 +59,31 @@ const TextSection = ({ textData }: TextSectionProps) => {
                 firstH3: true,
             });
         }
-        else if (latestValue > 200 && !animationState.firstUl) {
+        else if (latestValue > 250 && !animationState.firstUl) {
             setAnimationState({
                 ...animationState,
                 firstUl: true,
             });
         }
-        else if (latestValue > 350 && !animationState.secondH3) {
+        else if (latestValue > 420 && !animationState.secondH3) {
             setAnimationState({
                 ...animationState,
                 secondH3: true,
             });
         }
-        else if (latestValue > 600 && !animationState.secondUl) {
+        else if (latestValue > 750 && !animationState.secondUl) {
             setAnimationState({
                 ...animationState,
                 secondUl: true,
             });
         }
-        else if (latestValue > 700 && !animationState.links) {
+        else if (latestValue > 900 && !animationState.links) {
             setAnimationState({
                 ...animationState,
                 links: true,
             });
         }
-        else if (latestValue > 800 && !animationState.lastH3) {
+        else if (latestValue > 1050 && !animationState.lastH3) {
             setAnimationState({
                 ...animationState,
                 lastH3: true,
@@ -113,25 +113,15 @@ const TextSection = ({ textData }: TextSectionProps) => {
 		}
 	};
 
-
-            //<m.h2 className={styles.h2}
-            //    variants={textVariants}
-            //    initial='initial'
-            //    animate={animationState.h2 ? 'animate' : ''}
-            //>
-            //    Добро пожаловать на <strong>Бук<span>Лайф</span></strong>!
-            //</m.h2>
     return (
         <LazyMotion features={domAnimation}>
-            <section>
-            <m.a className={styles.mainLink}
-                href='/books'
-                variants={textVariants}
-                initial='initial'
-                animate={animationState.h2 ? 'animate' : ''}
-            >
-                <strong>Читать сейчас!</strong>
-            </m.a>
+            <section className={styles.mainSection}>
+                <Link className={styles.mainLink}
+                    href='/books'
+                >
+                    К выбору книг
+                    <SlideArrowSvg width={60} height={60} direction='right' />
+                </Link>
                 <m.h3 className={styles.h3}
                     variants={textVariants}
                     initial='initial'

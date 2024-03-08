@@ -50,7 +50,7 @@ function createHeader(sectionIndex: number, prop: ReaderProp) {
     if (sectionIndex != 0) return [];
     return [
         <h1 key={"header_title"} className={styles.title}>
-            "{prop.title}"
+            &quot;{prop.title}&quot;
         </h1>,
 
         <p key={"header_author"} className={styles.author}>
@@ -63,6 +63,7 @@ function createHeader(sectionIndex: number, prop: ReaderProp) {
           <Image
 //>>>>>>> 6caf17e7aafc1bd521e2362a29a8647b7fb7e9ba
             className={styles.img}
+            key={"header_img"}
             src={prop.thumbnailPath}
             data-src={prop.thumbnailPath}
             width={220}

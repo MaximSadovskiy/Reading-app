@@ -7,7 +7,7 @@ import { getBookDataRead, DB_Book_Record } from "@/database/db_helpers_BOOKS";
 type ReadPageParams = { params: { bookId: string } };
 async function getBookFilePath(bookData: DB_Book_Record | null) {
     // path + query params
-    const CURRENT_ABS_PATH = path.resolve(".");
+    const CURRENT_ABS_PATH = process.env.DOMAIN_URL as string;
     // it should not happen
     if (!bookData) {
         return null;

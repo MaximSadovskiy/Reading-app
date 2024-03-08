@@ -1,38 +1,39 @@
 @use 'utils' as *;
 
-.h2 {
-    @include fontHeading(2);
+.mainSection {
+    @include colFlex(center);
+}
 
-    @include breakpointDown(650) {
-        text-align: start;
-        margin-top: pxIntoUnit(50);
-    }
+.mainLink {
+    @include animationSlideInBlur(1.25s, -500);
+    @include linkWithUnderline;
+    @include fontMarc(47, 0);
 
-    > strong {
-        @include fontMarc(52, 0);
-        color: var(--main-text-highlight);
+    animation-delay: 2s;
+    align-self: center;
+    color: var(--main-text-highlight);
+    margin-bottom: pxIntoUnit(30);
 
-        > span {
-            color: var(--main-text-highlight-logo);
+    &:hover {
+        & > svg {
+            transform: rotate(180deg) scale(1) translateX(pxIntoUnit(-15));
         }
     }
-}
-.mainLink {
-    @include fontHeading(2);
-    > strong {
-        @include fontMarc(52, 0);
-        color: var(--main-text-highlight);
 
+    & > svg {
+        @include svgTransition; 
+
+        position: absolute;
+        right: pxIntoUnit(-60);
+        top: 0;
+        transform: rotate(180deg) scale(0.85);
+        fill: var(--svg-fill-active);
+        stroke: var(--svg-fill-active);
     }
 
-    margin-bottom: 2.5em;
-    text-align:center;
-    display:block;
-    &:hover {
-        text-decoration:underline;
-        color: #feba79;
-    }
 }
+
+
 .h3 {
     @include fontHeading(3);
     margin-block: pxIntoUnit(50);

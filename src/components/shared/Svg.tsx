@@ -36,7 +36,7 @@ export const SlideArrowSvg = ({ width = 50, height = 50, direction = "left"}: {
     return (
         <svg width={`${width}px`} height={`${height}px`} 
 
-        data-direction={direction} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        data-direction={direction} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 
             <g id="SVGRepo_bgCarrier" strokeWidth="0"/>
 
