@@ -26,7 +26,7 @@ export const AddComment = ({ bookTitle, user, bookId }: AddCommentProps) => {
     // add comment action
     const handleAddComment = async () => {
         // if comment empty
-        if (commentText.length <= 10) {
+        if (commentText.length <= 4) {
             toast('Слишком короткий комментарий', {
                 theme: 'colored',
                 type: 'error',
@@ -81,7 +81,7 @@ export const AddComment = ({ bookTitle, user, bookId }: AddCommentProps) => {
             </div>
             {isModalOpen && (
                 <ConfirmModal 
-                    title="Требуется авторизацяи, перейти?"
+                    title="Требуется авторизация, перейти?"
                     activeBtnText="Перейти"
                     modalState={isModalOpen}
                     closeCallback={closeCallback}

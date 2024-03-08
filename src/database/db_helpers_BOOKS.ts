@@ -288,7 +288,18 @@ export const getBooksByGenre = (booksArray: LibraryBooksSuccess, genre: GenreLit
     return allBooksWithGenre;
 };
 
-
+class DB_Book_Record {
+    title: any;
+    thumbnail: any;
+    filePath: any;
+    authorName: any;
+    constructor(title: any, thumbnail: any, filePath: any, authorName: any) {
+        this.title = title;
+        this.thumbnail = thumbnail;
+        this.filePath = filePath;
+        this.authorName = authorName;
+    }
+}
 // Read
 export const getBookDataRead = async (bookId: number) => {
     const book = await db.book.findUnique({
@@ -307,11 +318,17 @@ export const getBookDataRead = async (bookId: number) => {
         return null;
     }
 
+    const resultBook = new DB_Book_Record(
+                                    book.title,
+                                    book.thumbnail,
+                                    book.file,
+                                    book.author.name);
 
-    const resultBook = {
-        ...book,
-        authorName: book.author.name,
-    };
+    //const resultBook = {
+    //    ...book,
+    //    authorName: book.author.name,
+    //};
 
     return resultBook;
 };
+export { DB_Book_Record };

@@ -10,41 +10,50 @@ interface PaginatingProp {
 const MAX_ITEMS_PAGING = 6;
 
 function PaginationBlockComponent(prop: PaginatingProp) {
-  function PropFuncCall(ev: any) {
-    prop.onClickFunction(ev);
-  }
-  function PropMoveOneFuncCall(isLeft: boolean) {
-    prop.onClickMoveOneFunction(isLeft);
-  }
-  function left() {
-    PropMoveOneFuncCall(true);
-  }
-  function right() {
-    PropMoveOneFuncCall(false);
-  }
-  // Algoritm for pagination, works but sucks.
-  const tempArr = [];
-  const start = Math.max(0, (prop.currentSectionIndex as number) - Math.floor(MAX_ITEMS_PAGING / 2));
-  const end = Math.min(prop.list.length, start + MAX_ITEMS_PAGING);
+    function onClickPropFuncCall(ev: any) {
+        prop.onClickFunction(ev);
+    }
+    function PropMoveOneFuncCall(isLeft: boolean) {
+        prop.onClickMoveOneFunction(isLeft);
+    }
+    function movePageLeft() {
+        PropMoveOneFuncCall(true);
+    }
+    function movePageRight() {
+        PropMoveOneFuncCall(false);
+    }
+    // Algoritm for pagination, works but sucks.
+    const start = Math.max(0, (prop.currentSectionIndex as number) - Math.floor(MAX_ITEMS_PAGING / 2));
+    const end = Math.min(prop.list.length, start + MAX_ITEMS_PAGING);
 
-  tempArr.push(<a onClick={left} href="#">❮</a>);
-  for (let i = start; i < end; ++i) {
-      tempArr.push(
-          <a  key={i}
-              data-selected={prop.currentSectionIndex === i ? true : false}
-              onClick={PropFuncCall}
-              href="#">
+    const PagingButtons = [];
+    PagingButtons.push(
+        <a key={"<"} onClick={movePageLeft} href="#">
+            ❮
+        </a>
+    );
+    for (let i = start; i < end; ++i) {
+        PagingButtons.push(
+            <a
+                key={"paging_" + i}
+                data-selected={prop.currentSectionIndex === i ? true : false}
+                onClick={onClickPropFuncCall}
+                href="#"
+            >
                 {prop.list[i]}
-          </a>
-      );
-  }
-  /* if (end < prop.list.length) {
-      tempArr.push(<a>...</a>);
-  } */
-  tempArr.push(<a onClick={right} href="#">❯</a>);
-  
-  return (
-    <div className={styles.pagination}>{tempArr}</div>
-  );
+            </a>
+        );
+    }
+    PagingButtons.push(
+        <a key={">"} onClick={movePageRight} href="#">
+            ❯
+        </a>
+    );
+
+    return (
+        <div key={"paging_div"} className={styles.pagination}>
+            {PagingButtons}
+        </div>
+    );
 }
 export { PaginationBlockComponent };

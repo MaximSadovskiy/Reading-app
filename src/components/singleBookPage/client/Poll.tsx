@@ -28,18 +28,18 @@ type ObjectWithNumberIndex = {
 	[ind: number]: string;
 };
 
-const textOnEachRate = {
-	0: "Паршиво.",
-	1: "Ужасно.",
-	2: "Очень плохо.",
-	3: "Плохо.",
-	4: "Не стоило того...",
-	5: "Середнячок...",
-	6: "Довольно неплохо...",
-	7: "Хорошо!",
-	8: "Отлично!",
-	9: "Великолепно!",
-};
+const textOnEachRate = [
+	/*0:*/ "Паршиво.",
+	/*1:*/ "Ужасно.",
+	/*2:*/ "Очень плохо.",
+	/*3:*/ "Плохо.",
+	/*4:*/ "Не стоило того...",
+	/*5:*/ "Середнячок...",
+	/*6:*/ "Довольно неплохо...",
+	/*7:*/ "Хорошо!",
+	/*8:*/ "Отлично!",
+	/*9:*/ "Великолепно!",
+];
 
 const emojiSrcOnRate = {
 	bad: "/emotions/sad.svg",
@@ -342,13 +342,12 @@ const RateDescVariants: Variants = {
 };
 
 const RateDescription = ({ itemIndex }: RateDescriptionProps) => {
-	let rateText: string;
-	let rateEmojiSrc: string;
-
 	// text
-	rateText = (textOnEachRate as ObjectWithNumberIndex)[itemIndex];
-
+	const rateText: string = textOnEachRate[itemIndex];
+	//rateText = (textOnEachRate as ObjectWithNumberIndex)[itemIndex];
+	
 	// emoji
+	let rateEmojiSrc: string;
 	if (itemIndex <= 4) {
 		rateEmojiSrc = emojiSrcOnRate.bad;
 	} else if (itemIndex <= 6) {

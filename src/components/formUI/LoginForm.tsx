@@ -66,7 +66,7 @@ export const LoginForm = () => {
         loginAction(data)
 			.then(response => {
 
-				if (response.success) {
+				if (response != undefined && response.success) {
 					// two-factor enabled --> UI changed a bit
 					if (response.success.type === LoginSuccessTypes.TWO_FACTOR) {
 						setResultState({
@@ -90,7 +90,7 @@ export const LoginForm = () => {
 				else {
 					setResultState({
 						status: 'error',
-						message: response.error as string,
+						message: response?.error as string,
 					});
 				}
 			})

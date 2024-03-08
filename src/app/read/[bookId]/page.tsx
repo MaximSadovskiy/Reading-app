@@ -1,75 +1,48 @@
-import { promises as fs} from "fs";
+import styles from "@/styles/modules/readLayout/readPage.module.scss";
+import path from "path";
 import { ReadBlockComponent } from "@/components/readLayout/ReadBlock";
 import { File } from "@/utils/FileUtil";
-import styles from "@/styles/modules/readLayout/readPage.module.scss";
-import { getBookDataRead } from "@/database/db_helpers_BOOKS";
-import path from 'path';
+import { getBookDataRead, DB_Book_Record } from "@/database/db_helpers_BOOKS";
 
-async function getFile(path: string): Promise<File | null> {
-  let buf: Buffer;
-  try {
-    buf = await fs.readFile(path);
-  } catch (e: any) {
-    return null;
-  }
-  return new File(buf);
+type ReadPageParams = { params: { bookId: string } };
+async function getBookFilePath(bookData: DB_Book_Record | null) {
+    // path + query params
+    const CURRENT_ABS_PATH = path.resolve(".");
+    // it should not happen
+    if (!bookData) {
+        return null;
+    }
+    return path.join(CURRENT_ABS_PATH, bookData.filePath);
 }
+export default async function ReadPage({ params }: ReadPageParams) {
+    const numberBookId = parseInt(params.bookId);
+    const bookData = await getBookDataRead(numberBookId);
+    const filePath = await getBookFilePath(bookData);
+    const file = await File.getFile(filePath);
 
-type ReadPageParams = { params: { bookId: string }};
+    if (file === null || bookData === null) {
+        return <div>BOOK CANNOT BE FOUND!</div>;
+    }
 
-export default async function Read({ params }: ReadPageParams) {
+    let sections = file.getListOfSections();
+    if (sections === undefined) {
+        sections = [];
+    }
+    if (sections.length < 1) {
+        file.text = "";
+    }
 
-  // path + query params
-  const numberBookId = parseInt(params.bookId);
-
-  const CURRENT_ABS_PATH = path.resolve('.');
-  const bookData = await getBookDataRead(numberBookId);
-  // it should not happen
-  if (!bookData) {
-    return <div>BOOK CANNOT BE FOUND!</div>;
-  };
-
-  // final abs path to book
-  const RESULT_PATH = path.join(CURRENT_ABS_PATH, bookData.file);
-  
-  console.log(RESULT_PATH);
-
-  let file = await getFile(RESULT_PATH);
-  if (file == null) return <div>BOOK CANNOT BE FOUND!</div>;
-  
-  let str = "";
-  let sections = file?.getListOfSections();
-
-  if (file?.getListOfSections().length > 0) {
-    str = file?.text;
-  }
-
-  if (sections === undefined) {
-    sections = [];
-  }
-
-  let bookName = "";
-
-  if (file.header != undefined) {
-    bookName = file.header.getBookName();
-  } else {
-    bookName = "ERROR TITLE";
-  }
-
-
-  return (
-    <main className={styles.main}>
-      <div className={styles.readerBlock}>
-
-        <ReadBlockComponent
-          text={str}
-          title={bookName}
-          authorName={bookData.authorName}
-          sections={JSON.parse(JSON.stringify(sections))}
-          thumbnailPath={bookData.thumbnail}
-        ></ReadBlockComponent>
-
-      </div>
-    </main>
-  );
+    return (
+        <main className={styles.main}>
+            <section className={styles.readerBlock}>
+                <ReadBlockComponent
+                    text={file.text}
+                    title={bookData.title}
+                    authorName={bookData.authorName}
+                    sections={JSON.parse(JSON.stringify(sections))}
+                    thumbnailPath={bookData.thumbnail}
+                ></ReadBlockComponent>
+            </section>
+        </main>
+    );
 }
