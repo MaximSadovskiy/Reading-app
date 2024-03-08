@@ -10,7 +10,7 @@ const listItemVariants: Variants = {
         scale: 1,
         transition: {
             type: 'spring',
-            duration: 1,
+            duration: 0.5,
             ease: 'easeInOut',
         }
     },
@@ -19,7 +19,7 @@ const listItemVariants: Variants = {
         scale: 0,
         transition: {
             type: 'spring',
-            duration: 1,
+            duration: 0.5,
             ease: 'easeInOut',
         }
     }

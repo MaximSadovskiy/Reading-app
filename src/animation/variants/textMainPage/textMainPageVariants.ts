@@ -12,7 +12,7 @@ const textVariants: Variants = {
         opacity: 1,
         x: 0,
         transition: {
-            duration: 1.15
+            duration: 0.55
         }
     }
 };
@@ -42,7 +42,7 @@ const linkVariants: Variants = {
         scale: [0, 1.15, 1],
         filter: 'blur(0px)',
         transition: {
-            duration: 1.15
+            duration: 0.55
         }
     }
 };

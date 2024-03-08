@@ -17,7 +17,22 @@
         }
     }
 }
+.mainLink {
+    @include fontHeading(2);
+    > strong {
+        @include fontMarc(52, 0);
+        color: var(--main-text-highlight);
 
+    }
+
+    margin-bottom: 2.5em;
+    text-align:center;
+    display:block;
+    &:hover {
+        text-decoration:underline;
+        color: #feba79;
+    }
+}
 .h3 {
     @include fontHeading(3);
     margin-block: pxIntoUnit(50);

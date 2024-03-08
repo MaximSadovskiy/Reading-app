@@ -9,8 +9,8 @@
     }
 
     text-align: center;
-    min-height: 50vh;
-    margin-bottom: pxIntoUnit(50);
+    min-height: 40vh;
+    margin-bottom: pxIntoUnit(30);
 
     & > .staticText {
         @include fontMarc(55);

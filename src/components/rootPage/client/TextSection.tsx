@@ -114,16 +114,24 @@ const TextSection = ({ textData }: TextSectionProps) => {
 	};
 
 
+            //<m.h2 className={styles.h2}
+            //    variants={textVariants}
+            //    initial='initial'
+            //    animate={animationState.h2 ? 'animate' : ''}
+            //>
+            //    Добро пожаловать на <strong>Бук<span>Лайф</span></strong>!
+            //</m.h2>
     return (
         <LazyMotion features={domAnimation}>
-            <m.h2 className={styles.h2}
+            <section>
+            <m.a className={styles.mainLink}
+                href='/books'
                 variants={textVariants}
                 initial='initial'
                 animate={animationState.h2 ? 'animate' : ''}
             >
-                Добро пожаловать на <strong>Бук<span>Лайф</span></strong>!
-            </m.h2>
-            <section>
+                <strong>Читать сейчас!</strong>
+            </m.a>
                 <m.h3 className={styles.h3}
                     variants={textVariants}
                     initial='initial'
