@@ -18,6 +18,7 @@ export const authRoutes = ['/auth/login', '/auth/register', '/auth/reset', '/aut
  * @type {string}
  */
 export const apiAuthPrefix = '/api/auth';
+export const apiBooksPrefix = '/api/books';
 
 /**
  * The default redirect after logging in
