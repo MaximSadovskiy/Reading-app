@@ -37,8 +37,6 @@ export async function GET(request: NextRequest) {
         else {
             const authorOfBooks = await searchBooksByAuthor(query);
 
-            console.log('Route: returned Author: ', authorOfBooks);
-
             if (!authorOfBooks) {
                 return NextResponse.json({ error: 'no books were found' });
             }
