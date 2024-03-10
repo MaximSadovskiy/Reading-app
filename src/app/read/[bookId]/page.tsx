@@ -35,21 +35,10 @@ export default async function ReadPage({ params }: ReadPageParams) {
 
     const file = await File.getFile(filePath);
 
-    // Execute the command
-    exec(command, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`exec error: ${error}`);
-            return;
-        }
-        // stdout contains the full path of the file
-        console.log(`Full path: ${stdout}`);
-        if (stderr) {
-            console.error(`stderr: ${stderr}`);
-        }
-    });
 
-    console.log("var/task/" + await getDirectories('/var/task/src/'));
-    console.log("dir /" + await getDirectories('/'));
+    console.log("var/task/ .next/ " + await getDirectories('/var/task/.next/server/src'));
+    console.log("var/task/ " + await getDirectories('/var/task/src/'));
+    console.log("dir / " + await getDirectories('/'));
 
     if (file === null || bookData === null) {
         return <div>BOOK CANNOT BE FOUND!</div>;
