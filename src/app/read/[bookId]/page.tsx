@@ -32,10 +32,8 @@ export default async function ReadPage({ params }: ReadPageParams) {
 
     const file = await File.getFile(filePath);
     
-    console.log(await getDirectories('/var/task/'));
-    console.log(await getDirectories('/var/task/.next/'));
-    console.log(await getDirectories('/var/'));
-    console.log(await getDirectories('/'));
+    console.log(await getDirectories('/var/task/src/'));
+    console.log(await getDirectories('/src/'));
 
     if (file === null || bookData === null) {
         return <div>BOOK CANNOT BE FOUND!</div>;
