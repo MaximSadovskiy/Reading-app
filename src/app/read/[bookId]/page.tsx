@@ -11,9 +11,9 @@ async function getBookFilePath(bookData: DB_Book_Record | null) {
         return null;
     }
 
-    const ABS_PATH = path.join(bookData.filePath);
-    
-    console.log('path is: ', ABS_PATH);
+    const ABS_PATH = path.join(process.cwd(), bookData.filePath);
+
+    console.log('abs path:' , ABS_PATH);
 
     return ABS_PATH;
 }
