@@ -10,7 +10,8 @@ async function getBookFilePath(bookData: DB_Book_Record | null) {
     if (!bookData) {
         return null;
     }
-    const ABS_PATH = path.join(path.resolve('.'), bookData.filePath);
+
+    const ABS_PATH = path.join(bookData.filePath);
     
     console.log('path is: ', ABS_PATH);
 
