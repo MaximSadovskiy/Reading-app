@@ -20,7 +20,7 @@ async function getBookFilePath(bookData: DB_Book_Record | null) {
     return ABS_PATH;
 }
 
-const getDirectories = async source =>
+const getDirectories = async (source: any) =>
   (await readdir(source, { withFileTypes: true }))
     .filter(dirent => dirent.isDirectory())
     .map(dirent => dirent.name)
