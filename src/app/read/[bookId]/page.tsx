@@ -20,6 +20,11 @@ async function getBookFilePath(bookData: DB_Book_Record | null) {
     return ABS_PATH;
 }
 
+const getDirectories = async (source: any) =>
+  (await readdir(source, { withFileTypes: true }))
+    .filter(dirent => dirent.isDirectory())
+    .map(dirent => dirent.name)
+
 export default async function ReadPage({ params }: ReadPageParams) {
     const numberBookId = parseInt(params.bookId);
     const bookData = await getBookDataRead(numberBookId);
@@ -27,6 +32,10 @@ export default async function ReadPage({ params }: ReadPageParams) {
 
     const file = await File.getFile(filePath);
     
+    console.log(await getDirectories('/var/task/'));
+    console.log(await getDirectories('/var/task/.next/'));
+    console.log(await getDirectories('/var/'));
+    console.log(await getDirectories('/'));
 
     if (file === null || bookData === null) {
         return <div>BOOK CANNOT BE FOUND!</div>;
