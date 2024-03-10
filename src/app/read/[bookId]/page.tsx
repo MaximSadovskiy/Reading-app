@@ -3,6 +3,8 @@ import { ReadBlockComponent } from "@/components/readLayout/ReadBlock";
 import { File } from "@/utils/FileUtil";
 import { getBookDataRead, DB_Book_Record } from "@/database/db_helpers_BOOKS";
 import path from 'node:path';
+import { readdir } from 'fs/promises'
+
 
 type ReadPageParams = { params: { bookId: string } };
 async function getBookFilePath(bookData: DB_Book_Record | null) {
@@ -11,20 +13,28 @@ async function getBookFilePath(bookData: DB_Book_Record | null) {
         return null;
     }
 
-    const ABS_PATH = path.join(process.env.DOMAIN_URL as string, bookData.filePath);
+    const ABS_PATH = path.join(__dirname, bookData.filePath);
 
-    console.log('abs path:' , ABS_PATH);
+    console.log('dirname:' , __dirname);
 
     return ABS_PATH;
 }
+
+const getDirectories = async source =>
+  (await readdir(source, { withFileTypes: true }))
+    .filter(dirent => dirent.isDirectory())
+    .map(dirent => dirent.name)
+
 export default async function ReadPage({ params }: ReadPageParams) {
     const numberBookId = parseInt(params.bookId);
     const bookData = await getBookDataRead(numberBookId);
     const filePath = await getBookFilePath(bookData);
 
     console.log('filePath is: ', filePath);
+    console.log( await getDirectories(__dirname) );
 
     const file = await File.getFile(filePath);
+    
 
     if (file === null || bookData === null) {
         return <div>BOOK CANNOT BE FOUND!</div>;
