@@ -12,12 +12,17 @@ async function getBookFilePath(bookData: DB_Book_Record | null) {
     }
     const ABS_PATH = path.join(path.resolve('.'), bookData.filePath);
     
+    console.log('path is: ', ABS_PATH);
+
     return ABS_PATH;
 }
 export default async function ReadPage({ params }: ReadPageParams) {
     const numberBookId = parseInt(params.bookId);
     const bookData = await getBookDataRead(numberBookId);
     const filePath = await getBookFilePath(bookData);
+
+    console.log('filePath is: ', filePath);
+
     const file = await File.getFile(filePath);
 
     if (file === null || bookData === null) {
