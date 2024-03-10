@@ -35,11 +35,9 @@ export default async function ReadPage({ params }: ReadPageParams) {
 
     const file = await File.getFile(filePath);
 
+    console.log("var/task/ " + await getDirectories('/var/task/src/components'));
+    console.log("var/task/ " + await getDirectories('/var/task/src/bookStorage'));
 
-    console.log("var/task/ .next/server " + await getDirectories('/var/task/.next/server/'));
-    console.log("var/task/ .next/server/app " + await getDirectories('/var/task/.next/server/app'));
-    console.log("var/task/ " + await getDirectories('/var/task/src/'));
-    console.log("dir / " + await getDirectories('/src'));
 
     if (file === null || bookData === null) {
         return <div>BOOK CANNOT BE FOUND!</div>;
