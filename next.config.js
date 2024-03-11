@@ -1,11 +1,10 @@
 /** @type {import('next').NextConfig} */
-import CopyPlugin from 'copy-webpack-plugin';
 
-const path = require('path');
+import CopyPlugin from 'copy-webpack-plugin';
 
 const nextConfig = {
     sassOptions: {
-        includePaths: [path.join(__dirname, 'src', 'styles')],
+        includePaths: [__dirname + "/src/styles"],
     },
     webpack: (config) => {
       config.plugins.push(
