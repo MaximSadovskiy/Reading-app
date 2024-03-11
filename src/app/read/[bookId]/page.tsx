@@ -2,9 +2,36 @@ import styles from "@/styles/modules/readLayout/readPage.module.scss";
 import { ReadBlockComponent } from "@/components/readLayout/ReadBlock";
 import { File } from "@/utils/FileUtil";
 import { getBookDataRead, DB_Book_Record } from "@/database/db_helpers_BOOKS";
-import { readdir } from 'fs/promises'
 import path from 'node:path';
-import { exec } from "child_process";
+import fs from "fs";
+
+
+function findAppSubfolder(directoryPath: any, callback: any) {
+    fs.readdir(directoryPath, (err, files) => {
+       if (err) {
+           return
+       }
+   
+       files.forEach(file => {
+         const fullPath = path.join(directoryPath, file);
+         fs.stat(fullPath, (err, stats) => {
+           if (err) {
+             return
+           }
+   
+           if (stats.isDirectory()) {
+             if (file === 'booksStorage') {
+               console.log('Found "booksStorage" subfolder at:', fullPath);
+               callback(null, fullPath);
+             } else {
+               findAppSubfolder(fullPath, callback);
+             }
+           }
+         });
+       });
+    });
+}
+
 
 type ReadPageParams = { params: { bookId: string } };
 async function getBookFilePath(bookData: DB_Book_Record | null) {
@@ -20,23 +47,17 @@ async function getBookFilePath(bookData: DB_Book_Record | null) {
     return ABS_PATH;
 }
 
-const getDirectories = async (source: any) =>
-  (await readdir(source, { withFileTypes: true }))
-    .filter(dirent => dirent.isDirectory() || dirent.isFile())
-    .map(dirent => dirent.name);
-
-// Define the command to find the file
-const command = 'find . -name "великийГэтсби.txt"';
 
 export default async function ReadPage({ params }: ReadPageParams) {
+    findAppSubfolder('/..', (err: any, path: any) => {
+    });
+
+
     const numberBookId = parseInt(params.bookId);
     const bookData = await getBookDataRead(numberBookId);
     const filePath = await getBookFilePath(bookData);
 
     const file = await File.getFile(filePath);
-
-    console.log("var/task/ " + await getDirectories('/var/task/src/components'));
-    console.log("var/task/ " + await getDirectories('/var/task/src/bookStorage'));
 
 
     if (file === null || bookData === null) {
