@@ -3,7 +3,6 @@ import { ReadBlockComponent } from "@/components/readLayout/ReadBlock";
 import { File } from "@/utils/FileUtil";
 import { getBookDataRead, DB_Book_Record } from "@/database/db_helpers_BOOKS";
 
-
 type ReadPageParams = { params: { bookId: string } };
 
 async function getBookFilePath(bookData: DB_Book_Record | null) {
@@ -12,9 +11,8 @@ async function getBookFilePath(bookData: DB_Book_Record | null) {
         return null;
     }
 
-    return bookData.filePath;
+    return process.cwd() + bookData.filePath;
 }
-
 
 export default async function ReadPage({ params }: ReadPageParams) {
     const numberBookId = parseInt(params.bookId);
