@@ -2,6 +2,7 @@ import styles from "@/styles/modules/readLayout/readPage.module.scss";
 import { ReadBlockComponent } from "@/components/readLayout/ReadBlock";
 import { File } from "@/utils/FileUtil";
 import { getBookDataRead, DB_Book_Record } from "@/database/db_helpers_BOOKS";
+import { readdir } from "fs/promises";
 
 type ReadPageParams = { params: { bookId: string } };
 
@@ -14,12 +15,18 @@ async function getBookFilePath(bookData: DB_Book_Record | null) {
     return process.cwd() + bookData.filePath;
 }
 
+const getDirectories = async (source: any) =>
+  (await readdir(source, { withFileTypes: true }))
+    .filter(dirent => dirent.isDirectory())
+    .map(dirent => dirent.name)
+
 export default async function ReadPage({ params }: ReadPageParams) {
     const numberBookId = parseInt(params.bookId);
     const bookData = await getBookDataRead(numberBookId);
     const filePath = await getBookFilePath(bookData);
 
     console.log('filepath is', filePath);
+    console.log( await getDirectories('/var/task') );
 
     const file = await File.getFile(filePath);
 
