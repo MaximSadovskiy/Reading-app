@@ -1,9 +1,8 @@
 /** @type {import('next').NextConfig} */
+import path from 'node:path';
+import CopyPlugin from 'copy-webpack-plugin';
 
-const path = require('path');
-const CopyPlugin = require("copy-webpack-plugin");
-
-const nextConfig = {
+export const nextConfig = {
     sassOptions: {
         includePaths: [path.join(__dirname, 'src', 'styles')],
     },
@@ -23,6 +22,3 @@ const nextConfig = {
     },
     reactStrictMode: true,
 }
-
-
-module.exports = nextConfig
