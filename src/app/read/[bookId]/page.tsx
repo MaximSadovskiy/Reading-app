@@ -26,7 +26,9 @@ export default async function ReadPage({ params }: ReadPageParams) {
     const filePath = await getBookFilePath(bookData);
 
     console.log('filepath is', filePath);
-    console.log( await getDirectories('/var/task') );
+    console.log(".next", await getDirectories('/var/task/.next') );
+    console.log(".next/server", await getDirectories('/var/task/.next/server') );
+    console.log(".next/static", await getDirectories('/var/task/.next/static') );
 
     const file = await File.getFile(filePath);
 
