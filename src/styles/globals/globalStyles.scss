@@ -107,6 +107,10 @@ body {
     --acc-bg: var(--color-darkbrown);
     --acc-bg-hover: var(--color-lightbrown);
 
+    // stripe menu (only on modal & tablet)
+    --menu-stripe-bg: var(--color-white);
+    --menu-stripe-bg-active: var(--color-orange);
+
     // rootPage
     --main-bg: var(--color-white);
     --main-text: var(--color-darkbrown);
