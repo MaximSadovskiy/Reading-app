@@ -3,9 +3,11 @@ import db from "@/database/db";
 import { PromiseValueType } from "@/interfaces/promiseValueTypeUtil";
 import { GenreLiterals } from "@/interfaces/storage/bookInterface";
 import { getUserById } from "@/database/db_helpers";
-import { getBookById, getCommentById, updateBookRating, updateLikesCountOfComment } from "@/database/db_helpers_BOOKS";
+import { getBookById, getCommentById, searchBooksByAuthor, searchMyLibraryBooksByAuthor, searchMyLibraryBooksByTitle, updateBookRating, updateLikesCountOfComment } from "@/database/db_helpers_BOOKS";
 import { revalidatePath } from "next/cache";
 import { auth } from "$/auth";
+import { searchBooksByTitle } from "@/database/db_helpers_BOOKS";
+import { getAuthorDisplayName } from "@/utils/textFormat/getAuthorDisplayName";
 
 // Popular Books
 type PopularBooksReturnTypePromise = ReturnType<typeof getPopularBooksAction>;
@@ -547,3 +549,71 @@ export const getCurrentReadBookId = async (userId: string) => {
 
     return { success: book.bookId }
 };  
+
+
+// SEARCH
+export type SearchResultType = ReturnType<typeof searchAllBooksByTitleAction>;
+export type SearchActionType = typeof searchAllBooksByTitleAction;
+
+export const searchAllBooksByTitleAction = async (titleQuery: string) => {
+
+    const booksByTitle = await searchBooksByTitle(titleQuery);
+
+    if (!booksByTitle || booksByTitle.length === 0) {
+        return { error: 'no books found' };
+    }
+    
+    const formattedBooks = booksByTitle.map(book => {
+        const { id, title, author, rating } = book;
+
+        const shouldReduceNameLength = author.name.length > 10;
+        const authorDisplayName = getAuthorDisplayName(author.name, shouldReduceNameLength);
+
+        return { id, title, authorDisplayName, rating };
+    });
+
+    return { success: formattedBooks };
+};
+
+
+export const searchAllBooksByAuthorAction = async (authorQuery: string) => {
+
+    const authorWithBooks = await searchBooksByAuthor(authorQuery);
+
+    if (!authorWithBooks || authorWithBooks.books.length === 0) {
+        return { error: 'no books found' };
+    }
+    
+    const shouldReduceNameLength = authorWithBooks.name.length > 10;
+    const authorDisplayName = getAuthorDisplayName(authorWithBooks.name, shouldReduceNameLength);
+
+    const formattedBooks = authorWithBooks.books.map(book => {
+        const { id, title, rating } = book;
+        return { id, title, authorDisplayName, rating };
+    });
+
+    return { success: formattedBooks };
+};
+
+
+export const searchMyLibraryTitleAction = async (titleQuery: string, userId: string) => {
+
+    const booksByTitle = await searchMyLibraryBooksByTitle(titleQuery, userId);
+
+    if (!booksByTitle || booksByTitle.length === 0) {
+        return { error: 'no books found' };
+    }
+
+    return { success: booksByTitle };
+};
+
+
+export const searchMyLibraryAuthorAction = async (authorQuery: string, userId: string) => {
+    const booksByAuthor = await searchMyLibraryBooksByAuthor(authorQuery, userId);
+
+    if (!booksByAuthor || booksByAuthor.length === 0) {
+        return { error: 'no books found' };
+    }
+
+    return { success: booksByAuthor };
+};

@@ -16,14 +16,14 @@ export async function GET(request: NextRequest) {
         
         if (mode === 'title') {
             const booksByTitle = await searchBooksByTitle(query);
-
+            
             if (!booksByTitle || booksByTitle.length === 0) {
                 return NextResponse.json({ error: 'no books were found' });
             }
-
+            
             const formattedBooks = booksByTitle.map(book => {
                 const { id, title, author, rating } = book;
-
+                
                 //if author name > 10 symbols --> truncate it
                 const shouldTruncate = author.name.length > 10;
                 const authorDisplayName = getAuthorDisplayName(author.name, shouldTruncate);
@@ -32,11 +32,11 @@ export async function GET(request: NextRequest) {
             });
             
             
-
             return NextResponse.json({ success: formattedBooks });
         }
         else {
             const authorOfBooks = await searchBooksByAuthor(query);
+
             if (!authorOfBooks) {
                 return NextResponse.json({ error: 'no books were found' });
             }

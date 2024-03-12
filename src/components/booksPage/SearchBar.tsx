@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect, SetStateAction, Suspense } from "react";
+import { useState, useRef, useEffect, SetStateAction } from "react";
 import useModal from "@/hooks/useModal";
 import debounce from "@/utils/debounceDecorator";
 import styles from '@/styles/modules/booksPage/searchBar.module.scss';
@@ -11,10 +11,13 @@ import { ArrowSvg, SearchSvg } from "@/components/shared/Svg";
 // анимации
 import { m, LazyMotion, domAnimation, AnimatePresence } from "framer-motion";
 import { listVariants, itemVariants } from "@/animation/variants/popupLists/popupListClipped";
-import getModalBlurVariants from "@/animation/variants/modalBlurVariants";
 import upDownVariants from "@/animation/variants/upDownVariants";
+import getModalBlurVariants from "@/animation/variants/modalBlurVariants";
 // modal
 import { closeIfOutsideClick } from "@/utils/clickOutsideCloseFunction";
+import { searchAllBooksByAuthorAction, searchAllBooksByTitleAction } from "@/server_actions/books_actions";
+import type { SearchActionType } from "@/server_actions/books_actions";
+import { getUppercasedQuery } from "@/utils/textFormat/getUppercasedQuery";
 
 
 type BooksForSearch = {
@@ -24,14 +27,14 @@ type BooksForSearch = {
     rating: number;
 }[];
 
-type SearchResult = { error: string } | { success: BooksForSearch } | undefined;
+export type SearchPageNames = 'books' | 'my_library'; 
 
 // WRAPPER
 type SearchProps = {
-    baseApiUrl: string;
+    pageName: SearchPageNames;
 }
 
-const SearchBar = ({ baseApiUrl }: SearchProps) => {
+const SearchBar = ({ pageName }: SearchProps) => {
 
     // Modal and Backdrop Open state 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -68,7 +71,7 @@ const SearchBar = ({ baseApiUrl }: SearchProps) => {
                             <SearchModal 
                                 isModalOpen={isModalOpen} 
                                 closeModal={closeModal}
-                                baseApiUrl={baseApiUrl} 
+                                pageName={pageName} 
                             />
                             <Backdrop />
                         </>
@@ -88,10 +91,10 @@ export default SearchBar;
 interface SearchModalProps {
     isModalOpen: boolean;
     closeModal: () => void;
-    baseApiUrl: string
+    pageName: SearchPageNames
 }
 
-const SearchModal = ({ isModalOpen, closeModal, baseApiUrl }: SearchModalProps) => {
+const SearchModal = ({ isModalOpen, closeModal, pageName }: SearchModalProps) => {
 
     const modalRef = useRef<HTMLDivElement>(null);
 
@@ -112,58 +115,61 @@ const SearchModal = ({ isModalOpen, closeModal, baseApiUrl }: SearchModalProps) 
     };
 
     // search request
-    const controllerRef = useRef<AbortController | null>(null);
-
     useEffect(() => {
-        if (query.length > 0) {
-                // aborting mechanism
-                if (controllerRef.current !== null) {
-                    controllerRef.current.abort();
+        let isCancelled = false;
+
+        const doSearch = debounce(async () => {
+            if (query.length === 0) return;
+
+            setIsLoading(true);
+            setIsNoResults(false);
+
+            // search function
+            // different between pages of site
+            let action: SearchActionType;
+            // books page actions
+            if (pageName === 'my_library') {
+                action = searchMode === 'title' 
+                        ? searchAllBooksByTitleAction
+                        : searchAllBooksByAuthorAction;
+            }
+            // books page actions
+            else {
+                action = searchMode === 'title' 
+                        ? searchAllBooksByTitleAction
+                        : searchAllBooksByAuthorAction;
+            }
+
+            try {
+                const upperCasedQuery = getUppercasedQuery(query);
+                const searchResultObject = await action(upperCasedQuery);
+
+                if (isCancelled) return; // Check if the promise was cancelled
+
+                if (!searchResultObject || 'error' in searchResultObject || searchResultObject.success.length === 0) {
+                    setIsLoading(false);
+                    setIsNoResults(true);
+                    return;
                 }
 
-                controllerRef.current = new AbortController();
-                const signal = controllerRef.current.signal;
+                setResults(searchResultObject.success);
+                setIsLoading(false);
+            } catch (error) {
+                if (isCancelled) return; // Check if the promise was cancelled
+                /* console.error(error);
+                setIsLoading(false); */
+            } 
+        }, 1000);
 
-                // declare request (try catch - for aborting)
-                const doSearch = debounce(async () => {
-                    try {
-                        const encodedQuery = encodeURIComponent(query);
-                        const searchParams = `?mode=${searchMode}&query=${encodedQuery}`;
-                        const apiURL = new URL(`${baseApiUrl}${searchParams}`);
-
-                        const response = await fetch(apiURL, {
-                            method: 'GET',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            // abort signal
-                            signal,
-                            // caching behaviour
-                            next: {
-                                // 1 hour
-                                revalidate: 3600,
-                            },
-                        });
-
-                        // RESULT
-                        const searchResultObject: SearchResult = await response.json();
-                        if (!searchResultObject || 'error' in searchResultObject || searchResultObject.success.length === 0) {
-                            setIsLoading(false);
-                            setIsNoResults(true);
-                            return;
-                        }
-
-                        setResults(searchResultObject.success);
-                        setIsLoading(false);
-                    } catch (err) {
-
-                    }
-                }, 1000);
-
-                // call request
-                doSearch();
+        // if user input > 1
+        if (query.length > 1) {
+            doSearch();
         }
-    }, [query, searchMode, baseApiUrl]);
+
+        return () => {
+            isCancelled = true; // Cancel the promise if the component unmounts or dependencies change
+        };
+    }, [query, searchMode, pageName]);
 
     return (
         <>

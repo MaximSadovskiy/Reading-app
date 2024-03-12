@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import authConfig from "auth.config";
 import {
     apiAuthPrefix,
+    apiBooksPrefix,
     authRoutes,
     publicRoutes
 } from '@/routes';
@@ -16,11 +17,12 @@ export default auth((req) => {
     const isLoggedIn = !!req.auth;
 
     const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
+    const isApiBooksRoute = nextUrl.pathname.startsWith(apiBooksPrefix);
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname) || bookIdRegex.test(nextUrl.pathname) || readRegex.test(nextUrl.pathname);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
     /* return; */
-    if (isApiAuthRoute || isPublicRoute || isAuthRoute) {
+    if (isApiAuthRoute || isPublicRoute || isAuthRoute || isApiBooksRoute) {
         return;
     }
 

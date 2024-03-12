@@ -1,19 +1,20 @@
 import styles from "@/styles/modules/readLayout/readPage.module.scss";
-import path from "path";
 import { ReadBlockComponent } from "@/components/readLayout/ReadBlock";
 import { File } from "@/utils/FileUtil";
 import { getBookDataRead, DB_Book_Record } from "@/database/db_helpers_BOOKS";
+import path from "path";
 
 type ReadPageParams = { params: { bookId: string } };
+
 async function getBookFilePath(bookData: DB_Book_Record | null) {
-    // path + query params
-    const CURRENT_ABS_PATH = process.env.DOMAIN_URL as string;
     // it should not happen
     if (!bookData) {
         return null;
     }
-    return path.join(CURRENT_ABS_PATH, bookData.filePath);
+
+    return path.join(process.cwd(), 'public', bookData.filePath);
 }
+
 export default async function ReadPage({ params }: ReadPageParams) {
     const numberBookId = parseInt(params.bookId);
     const bookData = await getBookDataRead(numberBookId);

@@ -1,8 +1,10 @@
 import styles from '@/styles/modules/rootPage/mainPage.module.scss';
 import Image from 'next/image';
 import SlidingLogo from '../components/rootPage/server/SlidingLogo';
-import TextSection from '@/components/rootPage/client/TextSection';
+import dynamic from 'next/dynamic';
 
+
+const TextSection = dynamic(() => import('@/components/rootPage/client/TextSection'), { ssr: false });
 // main component
 export default function RootPage() {
 

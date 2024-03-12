@@ -64,6 +64,7 @@ export const searchBooksByTitle = async (query: string) => {
 // Search by author
 export type SearchByAuthorReturn = ReturnType<typeof searchBooksByAuthor>; 
 export const searchBooksByAuthor =  async (query: string) => {
+    
     const booksByAuthor = await db.author.findFirst({
         where: { name: { 
             startsWith: query,
@@ -80,7 +81,7 @@ export const searchBooksByAuthor =  async (query: string) => {
                 }
             },
         }
-    });
+    });;
 
     if (!booksByAuthor) return null;
 

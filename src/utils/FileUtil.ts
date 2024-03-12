@@ -61,6 +61,7 @@ class File {
         try {
             buf = await fs.readFile(path);
         } catch (e: any) {
+            console.error(e);
             return null;
         }
         return new File(buf);
