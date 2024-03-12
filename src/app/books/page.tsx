@@ -9,7 +9,6 @@ import { getFavouriteGenres, getRandomGenres } from "@/database/db_helpers_BOOKS
 import { GenreLiterals } from "@/interfaces/storage/bookInterface";
 import Link from "next/link";
 import { genreDescriptions } from "@/booksStorage/textData/genresDescription";
-import { SEARCH_ALL_BOOKS_URL } from "@/apiUrls";
 import BookCarousel from "@/components/booksPage/bookCarousel";
 
 // lazy loading
