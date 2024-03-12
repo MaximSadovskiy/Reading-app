@@ -27,8 +27,7 @@ export default async function ReadPage({ params }: ReadPageParams) {
 
     console.log('filepath is', filePath);
 
-    console.log("/var/", await getDirectories('/var/') );
-    console.log("/", await getDirectories('/') );
+    console.log("path for /var/task", await getDirectories('/var/task') );
 
     const file = await File.getFile(filePath);
 

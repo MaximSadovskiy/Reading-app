@@ -12,8 +12,8 @@ const nextConfig = {
         new CopyPlugin({
             patterns: [
                 {
-                  from: './src/booksStorage/srcs/books/*.txt', // Use a glob pattern to match multiple .txt files
-                  to: 'booksStorage/[name][ext]', // This will copy the files to .next/static/books, preserving their names and extensions
+                  from: './src/booksStorage/srcs/books/*.txt',
+                  to: '/var/task/booksStorage/[name][ext]',
                 },
                 // Add more patterns as needed
               ],
