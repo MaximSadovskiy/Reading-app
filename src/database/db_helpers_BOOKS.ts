@@ -37,8 +37,8 @@ export type SearchByTitleReturn = ReturnType<typeof searchBooksByTitle>;
 export const searchBooksByTitle = async (query: string) => {
     const booksByTitle = await db.book.findMany({
         where: { title: {
-            mode: 'insensitive',
             startsWith: query,
+            mode: 'insensitive',
         }},
         orderBy: { rating: 'desc' },
         select: {
@@ -67,8 +67,8 @@ export const searchBooksByAuthor =  async (query: string) => {
     
     const booksByAuthor = await db.author.findFirst({
         where: { name: { 
-            mode: 'insensitive', 
             startsWith: query,
+            mode: 'insensitive', 
         }},
         select: {
             name: true,
@@ -95,10 +95,7 @@ export const searchMyLibraryBooksByTitle = async (title: string, userId: string)
         where: {
             userId,
             book: {
-                title: { 
-                    mode: 'insensitive', 
-                    startsWith: title, 
-                }
+                title: { startsWith: title, mode: 'insensitive', }
             }
         },
         select: {
@@ -137,10 +134,7 @@ export const searchMyLibraryBooksByAuthor = async (authorName: string, userId: s
             userId,
             book: {
                 author: {
-                    name: { 
-                        mode: 'insensitive',
-                        startsWith: authorName, 
-                    }
+                    name: { startsWith: authorName, mode: 'insensitive', }
                 }
             }
         },

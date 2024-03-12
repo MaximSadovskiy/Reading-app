@@ -63,7 +63,7 @@ export const DisplayOfBooks = ({ booksByGenre, isEmpty }: DisplayOfBooksProps) =
     return (
         <section className={styles.mainSection}>
             <SearchBar 
-                pageName='my_library'
+                baseApiUrl={SEARCH_MY_LIBRARY_BOOKS_URL}
             />
             {renderingCarousels}  
         </section>
