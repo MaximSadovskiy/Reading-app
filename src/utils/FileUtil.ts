@@ -56,8 +56,6 @@ class File {
     public textIndex = 0;
 
     public static async getFile(path: string | null): Promise<File | null> {
-        console.log('input path is: ', path);
-
         if (path === null) return null;
         let buf: Buffer;
         try {

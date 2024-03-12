@@ -81,7 +81,7 @@ export default async function BooksPage() {
 				</ul>
 			</div>
 			<SearchBar 
-				baseApiUrl={SEARCH_ALL_BOOKS_URL}
+				pageName='books'
 			/>
 			<Suspense fallback={<Spinner sizing='medium' />}>
 				<BookCarousel

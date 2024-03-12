@@ -17,6 +17,7 @@ import getModalBlurVariants from "@/animation/variants/modalBlurVariants";
 import { closeIfOutsideClick } from "@/utils/clickOutsideCloseFunction";
 import { searchAllBooksByAuthorAction, searchAllBooksByTitleAction } from "@/server_actions/books_actions";
 import type { SearchActionType } from "@/server_actions/books_actions";
+import { getUppercasedQuery } from "@/utils/textFormat/getUppercasedQuery";
 
 
 type BooksForSearch = {
@@ -140,7 +141,8 @@ const SearchModal = ({ isModalOpen, closeModal, pageName }: SearchModalProps) =>
             }
 
             try {
-                const searchResultObject = await action(query);
+                const upperCasedQuery = getUppercasedQuery(query);
+                const searchResultObject = await action(upperCasedQuery);
 
                 if (isCancelled) return; // Check if the promise was cancelled
 
