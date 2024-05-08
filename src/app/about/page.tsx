@@ -14,6 +14,9 @@ export default function AboutPage() {
     return (
         <main className={styles.main}>
             <h2>О приложении <span>Бук</span><span>Лайф</span></h2>
+            <div>Авторы:</div>
+            <a href="https://github.com/MaximSadovskiy/">https://github.com/MaximSadovskiy</a>
+            <a href="https://github.com/Romansh12610/">https://github.com/Romansh12610</a>
             <section className={styles.textSection}>
                 {renderingBlocksOfText}
             </section>
